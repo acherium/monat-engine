@@ -1,4 +1,4 @@
-import { $, $a } from "./lyra/lyra.js";
+import { create, append, revoke } from "./lyra/lyra-script.js";
+
 (() => {
-  console.log($("body"));
 })();
