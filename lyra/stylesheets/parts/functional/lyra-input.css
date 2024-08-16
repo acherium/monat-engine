@@ -1,0 +1,74 @@
+@charset "UTF-8";
+input:disabled { cursor: no-drop; }
+input:focus {outline: solid 2px var(--c-lyra); }
+
+input[type=text],
+input[type=number] {
+  margin: 0;
+  padding: var(--p-large);
+  box-sizing: border-box;
+
+  font-size: inherit;
+  color: var(--c-font);
+  border: none;
+  border-radius: var(--r);
+  background-color: var(--c-button);
+  appearance: textfield;
+}
+input[type=text] *,
+input[type=number] * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+input[type=text]::placeholder,
+input[type=number]::placeholder {
+  color: var(--c-checkbox-border);
+  font-style: italic;
+}
+
+input[type=text]:disabled,
+input[type=number]:disabled { opacity: 0.5; }
+
+label:has(input[type=text]),
+label:has(input[type=number]) {
+  display: flex;
+  align-items: center;
+  padding: var(--p);
+
+  width: fit-content;
+  height: fit-content;
+
+  border: solid 2px var(--c-button);
+  border-radius: var(--r);
+  background-color: var(--c-button);
+}
+
+label:has(input[type=text]) > *:not(:last-child),
+label:has(input[type=number]) > *:not(:last-child) { margin-right: var(--m); }
+
+label:has(input[type=text]) > input[type=text],
+label:has(input[type=number]) > input[type=number] {
+  margin-left: var(--m);
+  padding: var(--p-small) var(--p-small) var(--p-small) var(--p);
+
+  border: none;
+  border-left: solid 2px var(--c-checkbox-border);
+  border-radius: 0;
+}
+
+label:has(input[type=text]:focus),
+label:has(input[type=number]:focus) { outline: solid 2px var(--c-lyra); }
+
+label:has(input[type=text]:focus) > input[type=text],
+label:has(input[type=number]:focus) > input[type=number] { outline: none; }
+
+label:has(input[type=text]:not(:disabled)),
+label:has(input[type=number]:not(:disabled)) { cursor: text; }
+
+label:has(input[type=text]:disabled),
+label:has(input[type=number]:disabled) {
+  opacity: 0.5;
+  cursor: no-drop;
+}
