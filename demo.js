@@ -1,4 +1,4 @@
-import { } from "./lyra/lyra-script.js";
+import { } from "./lyra/lyra-module.js";
 
 (() => {
 })();

@@ -2,6 +2,13 @@
 input:disabled { cursor: no-drop; }
 input:focus {outline: solid 2px var(--c-lyra); }
 
+label:has(input) * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Input: Text, Number */
 input[type=text],
 input[type=number] {
   margin: 0;
@@ -71,4 +78,110 @@ label:has(input[type=text]:disabled),
 label:has(input[type=number]:disabled) {
   opacity: 0.5;
   cursor: no-drop;
+}
+
+/* Input: Range */
+input[type=range] {
+  appearance: none;
+
+  height: 10px;
+
+  border-radius: 5px;
+  background-color: var(--c-button);
+}
+
+input[type=range]::-webkit-slider-thumb {
+  box-sizing: border-box;
+  
+  width: 20px;
+  height: 20px;
+
+  border: solid 2px var(--c-main);
+  border-radius: 10px;
+  background-color: var(--c-lyra);
+  appearance: none;
+  cursor: pointer;
+}
+
+input[type=range]::-moz-range-thumb {
+  box-sizing: border-box;
+  
+  width: 20px;
+  height: 20px;
+
+  border: solid 2px var(--c-main);
+  border-radius: 10px;
+  background-color: var(--c-lyra);
+  cursor: pointer;
+}
+
+label:has(input[type=range]) {
+  display: grid;
+  position: relative;
+  place-items: center;
+  padding: 0 var(--p-large);
+  box-sizing: border-box;
+
+  width: 500px;
+  height: 44px;
+
+  border-radius: var(--r);
+  background-color: var(--c-main);
+}
+
+label:has(input[type=range]) > input:focus { outline: none; }
+label:has(input[type=range]:focus) { outline: solid 2px var(--c-lyra); }
+
+label:has(input[type=range]) > input[type=range] {
+  z-index: 1;
+
+  width: 100%;
+
+  background-color: transparent;
+}
+
+label:has(input[type=range]) > div {
+  position: absolute;
+  /* left: var(--p-large); */
+  z-index: 0;
+  /* overflow: hidden; */
+
+  width: calc(100% - var(--p-large) * 2 - 20px);
+  height: 10px;
+
+  border-radius: 5px;
+  background-color: var(--c-button);
+  pointer-events: none;
+}
+
+label:has(input[type=range]) > div > div {
+  height: 100%;
+
+  border-radius: 5px;
+  background-color: var(--c-lyra);
+}
+
+label:has(input[type=range]) > div > span {
+  display: grid;
+  position: absolute;
+  place-items: center;
+  top: -30px;
+}
+
+label:has(input[type=range]) > div > span > span {
+  position: absolute;
+  padding: var(--p) var(--p-large);
+  z-index: 2;
+
+  text-align: center;
+  color: var(--c-white);
+  border-radius: var(--r);
+  outline: solid 2px var(--c-main);
+  background-color: var(--c-lyra);
+  opacity: 0;
+  pointer-events: none;
+
+  transform: translateY(3px) scale(0.95);
+  transition: ease-in-out 0.15s;
+  transition-property: opacity transform;
 }
