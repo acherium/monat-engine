@@ -1,3 +1,9 @@
+// 내부 상수들
+const COMMON_INTERVAL = 30;
+const ANIMATION_INTERVAL = 30;
+const WINDOW_ANIMATION_INTERVAL = 250;
+const DEFAULT_NOTIFICATION_DURATION = 5000;
+
 // 각종 변수들
 /**
  * 문서 본문 요소입니다.
@@ -125,5 +131,278 @@ export class LyraButton {
     if (params.icon && params.icon.length > 0) append(create("div", { classes: [ "i", `i-${params.icon}` ] }), button);
     if (params.text && params.text.length > 0) append(create("p", { properties: { innerText: params.text} }), button);
     return button;
+  };
+};
+
+export class LyraModalManager {
+  /**
+   * HTML 문서 원본에 생성된 LyraModal 규격의 모든 요소를 불러오고, 이 모달창들의 동작을 통제하는 객체를 생성하여 반환합니다.
+   * @returns {LyraModalManager}
+   */
+  constructor() {
+    const res = {
+      area: append(create("div", { id: "lyra-modal-area" })),
+      reserve: {}
+    };
+    freeze(res.area);
+
+    for (const modal of $a(".modal")) {
+      if (!modal.id || modal.id.length < 0) continue;
+      res.reserve[modal.id] = new LyraModal({}, modal);
+    };
+
+    return res;
+  };
+};
+
+export class LyraModal {
+  /**
+   * @typedef {object} LyraModalParameters
+   * @property {string} [bg] 모달 뒷배경 효과.
+   * @property {string} [icon] 제목 아이콘 이름.
+   * @property {string} [title] 모달창 제목.
+   * @property {HTMLElement} [content] 모달 내용 부분에 삽입할 HTML 요소.
+   * @property {Array.<HTMLButtonElement>} [buttons] 모달 하단에 삽입할 HTML 버튼 요소.
+   * @property {boolean} [defaultCloseButton] 기본 닫기(확인) 버튼 삽입 여부.
+   * @property {number} [zIndex] 모달 요소의 z-index 값.
+   */
+  /**
+   * 모달 클래스를 생성하고 반환합니다. 규격에 맞는 원본 HTML 요소가 제공된 경우에 해당 요소를 이 클래스에 연결시킵니다.
+   * @param {LyraModalParameters} [params] 매개변수.
+   * @param {HTMLElement} [origin] 원본 HTML 요소.
+   * @returns {LyraModal}
+   */
+  constructor(params = {}, origin = null) {
+    this.nodes = {
+      main: null,
+      bg: null,
+      body: null,
+      title: null,
+      titleIcon: null,
+      titleText: null,
+      content: null,
+      controller: null,
+      buttons: [],
+      defaultCloseButton: new LyraButton({ icon: "accept", text: "확인", events: { click: () => this.close() } }),
+    };
+    this._closeButtonIndex = -1;
+
+    if (origin && origin.classList.contains("modal") && origin.constructor === HTMLDivElement) {
+      this.nodes.main = revoke(origin);
+      this.nodes.bg = this.nodes.main.querySelector(".bg");
+      this.nodes.body = this.nodes.main.querySelector(".body");
+      this.nodes.title = this.nodes.body.querySelector(".title");
+      this.nodes.titleIcon = this.nodes.title.querySelector(".icon");
+      this.nodes.titleText = this.nodes.title.querySelector("h1");
+      this.nodes.content = this.nodes.body.querySelector(".content");
+      this.nodes.controller = this.nodes.body.querySelector(".controller");
+      this.nodes.buttons = Array.from(this.nodes.controller.querySelectorAll("button"));
+      this._closeButtonIndex = this.nodes.buttons.findIndex((x) => x.classList.contains("close"));
+
+      if (this._closeButtonIndex > -1) {
+        this.nodes.buttons.splice(this._closeButtonIndex, 0, this.nodes.defaultCloseButton);
+        this.nodes.buttons = this.nodes.buttons.filter((x) => x.classList.contains("close") ? x.remove() : x).filter((x) => x);
+      };
+
+      this.nodes.bg.addEventListener("click", () => this.close());
+    } else {
+      this.nodes.main = create("div", { classes: [ "modal" ] });
+      this.nodes.bg = append(create("div", { classes: [ "bg" ], events: { click: () => this.close() } }), this.nodes.main);
+      this.nodes.body = append(create("div", { classes: [ "body" ]}), this.nodes.main);
+      this.nodes.title = append(create("div", { classes: [ "title" ]}), this.nodes.body);
+      this.nodes.content = append(create("div", { classes: [ "content" ]}), this.nodes.body);
+      this.nodes.controller = append(create("div", { classes: [ "controller" ]}), this.nodes.body);
+
+      if (params.bg) this.nodes.bg.classList.add(`bg-${params.bg}`);
+      else this.nodes.bg.classList.add("bg-acrylic");
+      if (params.icon) this.nodes.titleIcon = append(create("div", { classes: [ "icon", "il", `i-${params.icon}` ] }), this.nodes.title);
+      if (params.title) this.nodes.titleText = append(create("h1", { properties: { innerText: `${params.title}` } }), this.nodes.title);
+      if (params.content && params.content instanceof HTMLElement) append(params.content, this.nodes.content);
+      if (params.buttons && params.buttons.constructor === Array) this.nodes.buttons = params.buttons;
+      if (params.defaultCloseButton == true) this._closeButtonIndex = this.nodes.buttons.push(this.nodes.defaultCloseButton) - 1;
+      if (params.zIndex) this.nodes.main.style["z-index"] = `${params.zIndex}`;
+    };
+
+    for (const button of this.nodes.buttons) append(button, this.nodes.controller);
+
+    return this;
+  };
+
+  show() {
+    this.nodes.main.style["pointer-events"] = "auto";
+    this.nodes.bg.style["animation-name"] = "ani-fade-in";
+    this.nodes.body.style["animation-timing-function"] = "var(--af-sweep-in)";
+    this.nodes.body.style["animation-name"] = "ani-window-in";
+    append(this.nodes.main, $("#lyra-modal-area"));
+
+    if (this._closeButtonIndex > -1) this.nodes.defaultCloseButton.focus();
+    else if (this.nodes.buttons.length > 0) this.nodes.buttons[this.nodes.buttons.length - 1].focus();
+    else document.activeElement?.blur();
+
+    return this;
+  };
+
+  close() {
+    this.nodes.main.style["pointer-events"] = "none";
+    this.nodes.bg.style["animation-name"] = "ani-fade-out";
+    this.nodes.body.style["animation-timing-function"] = "var(--af-sweep-out)";
+    this.nodes.body.style["animation-name"] = "ani-window-out";
+    setTimeout(() => {
+      this.nodes.main = revoke(this.nodes.main);
+    }, WINDOW_ANIMATION_INTERVAL + ANIMATION_INTERVAL);
+
+    return this;
+  };
+};
+
+export class LyraNotificationManager {
+  /**
+   * HTML 문서 원본에 생성된 LyraNotification 규격의 모든 요소를 불러오고, 이 알림창들의 동작을 통제하는 객체를 생성하여 반환합니다.
+   * @returns {LyraNotificationManager}
+   */
+  constructor() {
+    const res = {
+      area: null,
+      wrap: null,
+      reserve: {}
+    };
+    res.area = append(create("div", { id: "lyra-notification-area" }));
+    res.wrap = append(create("div", { classes: [ "wrap" ]}), res.area);
+    freeze(res.area);
+
+    for (const notification of $a(".notification")) {
+      if (!notification.id || notification.id.length < 0) continue;
+      res.reserve[notification.id] = new LyraNotification({}, notification);
+    };
+
+    return res;
+  };
+};
+
+export class LyraNotification {
+  /**
+   * @typedef {object} LyraNotificationParameters
+   * @property {string} [icon] 알림창 아이콘 이름.
+   * @property {string} [text] 알림 내용.
+   * @property {number} [duration] 알림창 유지시간(ms).
+   * @property {boolean} [autoShow] 알림창 생성시 즉시 자동 표시 여부.
+   * @property {boolean} [autoClose] 유지시간에 따른 자동 닫힘 여부.
+   * @property {boolean} [autoDestroy] 유지시간에 따른 자동 닫힘시 객체, 요소 완전 삭제 여부.
+   * @property {boolean} [defaultCloseButton] 기본 알림창 닫기 버튼 삽입 여부.
+   */
+  /**
+   * 알림창 클래스를 생성하고 반환합니다. 규격에 맞는 원본 HTML 요소가 제공된 경우에 해당 요소를 이 클래스에 연결시킵니다.
+   * @param {LyraNotificationParameters} [params] 매개변수.
+   * @param {HTMLElement} [origin] 원본 HTML 요소.
+   * @returns {LyraNotification}
+   */
+  constructor(params = {}, origin = null) {
+    this.nodes = {
+      main: null,
+      icon: null,
+      text: null,
+      gauge: create("div", { classes: [ "gauge" ]}),
+      buttonArea: create("div", { classes: [ "button-area" ]}),
+      buttons: [],
+      defaultCloseButton: new LyraButton({ icon: "deny", events: { click: () => this.close() }})
+    };
+    this._options = {
+      duration: typeof params.duration !== "undefined" ? parseInt(params["duration"]) : DEFAULT_NOTIFICATION_DURATION,
+      autoShow: typeof params.autoShow !== "undefined" ? Boolean(params.autoShow) : false,
+      autoClose: typeof params.autoClose !== "undefined" ? Boolean(params.autoClose) : true,
+      autoDestroy: typeof params.autoDestroy !== "undefined" ? Boolean(params.autoDestroy) : true,
+      defaultCloseButton: typeof params.defaultCloseButton !== "undefined" ? Boolean(params.defaultCloseButton) : true
+    };
+    this._timeoutHandler = null;
+
+    if (origin && origin.classList.contains("notification") && origin.constructor === HTMLDivElement) {
+      this.nodes.main = revoke(origin);
+      this.nodes.icon = this.nodes.main.querySelector(".icon");
+      this.nodes.text = this.nodes.main.querySelector("p");
+      this.nodes.buttons = Array.from(this.nodes.main.querySelectorAll("button")).map((x) => revoke(x));
+
+      const op = {
+        duration: this.nodes.main.getAttribute("lyra-duration"),
+        autoShow: this.nodes.main.getAttribute("lyra-autoShow"),
+        autoClose: this.nodes.main.getAttribute("lyra-autoClose"),
+        autoDestroy: this.nodes.main.getAttribute("lyra-autoDestroy"),
+        defaultCloseButton: this.nodes.main.getAttribute("lyra-defaultCloseButton"),
+      };
+
+      this._options.duration = op.duration !== null ? parseInt(op.duration) : this._options.duration;
+      this._options.autoShow = op.autoShow !== null ? (op.autoShow === "true" ? true : false) : this._options.autoShow;
+      this._options.autoClose = op.autoClose !== null ? (op.autoClose === "false" ? false : true) : this._options.autoClose;
+      this._options.autoDestroy = op.autoDestroy !== null ? (op.autoDestroy === "false" ? false : true) : this._options.autoDestroy;
+      this._options.defaultCloseButton = op.defaultCloseButton !== null ? (op.defaultCloseButton === "false" ? false : true) : this._options.defaultCloseButton;
+    } else {
+      this.nodes.main = create("div", { classes: [ "notification", "bg-acrylic" ] });
+      if (params.icon) this.nodes.icon = append(create("div", { classes: [ "icon", "i", `i-${params.icon}` ] }), this.nodes.main);
+      if (params.text) this.nodes.text = append(create("p", { properties: { innerText: params.text } }), this.nodes.main);
+      if (params.buttons && params.buttons.constructor === Array) this.nodes.buttons = params.buttons;
+    };
+
+    this.nodes.main.addEventListener("pointerover", () => {
+      if (!this._options.autoClose) return;
+      this.offTimer();
+    });
+    this.nodes.main.addEventListener("pointerleave", () => {
+      if (!this._options.autoClose) return;
+      this.onTimer();
+    });
+
+    if (this._options.defaultCloseButton) this.nodes.buttons.push(this.nodes.defaultCloseButton);
+    if (this.nodes.buttons.length > 0) append(this.nodes.buttonArea, this.nodes.main);
+    if (this.nodes.buttons.length > 1) this.nodes.main.classList.add("notification-two-track");
+    for (const button of this.nodes.buttons) {
+      append(button, this.nodes.buttonArea);
+      button.addEventListener("click", () => this.close());
+    };
+
+    append(this.nodes.gauge, this.nodes.main);
+    if (this._options.autoShow) setTimeout(() => this.show());
+
+    // console.log(this);
+    // append(this.nodes.main, $("#lyra-notification-area > div"));
+    return this;
+  };
+
+  show() {
+    this.nodes.main.style["pointer-events"] = "auto";
+    this.nodes.main.style["animation-timing-function"] = "var(--af-sweep-in)";
+    this.nodes.main.style["animation-name"] = "ani-window-in";
+    append(this.nodes.main, $("#lyra-notification-area > .wrap"));
+
+    if (this._options.defaultCloseButton) this.nodes.defaultCloseButton.focus();
+    if (this._options.autoClose) this.onTimer();
+
+    return this;
+  };
+
+  close() {
+    this.nodes.main.style["pointer-events"] = "none";
+    this.nodes.main.style["animation-timing-function"] = "var(--af-sweep-out)";
+    this.nodes.main.style["animation-name"] = "ani-window-out";
+
+    if (this._options.autoDestroy) setTimeout(() => this.destroy(), WINDOW_ANIMATION_INTERVAL + ANIMATION_INTERVAL);
+    
+    return this;
+  };
+
+  destroy() {
+    if (this._timeoutHandler !== null) clearTimeout(this._timeoutHandler);
+    this.nodes.main.remove();
+    return null;
+  };
+
+  onTimer() {
+    this._timeoutHandler = setTimeout(() => this.close(), this._options.duration + ANIMATION_INTERVAL);
+    this.nodes.gauge.style["animation"] = `${this._options.duration/1000}s linear ani-notification-gauge both`;
+    return this;
+  };
+
+  offTimer() {
+    if (this._timeoutHandler !== null) clearTimeout(this._timeoutHandler);
+    this.nodes.gauge.style["animation"] = null;
+    return this;
   };
 };

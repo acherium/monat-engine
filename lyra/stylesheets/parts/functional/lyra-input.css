@@ -121,6 +121,7 @@ label:has(input[type=range]) {
   place-items: center;
   padding: 0 var(--p-large);
   box-sizing: border-box;
+  z-index: 0;
 
   width: 500px;
   height: 44px;

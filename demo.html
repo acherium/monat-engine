@@ -11,9 +11,13 @@
   <link rel="stylesheet" href="./lyra/lyra-styles.css">
 </head>
 <body>
-  <button>
+  <button id="button-test1">
     <div class="i i-circle"></div>
-    <p>Button</p>
+    <p>Button 1</p>
+  </button>
+  <button id="button-test2">
+    <div class="i i-star5"></div>
+    <p>Button 2</p>
   </button>
   <br>
   <label>
@@ -23,5 +27,26 @@
     </div>
     <input type="range" min="0" max="255" step="1" value="0">
   </label>
+  <div id="modal-name" class="modal">
+    <div class="bg bg-acrylic"></div>
+    <div class="body">
+      <div class="title">
+        <div class="icon il i-content"></div>
+        <h1>이름</h1>
+      </div>
+      <div class="content"></div>
+      <div class="controller">
+        <button class="close"></button>
+      </div>
+    </div>
+  </div>
+  <div id="beta-alert" class="notification bg-acrylic" lyra-autoShow="true" lyra-autoClose="true" lyra-duration="10000">
+      <div class="icon i i-warning"></div>
+      <p>개발 중인 빌드입니다. 성능 저하나 오류가 있을 수 있습니다.<br>자세한 빌드 정보는 정보 창을 확인하세요.</p>
+      <button>
+        <div class="i i-star5"></div>
+        <p>testbutton</p>
+      </button>
+  </div>
 </body>
 </html>

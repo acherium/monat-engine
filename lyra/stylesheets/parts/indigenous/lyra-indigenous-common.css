@@ -15,6 +15,6 @@
 }
 
 .bg-acrylic::before {
-  background: repeat url("./assets/essentials/noise.png");
+  background: repeat url("../../../assets/essentials/noise.png");
   opacity: 0.02;
 }
