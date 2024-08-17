@@ -67,7 +67,7 @@
   z-index: 3;
 
   width: max-content;
-  height: 16px;
+  height: max-content;
 
   border-radius: 16px;
   background-color: transparent;

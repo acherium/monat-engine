@@ -44,7 +44,7 @@ for (const area of document.querySelectorAll("div.slider")) {
   const length = images.length;
   let previous = null;
   let current = null;
-  let intervalHandler = null;
+  let timeoutHandler = null;
 
   const controller = append(create("div", { classes: [ "controller" ] }), area);
   const radios = [];
@@ -81,6 +81,9 @@ for (const area of document.querySelectorAll("div.slider")) {
     };
 
     radios[current].checked = true;
+    
+    clearTimeout(timeoutHandler);
+    timeoutHandler = setTimeout(goNext, DEFAULT_IMAGE_SLIDER_INTERVAL);
   };
   const goPrevious = () => {
     previous = copy(current);
@@ -93,6 +96,9 @@ for (const area of document.querySelectorAll("div.slider")) {
     images[current].style["animation-name"] = "ani-slider-in-left";
 
     radios[current].checked = true;
+    
+    clearTimeout(timeoutHandler);
+    timeoutHandler = setTimeout(goNext, DEFAULT_IMAGE_SLIDER_INTERVAL);
   };
   const goNext = () => {
     previous = copy(current);
@@ -105,11 +111,14 @@ for (const area of document.querySelectorAll("div.slider")) {
     images[current].style["animation-name"] = "ani-slider-in-right";
 
     radios[current].checked = true;
+
+    clearTimeout(timeoutHandler);
+    timeoutHandler = setTimeout(goNext, DEFAULT_IMAGE_SLIDER_INTERVAL);
   };
 
   const btnPrevious = append(new LyraButton({ icon: "arrow-w", classes: [ "previous" ], events: { click: goPrevious } }), area);
   const btnNext = append(new LyraButton({ icon: "arrow-e", classes: [ "next" ], events: { click: goNext } }), area);
   
   initSlide();
-  intervalHandler = setInterval(goNext, DEFAULT_IMAGE_SLIDER_INTERVAL);
+  timeoutHandler = setTimeout(goNext, DEFAULT_IMAGE_SLIDER_INTERVAL);
 };
