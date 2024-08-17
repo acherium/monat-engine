@@ -5,6 +5,11 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
+
+  background-color: var(--main);
+  
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
 .slider > .capsule {
@@ -15,9 +20,10 @@
   
   border-radius: inherit;
   
+  /* transition: transform ease-out 0.5s; */
   animation-duration: 0.5s;
   animation-timing-function: ease-in-out;
-  animation-fill-mode: both;
+  animation-fill-mode: forwards;
 }
 
 .slider > .capsule img {

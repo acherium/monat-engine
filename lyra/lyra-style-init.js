@@ -66,6 +66,22 @@ for (const area of document.querySelectorAll("div.slider")) {
     previous = a;
     current = b;
     
+    images[previous].animate({
+      transform: [ "scale(1)", "scale(0.75)" ]
+    }, {
+      duration: DEFAULT_IMAGE_SLIDER_DURATION,
+      easing: "ease-in",
+      composite: "add"
+    });
+
+    images[current].animate({
+      transform: [ "scale(0.75)", "scale(1)" ]
+    }, {
+      duration: DEFAULT_IMAGE_SLIDER_DURATION,
+      easing: "ease-out",
+      composite: "add"
+    });
+
     if (previous < current) {
       images[previous].style["z-index"] = "0";
       images[previous].style["animation-name"] = "ani-slider-out-left";
@@ -91,9 +107,23 @@ for (const area of document.querySelectorAll("div.slider")) {
 
     images[previous].style["z-index"] = "0";
     images[previous].style["animation-name"] = "ani-slider-out-right";
+    images[previous].animate({
+      transform: [ "scale(1)", "scale(0.75)" ]
+    }, {
+      duration: DEFAULT_IMAGE_SLIDER_DURATION,
+      easing: "ease-in",
+      composite: "add"
+    });
 
     images[current].style["z-index"] = "1";
     images[current].style["animation-name"] = "ani-slider-in-left";
+    images[current].animate({
+      transform: [ "scale(0.75)", "scale(1)" ]
+    }, {
+      duration: DEFAULT_IMAGE_SLIDER_DURATION,
+      easing: "ease-out",
+      composite: "add"
+    });
 
     radios[current].checked = true;
     
@@ -106,9 +136,23 @@ for (const area of document.querySelectorAll("div.slider")) {
 
     images[previous].style["z-index"] = "0";
     images[previous].style["animation-name"] = "ani-slider-out-left";
+    images[previous].animate({
+      transform: [ "scale(1)", "scale(0.75)" ]
+    }, {
+      duration: DEFAULT_IMAGE_SLIDER_DURATION,
+      easing: "ease-in",
+      composite: "add"
+    });
 
     images[current].style["z-index"] = "1";
     images[current].style["animation-name"] = "ani-slider-in-right";
+    images[current].animate({
+      transform: [ "scale(0.75)", "scale(1)" ]
+    }, {
+      duration: DEFAULT_IMAGE_SLIDER_DURATION,
+      easing: "ease-out",
+      composite: "add"
+    });
 
     radios[current].checked = true;
 
@@ -118,6 +162,38 @@ for (const area of document.querySelectorAll("div.slider")) {
 
   const btnPrevious = append(new LyraButton({ icon: "arrow-w", classes: [ "previous" ], events: { click: goPrevious } }), area);
   const btnNext = append(new LyraButton({ icon: "arrow-e", classes: [ "next" ], events: { click: goNext } }), area);
+
+  area.ontouchstart = (e) => {
+    if (e.target instanceof HTMLButtonElement || e.target instanceof HTMLInputElement) return;
+    clearTimeout(timeoutHandler);
+
+    const ox = e.touches[0].pageX;
+    let dx = 0;
+
+    area.ontouchmove = (m) => {
+      const x = m.touches[0].pageX;
+      dx = x - ox;
+    };
+
+    area.ontouchend = () => {
+      if (dx > 200) goPrevious();
+      if (dx < -200) goNext();
+      clearTimeout(timeoutHandler);
+      timeoutHandler = setTimeout(goNext, DEFAULT_IMAGE_SLIDER_INTERVAL);
+      area.ontouchmove = null;
+      area.ontouchend = null;
+      area.ontoucherror = null;
+    };
+    area.ontoucherror = () => {
+      if (dx > 200) goPrevious();
+      if (dx < -200) goNext();
+      clearTimeout(timeoutHandler);
+      timeoutHandler = setTimeout(goNext, DEFAULT_IMAGE_SLIDER_INTERVAL);
+      area.ontouchmove = null;
+      area.ontouchend = null;
+      area.ontoucherror = null;
+    };
+  };
   
   initSlide();
   timeoutHandler = setTimeout(goNext, DEFAULT_IMAGE_SLIDER_INTERVAL);
