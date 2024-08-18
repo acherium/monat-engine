@@ -225,7 +225,7 @@ import { body, $, $a, copy,
   const tip = append(create("span", { classes: [ "tip" ] }), tipArea);
   const tipPos = { x: 0, y: 0 };
   const tipOffset = { x: 10, y: 20 };
-  let tipFlag = false;
+  let tipFlag = null;
   document.addEventListener("mousemove", (e) => {
     if (e.target === document) return;
     const bounding = tip.getBoundingClientRect();
@@ -235,8 +235,8 @@ import { body, $, $a, copy,
     if ((e.clientY + tipOffset.y + height) < (window.innerHeight - tipOffset.y)) tipPos.y = e.clientY + tipOffset.y;
     tip.style["transform"] = `translate(${tipPos.x}px, ${tipPos.y}px)`;
 
-    if (e.target !== body && e.target.getAttribute("lyra-tip") !== null && !tipFlag) {
-      tipFlag = true;
+    if (e.target !== body && e.target.getAttribute("lyra-tip") !== null && tipFlag !== e.target) {
+      tipFlag = e.target;
       tip.innerText = e.target.getAttribute("lyra-tip");
       tip.animate({
         transform: [ "translate(-5px, -5px) scale(0.9)", "translate(0px, 0px) scale(1)" ]
@@ -254,7 +254,7 @@ import { body, $, $a, copy,
         composite: "replace"
       });
     } else if ((e.target === body || e.target.getAttribute("lyra-tip") === null) && tipFlag) {
-      tipFlag = false;
+      tipFlag = null;
       tip.animate({
         transform: [ "translate(0px, 0px) scale(1)", "translate(-5px, -5px) scale(0.9)" ]
       }, {
