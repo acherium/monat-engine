@@ -1,35 +1,21 @@
 @charset "UTF-8";
-.fjcs { justify-content: flex-start; }
-.fjcc { justify-content: center; }
-.fjce { justify-content: flex-end; }
-.fjcb { justify-content: space-between; }
+.fjcs { justify-content: flex-start !important; }
+.fjcc { justify-content: center !important; }
+.fjce { justify-content: flex-end !important; }
+.fjcb { justify-content: space-between !important; }
 
 .wf { width: 100% !important; }
 .hf { height: 100% !important; }
 .f1 { flex: 1 !important; }
-.wfix { min-width: max-content; }
-.hfix { min-height: max-content; }
+.wfix { min-width: max-content !important; }
+.hfix { min-height: max-content !important; }
 
-.wm50 {
-  max-width: 100%;
-  width: 50px;
-}
-.wm400 {
-  max-width: 100%;
-  width: 400px;
-}
-.wm600 {
-  max-width: 100%;
-  width: 600px;
-}
-.hm200 {
-  max-height: 100%;
-  height: 200px;
-}
-.hm300 {
-  max-height: 100%;
-  height: 300px;
-}
+.wm50 { width: 50px !important; }
+.wm400 { width: 400px !important; }
+.wm600 { width: 600px !important; }
+
+.hm200 { height: 200px !important; }
+.hm300 { height: 300px !important; }
 
 .oh { overflow: hidden !important; }
 
