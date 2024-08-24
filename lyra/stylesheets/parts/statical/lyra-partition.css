@@ -1,14 +1,12 @@
 @charset "UTF-8";
 .divline,
-.divline-row {
+.divline-column {
   width: 2px;
-  height: auto;
 
   background-color: var(--c-border);
 }
 
-.divline-column {
-  width: auto;
+.divline-row {
   height: 2px;
 
   background-color: var(--c-border);
