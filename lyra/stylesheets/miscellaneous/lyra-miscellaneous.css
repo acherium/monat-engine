@@ -1,4 +1,8 @@
 @charset "UTF-8";
+.fais { align-items: flex-start !important;}
+.faic { align-items: center !important; }
+.faie { align-items: flex-end !important; }
+
 .fjcs { justify-content: flex-start !important; }
 .fjcc { justify-content: center !important; }
 .fjce { justify-content: flex-end !important; }
@@ -7,8 +11,14 @@
 .wf { width: 100% !important; }
 .hf { height: 100% !important; }
 .f1 { flex: 1 !important; }
-.wfix { min-width: max-content !important; }
-.hfix { min-height: max-content !important; }
+.wfix {
+  max-width: 100% !important;
+  min-width: max-content !important;
+}
+.hfix {
+  max-height: 100% !important;
+  min-height: max-content !important;
+}
 
 .wm50 { width: 50px !important; }
 .wm400 { width: 400px !important; }

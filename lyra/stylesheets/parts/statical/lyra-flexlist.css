@@ -7,8 +7,11 @@
 .list-rev-column{
   display: flex;
   position: relative;
+  align-items: center;
+  justify-content: center;
   gap: var(--m);
   flex-wrap: wrap;
+  flex-direction: row;
 
   width: fit-content;
   height: fit-content;

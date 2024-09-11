@@ -1,9 +1,10 @@
-// 내부 상수들
+// 각종 변수들
+// 내부 변수
 export const LYRA_NAME = "Lyra Engine";
 export const LYRA_AUTHOR = "Acherium";
 export const LYRA_CONTACT = "acherium@pm.me";
-export const LYRA_VERSION = "1102";
-export const LYRA_DATE = "24-08-24";
+export const LYRA_VERSION = "1104";
+export const LYRA_DATE = "24-09-11";
 
 export const COMMON_INTERVAL = 30;
 export const ANIMATION_INTERVAL = 30;
@@ -14,12 +15,19 @@ export const DEFAULT_NOTIFICATION_DURATION = 5000;
 export const DEFAULT_IMAGE_SLIDER_INTERVAL = 5000;
 export const DEFAULT_IMAGE_SLIDER_DURATION = 500;
 
-// 각종 변수들
 /**
  * 문서 본문 요소입니다.
  * @see {@link https://developer.mozilla.org/ko/docs/Web/HTML/Element/body | MDN 레퍼런스> <body>: 문서 본문 요소}
  */
 export const body = document.body;
+
+// 환경 변수
+export const lyraEnv = {
+  theme: "auto"
+};
+export const DICT_LYRA_ENV = {
+  theme: [ "auto", "light", "dark" ]
+};
 
 
 // 각종 함수들
@@ -29,7 +37,7 @@ export const body = document.body;
  * @see {@link https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze | MDN 레퍼런스> Object.freeze()}
  */
 export const freeze = (obj) => {
-  for (const value of Object.values(obj)) freeze(value);
+  for (const value of Object.values(obj)) if (typeof value === "object" && typeof value[Symbol.iterator] === "function") freeze(value);
   Object.freeze(obj);
   return;
 };
@@ -193,7 +201,10 @@ export class LyraModal {
       content: null,
       controller: null,
       buttons: [],
-      defaultCloseButton: new LyraButton({ icon: "accept", text: "확인", events: { click: () => this.close() } }),
+      defaultCloseButton: new LyraButton({ icon: "accept", text: "확인", events: { click: () => {
+        document.removeEventListener("click", this.detectBlur);
+        this.close();
+      } } }),
     };
     this._closeButtonIndex = -1;
 
@@ -214,10 +225,10 @@ export class LyraModal {
         this.nodes.buttons = this.nodes.buttons.filter((x) => x.classList.contains("close") ? x.remove() : x).filter((x) => x);
       };
 
-      this.nodes.bg.addEventListener("click", () => this.close());
+      // this.nodes.bg.addEventListener("click", () => this.close());
     } else {
       this.nodes.main = create("div", { classes: [ "modal" ] });
-      this.nodes.bg = append(create("div", { classes: [ "bg" ], events: { click: () => this.close() } }), this.nodes.main);
+      this.nodes.bg = append(create("div", { classes: [ "bg" ] }), this.nodes.main);
       this.nodes.body = append(create("div", { classes: [ "body" ]}), this.nodes.main);
       this.nodes.title = append(create("div", { classes: [ "title" ]}), this.nodes.body);
       this.nodes.content = append(create("div", { classes: [ "content" ]}), this.nodes.body);
@@ -232,13 +243,26 @@ export class LyraModal {
       if (params.zIndex) this.nodes.main.style["z-index"] = `${params.zIndex}`;
     };
 
-    for (const button of this.nodes.buttons) append(button, this.nodes.controller);
+    for (const button of this.nodes.buttons) {
+      append(button, this.nodes.controller);
+      if (button.classList.contains("close")) button.addEventListener("click", () => {
+        document.removeEventListener("click", this.detectBlur);
+        this.close();
+      });
+    };
 
     return this;
   };
 
+  detectBlur = (e) => {
+    if (!Array.from($a(".body *, .body", this.nodes.main)).includes(e.target)) {
+      this.close();
+      document.removeEventListener("click", this.detectBlur);
+    };
+  };
+
   show() {
-    this.nodes.main.style["pointer-events"] = "auto";
+    // this.nodes.main.style["pointer-events"] = "auto";
     this.nodes.bg.style["animation-name"] = "ani-fade-in";
     this.nodes.body.style["animation-timing-function"] = "var(--af-sweep-in)";
     this.nodes.body.style["animation-name"] = "ani-window-in";
@@ -248,16 +272,20 @@ export class LyraModal {
     else if (this.nodes.buttons.length > 0) this.nodes.buttons[this.nodes.buttons.length - 1].focus();
     else document.activeElement?.blur();
 
+    setTimeout(() => {
+      document.addEventListener("click", this.detectBlur);
+    });
+
     return this;
   };
 
   close() {
-    this.nodes.main.style["pointer-events"] = "none";
+    // this.nodes.main.style["pointer-events"] = "none";
     this.nodes.bg.style["animation-name"] = "ani-fade-out";
     this.nodes.body.style["animation-timing-function"] = "var(--af-sweep-out)";
     this.nodes.body.style["animation-name"] = "ani-window-out";
     setTimeout(() => {
-      this.nodes.main = revoke(this.nodes.main);
+      if (this.nodes.main.isConnected) this.nodes.main = revoke(this.nodes.main);
     }, WINDOW_ANIMATION_DURATION + ANIMATION_INTERVAL);
 
     return this;
@@ -415,3 +443,7 @@ export class LyraNotification {
     return this;
   };
 };
+
+// 환경변수 고정
+Object.seal(lyraEnv);
+freeze(DICT_LYRA_ENV);

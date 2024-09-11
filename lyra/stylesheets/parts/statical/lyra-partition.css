@@ -1,13 +1,19 @@
 @charset "UTF-8";
 .divline,
 .divline-column {
-  width: 2px;
+  margin: 0 var(--m);
 
-  background-color: var(--c-border);
+  min-width: 2px;
+  height: 100%;
+
+  background-color: var(--c-button);
 }
 
 .divline-row {
-  height: 2px;
+  margin: var(--m) 0;
 
-  background-color: var(--c-border);
+  width: 100%;
+  min-height: 2px;
+
+  background-color: var(--c-button);
 }
