@@ -32,18 +32,16 @@
 #watermark {
   position: absolute;
   right: 10px;
-  bottom: 10px;
+  top: 10px;
   margin: 0;
   padding: 6px;
   z-index: 9999;
   box-sizing: border-box;
 
   font-size: 10pt;
-  color: white;
+  color: oklch(70% 0 0/0.5);
   border-radius: 4px;
-  background-color: black;
   text-align: right;
-  opacity: 1;
   pointer-events: none;
 }
 

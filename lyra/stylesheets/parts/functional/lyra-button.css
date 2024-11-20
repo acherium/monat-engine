@@ -13,6 +13,9 @@ button {
   overflow: hidden;
   box-sizing: border-box;
 
+  min-width: 44px;
+  height: 44px;
+
   color: var(--c-font);
   border: none;
   border-radius: var(--r);
@@ -61,8 +64,10 @@ button:not(:disabled)::before {
   will-change: transform;
 } */
 
-button:not(:disabled):hover::before,
-button:not(:disabled):focus::before { opacity: 0.1; }
+
+button:not(:disabled):hover::before { opacity: 0.1; }
+/* button:not(:disabled):hover::before,
+button:not(:disabled):focus::before { opacity: 0.1; } */
 
 /* button:not(:disabled):hover::after,
 button:not(:disabled):focus::after { animation: 4s linear 0.25s ani-button-cover-effect; } */
