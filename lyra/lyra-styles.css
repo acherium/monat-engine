@@ -14,6 +14,9 @@
 
   font-family: "Wanted Sans Variable", "Pretendard GOV Variable", sans-serif;
   color: var(--font);
+
+  transition: var(--duration-ui);
+  transition-property: color, border-color, background-color;
 }
 
 body {

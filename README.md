@@ -3,4 +3,4 @@
 
 어느정도 만들면 명세, 표준 문서 공개 예정.
 
-[데모 페이지](https://acherium.github.io/lyra-engine)
+[데모 페이지](https://acherium.github.io/lyra-engine/index.html)

@@ -1,16 +1,5 @@
 @charset "UTF-8";
 :root {
-  /* 악센트 색상 */
-  --lyra: oklch(61% 0.26 322);
-  --accent: var(--lyra);
-  --accent-alt: var(--lyra);
-
-  /* 악센트 기반 색상 */
-  --accent-light: oklch(from var(--accent) 97% 0.009 h);
-  --accent-medium: oklch(from var(--accent) 90% 0.05 h);
-  --accent-deep: oklch(from var(--accent) 40% 0.2 h);
-  --accent-dark: oklch(from var(--accent) 23% 0.03 h);
-
   /* 무채색 */
   --white: oklch(100% 0 0);
   --c-n9: oklch(90% 0 0);
@@ -23,6 +12,28 @@
   --c-n2: oklch(20% 0 0);
   --c-n1: oklch(10% 0 0);
   --black: oklch(0% 0 0);
+
+  /* 악센트 색상 */
+  --lyra: oklch(61% 0.26 322);
+  --accent: var(--lyra);
+  --accent-alt: var(--lyra);
+
+  /* 악센트 색상 - 그레이스케일 */
+  --lyra-gs: oklch(from var(--lyra) l 0 h);
+  --accent-gs: var(--lyra-gs);
+  --accent-alt-gs: var(--lyra-gs);
+
+  /* 악센트 기반 색상 */
+  --accent-light: oklch(from var(--accent) 97% 0.009 h);
+  --accent-medium: oklch(from var(--accent) 90% 0.05 h);
+  --accent-deep: oklch(from var(--accent) 40% 0.2 h);
+  --accent-dark: oklch(from var(--accent) 23% 0.03 h);
+
+  /* 악센트 기반 색상 - 그레이스케일 */
+  --accent-light-gs: oklch(from var(--accent-light) l 0 h);
+  --accent-medium-gs: oklch(from var(--accent-medium) l 0 h);
+  --accent-deep-gs: oklch(from var(--accent-deep) l 0 h);
+  --accent-dark-gs: oklch(from var(--accent-dark) l 0 h);
 
   /* 기본 7 색상 */
   --red: oklch(61% 0.23 25);
@@ -62,13 +73,13 @@
   --palette-6: var(--black);
 
   /* 동적 팔레트 - 그레이스케일 */
-  --palette-0-gs: oklch(from var(--white) l 0 h);
-  --palette-1-gs: oklch(from var(--accent-light) l 0 h);
-  --palette-2-gs: oklch(from var(--accent-medium) l 0 h);
-  --palette-3-gs: oklch(from var(--accent) l 0 h);
-  --palette-4-gs: oklch(from var(--accent-deep) l 0 h);
-  --palette-5-gs: oklch(from var(--accent-dark) l 0 h);
-  --palette-6-gs: oklch(from var(--black) l 0 h);
+  --palette-0-gs: oklch(from var(--palette-0) l 0 h);
+  --palette-1-gs: oklch(from var(--palette-1) l 0 h);
+  --palette-2-gs: oklch(from var(--palette-2) l 0 h);
+  --palette-3-gs: oklch(from var(--palette-3) l 0 h);
+  --palette-4-gs: oklch(from var(--palette-4) l 0 h);
+  --palette-5-gs: oklch(from var(--palette-5) l 0 h);
+  --palette-6-gs: oklch(from var(--palette-6) l 0 h);
 
   /* 기본 요소 */
   --main: var(--palette-1);

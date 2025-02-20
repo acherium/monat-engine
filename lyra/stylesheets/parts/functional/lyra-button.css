@@ -39,7 +39,8 @@ button::before {
   border-radius: inherit;
   content: "";
 
-  transition: box-shadow var(--duration-ui); 
+  transition: var(--duration-ui); 
+  transition-property: border-color, background-color, box-shadow;
 }
 
 button::after {
@@ -71,7 +72,7 @@ button:not(:disabled)::before {
   background-color: var(--sub);
 }
 
-button[filled]:not(:disabled) { color: var(--main); }
+button[filled]:not(:disabled) { color: var(--accent-light); }
 button[filled]:not(:disabled)::before {
   border: solid 1px var(--palette-3);
   background-color: var(--palette-3);
@@ -137,61 +138,61 @@ button[blank]:disabled::before {
 
 
 /* 활성화된 색상 버튼 */
-button[red]:not(:disabled) { color: var(--palette-1); }
+button[red]:not(:disabled) { color: var(--accent-light); }
 button[red]:not(:disabled)::before {
   border: solid 1px var(--red);
   background-color: var(--red);
 }
 
-button[orange]:not(:disabled) { color: var(--palette-1); }
+button[orange]:not(:disabled) { color: var(--accent-light); }
 button[orange]::before {
   border: solid 1px var(--orange);
   background-color: var(--orange);
 }
 
-button[yellow]:not(:disabled) { color: var(--palette-5); }
+button[yellow]:not(:disabled) { color: var(--accent-dark); }
 button[yellow]::before {
   border: solid 1px var(--yellow);
   background-color: var(--yellow);
 }
 
-button[green]:not(:disabled) { color: var(--palette-5); }
+button[green]:not(:disabled) { color: var(--accent-dark); }
 button[green]::before {
   border: solid 1px var(--green);
   background-color: var(--green);
 }
 
-button[blue]:not(:disabled) { color: var(--palette-1); }
+button[blue]:not(:disabled) { color: var(--accent-light); }
 button[blue]::before {
   border: solid 1px var(--blue);
   background-color: var(--blue);
 }
 
-button[navy]:not(:disabled) { color: var(--palette-1); }
+button[navy]:not(:disabled) { color: var(--accent-light); }
 button[navy]::before {
   border: solid 1px var(--navy);
   background-color: var(--navy);
 }
 
-button[purple]:not(:disabled) { color: var(--palette-1); }
+button[purple]:not(:disabled) { color: var(--accent-light); }
 button[purple]::before {
   border: solid 1px var(--purple);
   background-color: var(--purple);
 }
 
-button[turquoise]:not(:disabled) { color: var(--palette-5); }
+button[turquoise]:not(:disabled) { color: var(--accent-dark); }
 button[turquoise]::before {
   border: solid 1px var(--turquoise);
   background-color: var(--turquoise);
 }
 
-button[skyblue]:not(:disabled) { color: var(--palette-5); }
+button[skyblue]:not(:disabled) { color: var(--accent-dark); }
 button[skyblue]::before {
   border: solid 1px var(--skyblue);
   background-color: var(--skyblue);
 }
 
-button[pink]:not(:disabled) { color: var(--palette-1); }
+button[pink]:not(:disabled) { color: var(--accent-light); }
 button[pink]::before {
   border: solid 1px var(--pink);
   background-color: var(--pink);
@@ -199,61 +200,61 @@ button[pink]::before {
 
 
 /* 비활성화된 색상 버튼 */
-button[red]:disabled { color: var(--palette-4-gs); }
+button[red]:disabled { color: var(--accent-deep-gs); }
 button[red]:disabled::before {
   border: solid 1px var(--red-gs);
   background-color: var(--red-gs);
 }
 
-button[orange]:disabled { color: var(--palette-4-gs); }
+button[orange]:disabled { color: var(--accent-deep-gs); }
 button[orange]:disabled::before {
   border: solid 1px var(--orange-gs);
   background-color: var(--orange-gs);
 }
 
-button[yellow]:disabled { color: var(--palette-4-gs); }
+button[yellow]:disabled { color: var(--accent-deep-gs); }
 button[yellow]:disabled::before {
   border: solid 1px var(--yellow-gs);
   background-color: var(--yellow-gs);
 }
 
-button[green]:disabled { color: var(--palette-4-gs); }
+button[green]:disabled { color: var(--accent-deep-gs); }
 button[green]:disabled::before {
   border: solid 1px var(--green-gs);
   background-color: var(--green-gs);
 }
 
-button[blue]:disabled { color: var(--palette-5-gs); }
+button[blue]:disabled { color: var(--accent-dark-gs); }
 button[blue]:disabled::before {
   border: solid 1px var(--blue-gs);
   background-color: var(--blue-gs);
 }
 
-button[navy]:disabled { color: var(--palette-3-gs); }
+button[navy]:disabled { color: var(--accent-gs); }
 button[navy]:disabled::before {
   border: solid 1px var(--navy-gs);
   background-color: var(--navy-gs);
 }
 
-button[purple]:disabled { color: var(--palette-5-gs); }
+button[purple]:disabled { color: var(--accent-dark-gs); }
 button[purple]:disabled::before {
   border: solid 1px var(--purple-gs);
   background-color: var(--purple-gs);
 }
 
-button[turquoise]:disabled { color: var(--palette-4-gs); }
+button[turquoise]:disabled { color: var(--accent-deep-gs); }
 button[turquoise]:disabled::before {
   border: solid 1px var(--turquoise-gs);
   background-color: var(--turquoise-gs);
 }
 
-button[skyblue]:disabled { color: var(--palette-4-gs); }
+button[skyblue]:disabled { color: var(--accent-deep-gs); }
 button[skyblue]:disabled::before {
   border: solid 1px var(--skyblue-gs);
   background-color: var(--skyblue-gs);
 }
 
-button[pink]:disabled { color: var(--palette-4-gs); }
+button[pink]:disabled { color: var(--accent-deep-gs); }
 button[pink]:disabled::before {
   border: solid 1px var(--pink-gs);
   background-color: var(--pink-gs);
