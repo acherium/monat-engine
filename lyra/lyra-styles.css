@@ -3,10 +3,12 @@
 @import url("./assets/fonts/PretendardGOV/web/variable/pretendardvariable-gov.css");
 @import url("./assets/icons/XEIcon/xeicon.min.css");
 
+/* 구성 요소 */
 @import url("./stylesheets/miscellaneous/lyra-miscellaneous.css");
 @import url("./stylesheets/palettes/lyra-palette.css");
 @import url("./stylesheets/parts/lyra-parts-all.css");
 
+/* 초기화 */
 * {
   margin: 0;
   padding: 0;
@@ -21,4 +23,10 @@
 
 body {
   background-color: var(--main);
+}
+
+/* 공통 요소 */
+.description {
+  font-size: small;
+  color: oklch(from var(--font) l c h/0.5);
 }

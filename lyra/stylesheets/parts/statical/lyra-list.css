@@ -18,13 +18,11 @@
   height: fit-content;
 }
 
-
 /* 목록 특성별 방향 설정 */
 .list-column { flex-direction: column; }
 .list-rev,
 .list-rev-row { flex-direction: row-reverse; }
 .list-rev-column { flex-direction: column-reverse; }
-
 
 /* 모바일 뷰 */
 @media screen and (max-width: 900px) {

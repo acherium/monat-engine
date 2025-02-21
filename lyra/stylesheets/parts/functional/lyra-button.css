@@ -1,12 +1,11 @@
 @charset "UTF-8";
+/* 버튼 속성값 */
 :root {
-  /* 버튼 속성값 */
   --button-size: 48px;
   --button-padding: 14px;
   --button-gap: 4px;
   --button-radius: 24px;
 }
-
 
 /* 버튼 공통 */
 button {
@@ -55,14 +54,12 @@ button::after {
   border-radius: inherit;
   background-color: var(--anti);
   opacity: 0;
-  box-shadow: 0 0 0 var(--shadow);
   content: "";
 
   transition: opacity var(--duration-ui); 
 }
 
 button > * { color: inherit; }
-
 
 /* 활성화된 버튼 */
 button:not(:disabled) { cursor: pointer; }
@@ -96,10 +93,8 @@ button[blank]:not(:disabled)::before {
   background-color: unset;
 }
 
-button:not(:disabled):hover::before { box-shadow: 0 0 3px var(--shadow); }
 button:not(:disabled):hover::after { opacity: 0.1; }
 button:not(:disabled):active::after { opacity: 0.2; }
-
 
 /* 비활성화된 버튼 */
 button:disabled {
@@ -135,7 +130,6 @@ button[blank]:disabled::before {
   border: unset;
   background-color: unset;
 }
-
 
 /* 활성화된 색상 버튼 */
 button[red]:not(:disabled) { color: var(--accent-light); }
@@ -260,13 +254,11 @@ button[pink]:disabled::before {
   background-color: var(--pink-gs);
 }
 
-
 /* 버튼 내부 아이콘 */
 button > i::before {
   font-size: 14pt;
   vertical-align: -6px;
 }
-
 
 /* 버튼 내부 문자열 */
 button > span { margin: 0 2px; }

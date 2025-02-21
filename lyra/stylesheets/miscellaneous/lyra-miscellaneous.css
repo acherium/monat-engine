@@ -1,13 +1,47 @@
 @charset "UTF-8";
+/* display 값 */
+[none] { display: none !important; }
+[block] { display: block !important; }
+[inline] { display: inline !important; }
+[inline-block] { display: inline-block !important; }
+[flex] { display: flex !important; }
+[grid] { display: grid !important; }
+
+/* 텍스트 옵션 */
+[bolder] { font-weight: 900 !important; }
+[bold] { font-weight: 700 !important; }
+[weight-normal] { font-weight: 400 !important; }
+[light] { font-weight: 200 !important; }
+[lighter] { font-weight: 100 !important; }
+
+[style-normal] { font-style: normal !important; }
+[italic] { font-style: italic !important; }
+[oblique] { font-style: oblique !important; }
+
+[underline] { text-decoration-line: underline !important;}
+[line-through] { text-decoration-line: line-through !important;}
+[overline] { text-decoration-line: overline !important;}
+[underline][line-through] { text-decoration-line: underline line-through !important; }
+[line-through][overline] { text-decoration-line: line-through overline !important; }
+[underline][overline] { text-decoration-line: underline overline !important; }
+[underline][line-through][overline] { text-decoration-line: underline line-through overline !important; }
+
+[text-left] { text-align: left !important; }
+[text-center] { text-align: center !important; }
+[text-right] { text-align: right !important; }
+
 /* align-items 값 */
-[align-start] { align-items: start; }
-[align-center] { align-items: center; }
-[align-end] { align-items: end; }
+[align-start] { align-items: start !important; }
+[align-center] { align-items: center !important; }
+[align-end] { align-items: end !important; }
 
 /* justify-content 값 */
-[justify-start] { justify-content: start; }
-[justify-center] { justify-content: center; }
-[justify-end] { justify-content: end; }
-[justify-around] { justify-content: space-around; }
-[justify-between] { justify-content: space-between; }
-[justify-around] { justify-content: space-around; }
+[justify-start] { justify-content: start !important; }
+[justify-center] { justify-content: center !important; }
+[justify-end] { justify-content: end !important; }
+[justify-around] { justify-content: space-around !important; }
+[justify-between] { justify-content: space-between !important; }
+[justify-around] { justify-content: space-around !important; }
+
+/* 테이블 값 */
+[table-fixed] { table-layout: fixed !important; }
