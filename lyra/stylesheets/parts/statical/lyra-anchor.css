@@ -15,6 +15,9 @@ a:visited {
   background-color: oklch(from var(--palette-4) l c h/0.15);
 }
 
+a:not(:visited):hover { background-color: oklch(from var(--palette-3) l c h/0.2); }
+a:visited:hover { background-color: oklch(from var(--palette-4) l c h/0.2); }
+
 a::before {
   font-family: xeicon !important;
   font-weight: 400;
