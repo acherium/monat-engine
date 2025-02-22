@@ -19,7 +19,7 @@ input[type="checkbox"] {
 
   vertical-align: -0.2em;
   border: solid 2px var(--palette-3-gs);
-  border-radius: 4px;
+  border-radius: var(--checkbox-radius);
   background-color: transparent;
 }
 

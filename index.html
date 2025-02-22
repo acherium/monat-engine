@@ -7,13 +7,21 @@
   <link rel="stylesheet" href="./lyra/lyra-styles.css">
 </head>
 <body class="list-column">
-  <div class="list-column">
-    <p><input type="checkbox" autocomplete="off"><span>Checkbox</span></p>
-    <p><input type="checkbox" checked autocomplete="off"><span>Checked Checkbox</span></p>
-    <p><input type="checkbox" onpointerenter="this.indeterminate = true;" autocomplete="off"><span>Indeterminate Checkbox</span></p>
-    <p><input type="checkbox" autocomplete="off" disabled><span>Disabled Checkbox</span></p>
-    <p><input type="checkbox" checked autocomplete="off" disabled><span>Disabled Checked Checkbox</span></p>
-    <p><input type="checkbox" onpointerenter="this.indeterminate = true;" autocomplete="off" disabled><span>Disabled Indeterminate Checkbox</span></p>
+  <div class="list-row">
+    <div class="list-column">
+      <p><input type="checkbox" autocomplete="off"><span>Checkbox</span></p>
+      <p><input type="checkbox" checked autocomplete="off"><span>Checked Checkbox</span></p>
+      <p><input type="checkbox" indeterminate onpointerenter="this.indeterminate = true;" autocomplete="off"><span>Indeterminate Checkbox</span></p>
+      <p><input type="checkbox" autocomplete="off" disabled><span>Disabled Checkbox</span></p>
+      <p><input type="checkbox" checked autocomplete="off" disabled><span>Disabled Checked Checkbox</span></p>
+      <p><input type="checkbox" indeterminate onpointerenter="this.indeterminate = true;" autocomplete="off" disabled><span>Disabled Indeterminate Checkbox</span></p>
+    </div>
+    <div class="list-column">
+      <p><input type="radio" name="radio" autocomplete="off"><span>Radio</span></p>
+      <p><input type="radio" name="radio" checked autocomplete="off"><span>Checked Radio</span></p>
+      <p><input type="radio" name="radio-disabled" autocomplete="off" disabled><span>Disabled Radio</span></p>
+      <p><input type="radio" name="radio-disabled" checked autocomplete="off" disabled><span>Disabled Checked Radio</span></p>
+    </div>
   </div>
   <table style="width: 700px" table-fixed>
     <caption>가나다라</caption>
