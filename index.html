@@ -7,6 +7,34 @@
   <link rel="stylesheet" href="./lyra/lyra-styles.css">
 </head>
 <body class="list-column">
+  <div class="list-column" no-select>
+    <label>
+      <input type="checkbox" autocomplete="off">
+      <div class="toggle"></div><p>Checkbox Toggle</p>
+    </label>
+    <label>
+      <input type="radio" name="toggle-test-radio-1" autocomplete="off">
+      <div class="toggle"></div><p>Radio Toggle 1</p>
+    </label>
+    <label>
+      <input type="radio" name="toggle-test-radio-1" autocomplete="off">
+      <div class="toggle"></div><p>Radio Toggle 2</p>
+    </label>
+  </div>
+  <div class="list-column" no-select>
+    <label>
+      <input type="checkbox" autocomplete="off" disabled>
+      <div class="toggle"></div><p>Disabled Checkbox Toggle</p>
+    </label>
+    <label>
+      <input type="radio" name="toggle-test-radio-2" autocomplete="off" checked disabled>
+      <div class="toggle"></div><p>Disabled Radio Toggle 1</p>
+    </label>
+    <label>
+      <input type="radio" name="toggle-test-radio-2" autocomplete="off" disabled>
+      <div class="toggle"></div><p>Disabled Radio Toggle 2</p>
+    </label>
+  </div>
   <div class="list-column">
     <label>
       <i class="xi-search"></i><p>검색</p>

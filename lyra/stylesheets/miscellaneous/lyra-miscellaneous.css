@@ -8,6 +8,8 @@
 [grid] { display: grid !important; }
 
 /* 텍스트 옵션 */
+[no-select] { user-select: none !important; }
+
 [bolder] { font-weight: 900 !important; }
 [bold] { font-weight: 700 !important; }
 [weight-normal] { font-weight: 400 !important; }
@@ -31,16 +33,16 @@
 [text-right] { text-align: right !important; }
 
 [color-normal] { color: var(--font) !important; }
-[red] { color: var(--red) !important; }
-[orange] { color: var(--orange) !important; }
-[yellow] { color: var(--yellow) !important; }
-[green] { color: var(--green) !important; }
-[blue] { color: var(--blue) !important; }
-[navy] { color: var(--navy) !important; }
-[purple] { color: var(--purple) !important; }
-[turquoise] { color: var(--turquoise) !important; }
-[skyblue] { color: var(--skyblue) !important; }
-[pink] { color: var(--pink) !important; }
+[red]:not(:is(button)) { color: var(--red) !important; }
+[orange]:not(:is(button)) { color: var(--orange) !important; }
+[yellow]:not(:is(button)) { color: var(--yellow) !important; }
+[green]:not(:is(button)) { color: var(--green) !important; }
+[blue]:not(:is(button)) { color: var(--blue) !important; }
+[navy]:not(:is(button)) { color: var(--navy) !important; }
+[purple]:not(:is(button)) { color: var(--purple) !important; }
+[turquoise]:not(:is(button)) { color: var(--turquoise) !important; }
+[skyblue]:not(:is(button)) { color: var(--skyblue) !important; }
+[pink]:not(:is(button)) { color: var(--pink) !important; }
 
 [highlight] {
   margin: 0 -2px -2px -2px;
