@@ -1,7 +1,7 @@
 @charset "UTF-8";
 /* 체크박스 속성 값 */
 :root {
-  --checkbox-size: 1.2em;
+  --checkbox-size: 1rem;
   --checkbox-radius: 4px;
 }
 
@@ -14,10 +14,10 @@ input[type="checkbox"] {
   align-items: center;
   justify-content: center;
 
-  min-width: 1.2em;
-  min-height: 1.2em;
+  min-width: var(--checkbox-size);
+  min-height: var(--checkbox-size);
 
-  vertical-align: -0.2em;
+  vertical-align: calc(var(--checkbox-size) / 7 * -1);
   border: solid 2px var(--palette-3-gs);
   border-radius: var(--checkbox-radius);
   background-color: transparent;

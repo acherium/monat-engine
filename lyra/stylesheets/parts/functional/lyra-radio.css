@@ -1,7 +1,7 @@
 @charset "UTF-8";
 /* 라디오 버튼 속성 값 */
 :root {
-  --radio-size: 1.2em;
+  --radio-size: 1rem;
   --radio-radius: 50%;
 }
 
@@ -14,10 +14,10 @@ input[type="radio"] {
   align-items: center;
   justify-content: center;
 
-  min-width: 1.2em;
-  min-height: 1.2em;
+  min-width: var(--radio-size);
+  min-height: var(--radio-size);
 
-  vertical-align: -0.2em;
+  vertical-align: calc(var(--radio-size) / 7 * -1);
   border: solid 2px var(--palette-3-gs);
   border-radius: var(--radio-radius);
   background-color: transparent;

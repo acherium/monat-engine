@@ -9,6 +9,7 @@
 @import url("./stylesheets/parts/lyra-parts-all.css");
 
 /* 초기화 */
+:root { font-size: 11pt; }
 * {
   margin: 0;
   padding: 0;
@@ -21,9 +22,7 @@
   transition-property: color, border-color, background-color;
 }
 
-body {
-  background-color: var(--main);
-}
+body { background-color: var(--main); }
 
 /* 공통 요소 */
 .description {

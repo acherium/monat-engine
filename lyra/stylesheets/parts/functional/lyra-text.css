@@ -1,0 +1,117 @@
+@charset "UTF-8";
+/* 입력 칸 속성값 */
+:root {
+  --input-size: 48px;
+  --input-padding: 14px;
+  --input-padding-offset: 4px;
+  --input-gap: 4px;
+  --input-radius: 24px;
+}
+
+/* 입력 칸 */
+input[type="text"],
+input[type="number"] {
+  appearance: textfield;
+
+  position: relative;
+  padding: var(--input-padding) calc(var(--input-padding) + var(--input-padding-offset));
+
+  min-width: var(--input-size);
+  min-height: var(--input-size);
+
+  font-size: 1rem;
+  border: unset;
+  border-radius: var(--input-radius);
+  outline: unset;
+  background-color: var(--palette-2);
+}
+
+/* 플레이스홀더 */
+input[type="text"]::placeholder,
+input[type="number"]::placeholder { color: oklch(from var(--font) l c h/0.5); }
+
+/* 라벨 내 입력 칸 */
+label:has(input[type="text"]),
+label:has(input[type="number"]) {
+  display: flex;
+  position: relative;
+  align-items: center;
+  gap: var(--input-gap);
+  padding: var(--input-padding);
+
+  min-width: var(--input-size);
+  height: var(--input-size);
+
+  border-radius: var(--input-radius);
+  background-color: var(--palette-2);
+}
+
+label:has(input[type="text"]) > *,
+label:has(input[type="number"]) > * { color: inherit; }
+
+label > input[type="text"],
+label > input[type="number"] {
+  padding: 0 var(--input-padding-offset);
+
+  min-height: unset;
+
+  border-radius: unset;
+  background-color: transparent;
+}
+
+label:has(input[type="text"])::after,
+label:has(input[type="number"])::after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  box-sizing: border-box;
+
+  width: 100%;
+  height: 100%;
+
+  border-radius: inherit;
+  background-color: var(--anti);
+  opacity: 0;
+  pointer-events: none;
+  content: "";
+
+  transition: opacity var(--duration-ui); 
+}
+
+label > p + input[type="text"] {
+  margin-left: var(--input-padding-offset);
+  padding-left: calc(var(--input-padding-offset) * 2);
+  border-left: solid 2px oklch(from var(--font) l c h/0.2);
+}
+
+label:has(input[type="text"]):hover::after,
+label:has(input[type="number"]):hover::after { opacity: 0.1; }
+
+label:has(input[type="text"]):active::after,
+label:has(input[type="number"]):active::after { opacity: 0.2; }
+
+/* 활성화된 입력 칸 */
+label:has(input[type="text"]):not(:disabled),
+label:has(input[type="number"]):not(:disabled) { cursor: text; }
+
+/* 비활성화된 입력 칸 */
+input[type="text"]:disabled,
+input[type="number"]:disabled {
+  color: var(--palette-4-gs);
+  background-color: var(--palette-2-gs);
+  cursor: no-drop;
+}
+
+label:has(input[type="text"]:disabled),
+label:has(input[type="number"]:disabled) {
+  color: var(--palette-4-gs);
+  background-color: var(--palette-2-gs);
+  cursor: no-drop;
+}
+
+label:has(input[type="text"]:disabled) > input[type="text"],
+label:has(input[type="number"]:disabled) > input[type="number"] { background-color: transparent; }
+
+/* 버튼 내부 아이콘 */
+label:has(input[type="text"]) > i::before,
+label:has(input[type="number"]) > i::before { font-size: calc(1rem * 1.3); }

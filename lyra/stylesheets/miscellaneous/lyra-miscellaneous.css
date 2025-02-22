@@ -30,6 +30,15 @@
 [text-center] { text-align: center !important; }
 [text-right] { text-align: right !important; }
 
+[highlight] {
+  margin: 0 -2px -2px -2px;
+  padding: 0 2px 2px 2px;
+
+  border-radius: 4px;
+  background-color: oklch(from var(--palette-3) l c h/0.15);
+}
+[highlight]:hover { background-color: oklch(from var(--palette-3) l c h/0.2); }
+
 /* align-items 값 */
 [align-start] { align-items: start !important; }
 [align-center] { align-items: center !important; }
