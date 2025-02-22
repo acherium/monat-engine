@@ -1,0 +1,26 @@
+@charset "UTF-8";
+/* 앵커 */
+a {
+  margin: 0 -2px -2px -2px;
+  padding: 0 2px 2px 2px;
+
+  text-decoration: dotted 2px underline;
+  color: var(--palette-3);
+  border-radius: 4px;
+  background-color: oklch(from var(--palette-3) l c h/0.15);
+}
+
+a:visited {
+  color: var(--palette-4);
+  background-color: oklch(from var(--palette-4) l c h/0.15);
+}
+
+a::before {
+  font-family: xeicon !important;
+  font-weight: 400;
+  font-variant: normal;
+  line-height: 1;
+  text-transform: none;
+  vertical-align: -0.15em;
+  content: "\e9c0\00a0";
+}

@@ -9,7 +9,11 @@
 @import url("./stylesheets/parts/lyra-parts-all.css");
 
 /* 초기화 */
-:root { font-size: 11pt; }
+:root {
+  font-size: 12pt;
+  line-height: 1.5em;
+}
+
 * {
   margin: 0;
   padding: 0;

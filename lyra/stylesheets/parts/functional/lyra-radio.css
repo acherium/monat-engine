@@ -28,8 +28,8 @@ input[type="radio"]::before {
   position: absolute;
   box-sizing: border-box;
 
-  width: 69%;
-  height: 69%;
+  width: 65%;
+  height: 65%;
 
   border-radius: 50%;
 
