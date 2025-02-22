@@ -30,14 +30,42 @@
 [text-center] { text-align: center !important; }
 [text-right] { text-align: right !important; }
 
+[color-normal] { color: var(--font) !important; }
+[red] { color: var(--red) !important; }
+[orange] { color: var(--orange) !important; }
+[yellow] { color: var(--yellow) !important; }
+[green] { color: var(--green) !important; }
+[blue] { color: var(--blue) !important; }
+[navy] { color: var(--navy) !important; }
+[purple] { color: var(--purple) !important; }
+[turquoise] { color: var(--turquoise) !important; }
+[skyblue] { color: var(--skyblue) !important; }
+[pink] { color: var(--pink) !important; }
+
 [highlight] {
   margin: 0 -2px -2px -2px;
   padding: 0 2px 2px 2px;
 
+  color: var(--palette-3);
   border-radius: 4px;
   background-color: oklch(from var(--palette-3) l c h/0.15);
 }
 [highlight]:hover { background-color: oklch(from var(--palette-3) l c h/0.2); }
+
+[highlight][color-normal] {
+  color: var(--palette-3) !important;
+  background-color: oklch(from var(--palette-3) l c h/0.15);
+}
+[highlight][red] { background-color: oklch(from var(--red) l c h/0.15); }
+[highlight][orange] { background-color: oklch(from var(--orange) l c h/0.15); }
+[highlight][yellow] { background-color: oklch(from var(--yellow) l c h/0.15); }
+[highlight][green] { background-color: oklch(from var(--green) l c h/0.15); }
+[highlight][blue] { background-color: oklch(from var(--blue) l c h/0.15); }
+[highlight][navy] { background-color: oklch(from var(--navy) l c h/0.15); }
+[highlight][purple] { background-color: oklch(from var(--purple) l c h/0.15); }
+[highlight][turquoise] { background-color: oklch(from var(--turquoise) l c h/0.15); }
+[highlight][skyblue] { background-color: oklch(from var(--skyblue) l c h/0.15); }
+[highlight][pink] { background-color: oklch(from var(--pink) l c h/0.15); }
 
 /* align-items 값 */
 [align-start] { align-items: start !important; }
