@@ -6,7 +6,15 @@
   <title>Document</title>
   <link rel="stylesheet" href="./lyra/lyra-styles.css">
 </head>
-<body>
+<body class="list-column">
+  <div class="list-column">
+    <p><input type="checkbox" autocomplete="off"><span>Checkbox</span></p>
+    <p><input type="checkbox" checked autocomplete="off"><span>Checked Checkbox</span></p>
+    <p><input type="checkbox" onpointerenter="this.indeterminate = true;" autocomplete="off"><span>Indeterminate Checkbox</span></p>
+    <p><input type="checkbox" autocomplete="off" disabled><span>Disabled Checkbox</span></p>
+    <p><input type="checkbox" checked autocomplete="off" disabled><span>Disabled Checked Checkbox</span></p>
+    <p><input type="checkbox" onpointerenter="this.indeterminate = true;" autocomplete="off" disabled><span>Disabled Indeterminate Checkbox</span></p>
+  </div>
   <table style="width: 700px" table-fixed>
     <caption>가나다라</caption>
     <thead>
@@ -58,7 +66,6 @@
       </tr>
     </tfoot>
   </table>
-  <br>
   <div class="list-column">
     <div class="list-row" align-center>
       <p>버튼</p>
@@ -80,29 +87,29 @@
     </div>
     <div class="list-row" align-center>
       <p>버튼</p>
-      <button red>red</button>
-      <button orange>orange</button>
-      <button yellow>yellow</button>
-      <button green>green</button>
-      <button blue>blue</button>
-      <button navy>navy</button>
-      <button purple>purple</button>
-      <button turquoise>turquoise</button>
-      <button skyblue>skyblue</button>
-      <button pink>pink</button>
+      <button red><span>red</span></button>
+      <button orange><span>orange</span></button>
+      <button yellow><span>yellow</span></button>
+      <button green><span>green</span></button>
+      <button blue><span>blue</span></button>
+      <button navy><span>navy</span></button>
+      <button purple><span>purple</span></button>
+      <button turquoise><span>turquoise</span></button>
+      <button skyblue><span>skyblue</span></button>
+      <button pink><span>pink</span></button>
     </div>
     <div class="list-row" align-center>
       <p>버튼</p>
-      <button disabled red>red</button>
-      <button disabled orange>orange</button>
-      <button disabled yellow>yellow</button>
-      <button disabled green>green</button>
-      <button disabled blue>blue</button>
-      <button disabled navy>navy</button>
-      <button disabled purple>purple</button>
-      <button disabled turquoise>turquoise</button>
-      <button disabled skyblue>skyblue</button>
-      <button disabled pink>pink</button>
+      <button disabled red><span>red</span></button>
+      <button disabled orange><span>orange</span></button>
+      <button disabled yellow><span>yellow</span></button>
+      <button disabled green><span>green</span></button>
+      <button disabled blue><span>blue</span></button>
+      <button disabled navy><span>navy</span></button>
+      <button disabled purple><span>purple</span></button>
+      <button disabled turquoise><span>turquoise</span></button>
+      <button disabled skyblue><span>skyblue</span></button>
+      <button disabled pink><span>pink</span></button>
     </div>
   </div>
 </body>
