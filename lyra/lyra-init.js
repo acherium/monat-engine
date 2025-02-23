@@ -1,6 +1,6 @@
 import {
   body, $, $a,
-  get,
+  get, set, unset,
   DRAG_SCROLLING_THRESHOLD
 } from "./lyra-module.js";
 

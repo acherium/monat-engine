@@ -130,11 +130,38 @@ export const revoke = (node) => node.parentNode.removeChild(node);
 
 /**
  * 지정한 HTML 요소의 속성 값을 불러옵니다. 찾는 속성 값이 없다면 null을 반환합니다.
- * @param {HTMLElement} node HTML 요소
- * @param {string} name 찾는 속성 이름
+ * @param {HTMLElement} node HTML 요소.
+ * @param {string} name 찾는 속성 이름.
  * @returns {* | null}
+ * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Element/getAttribute | MDN 레퍼런스(영문)> Element: getAttribute() method}
  */
 export const get = (node, name) => node.getAttribute(name);
+
+/**
+ * 지정한 HTML 요소의 속성 값을 설정하거나 바꿉니다. 대상 HTML 요소를 반환합니다.
+ * @param {HTMLElement} node HTML 요소.
+ * @param {string} name 속성 이름.
+ * @param {*} value 속성 값.
+ * @returns {HTMLElement}
+ * @see {@link https://developer.mozilla.org/ko/docs/Web/API/Element/setAttribute | MDN 레퍼런스> Element.setAttribute()}
+ */
+export const set = (node, name, value) => {
+  console.log(node);
+  node.setAttribute(name, value);
+  return node;
+};
+
+/**
+ * 지정한 HTML 요소의 속성 값을 제거합니다. 대상 HTML 요소를 반환합니다.
+ * @param {HTMLElement} node HTML 요소.
+ * @param {string} name 제거할 속성 이름.
+ * @returns {HTMLElement}
+ * @see {@link https://developer.mozilla.org/ko/docs/Web/API/Element/removeAttribute | MDN 레퍼런스| Element.removeAttribute()}
+ */
+export const unset = (node, name) => {
+  node.removeAttribute(name);
+  return node;
+};
 
 // 환경변수 고정
 Object.seal(lyraEnv);
