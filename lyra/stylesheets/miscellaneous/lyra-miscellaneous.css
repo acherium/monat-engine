@@ -7,6 +7,11 @@
 [flex] { display: flex !important; }
 [grid] { display: grid !important; }
 
+/* 크기 옵션 */
+[width-full] { width: 100% !important; }
+[height-full] { height: 100% !important; }
+[flex-full] { flex: 1 !important; }
+
 /* 텍스트 옵션 */
 [no-select] { user-select: none !important; }
 

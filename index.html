@@ -7,7 +7,45 @@
   <link rel="stylesheet" href="./lyra/lyra-styles.css">
 </head>
 <body class="list-column">
-  <div class="list-column" no-select>
+  <div class="tabs" style="max-width: 100%; width: 600px;">
+    <label><input type="radio" name="tab-test" id="0" autocomplete="off"><p>탭 1</p></label>
+    <label><input type="radio" name="tab-test" id="1" autocomplete="off"><p>탭 2</p></label>
+    <label><input type="radio" name="tab-test" id="2" autocomplete="off"><p>탭 3</p></label>
+    <label><input type="radio" name="tab-test" id="3" autocomplete="off"><p>탭 4</p></label>
+    <label><input type="radio" name="tab-test" id="4" autocomplete="off"><p>탭 5</p></label>
+    <label><input type="radio" name="tab-test" id="5" autocomplete="off" disabled checked><p>탭 6</p></label>
+    <label><input type="radio" name="tab-test" id="6" autocomplete="off" disabled><p>탭 7</p></label>
+  </div>
+  <div class="tabs-row" bottom style="max-width: 100%; width: 600px;">
+    <label><input type="radio" name="tab-test2" id="0" autocomplete="off" checked><p>탭 1</p></label>
+    <label><input type="radio" name="tab-test2" id="1" autocomplete="off"><i class="xi-external-link"></i><p>탭 2</p></label>
+    <label><input type="radio" name="tab-test2" id="2" autocomplete="off"><p>탭 3</p></label>
+    <label><input type="radio" name="tab-test2" id="3" autocomplete="off" disabled><p>탭 4</p></label>
+    <label><input type="radio" name="tab-test2" id="4" autocomplete="off"><p>탭 5</p></label>
+    <label><input type="radio" name="tab-test2" id="5" autocomplete="off"><p>탭 6</p></label>
+    <label><input type="radio" name="tab-test2" id="6" autocomplete="off"><p>탭 7</p></label>
+  </div>
+  <div class="list-row" style="max-width: 100%; width: 600px;">
+    <div class="tabs-column" width-max flex-full>
+      <label><input type="radio" name="tab-test3" id="0" autocomplete="off" checked><p>탭 1</p></label>
+      <label><input type="radio" name="tab-test3" id="1" autocomplete="off"><i class="xi-external-link"></i><p>탭 2</p></label>
+      <label><input type="radio" name="tab-test3" id="2" autocomplete="off"><p>탭 3</p></label>
+      <label><input type="radio" name="tab-test3" id="3" autocomplete="off" disabled><p>탭 4</p></label>
+      <label><input type="radio" name="tab-test3" id="4" autocomplete="off"><p>탭 5</p></label>
+      <label><input type="radio" name="tab-test3" id="5" autocomplete="off"><p>탭 6</p></label>
+      <label><input type="radio" name="tab-test3" id="6" autocomplete="off"><p>탭 7</p></label>
+    </div>
+    <div class="tabs-column" right width-max flex-full>
+      <label><input type="radio" name="tab-test4" id="0" autocomplete="off"><p>탭 1</p></label>
+      <label><input type="radio" name="tab-test4" id="1" autocomplete="off"><i class="xi-external-link"></i><p>탭 2</p></label>
+      <label><input type="radio" name="tab-test4" id="2" autocomplete="off"><p>탭 3</p></label>
+      <label><input type="radio" name="tab-test4" id="3" autocomplete="off" disabled checked><p>탭 4</p></label>
+      <label><input type="radio" name="tab-test4" id="4" autocomplete="off"><p>탭 5</p></label>
+      <label><input type="radio" name="tab-test4" id="5" autocomplete="off"><p>탭 6</p></label>
+      <label><input type="radio" name="tab-test4" id="6" autocomplete="off"><p>탭 7aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</p></label>
+    </div>
+  </div>
+  <div class="list-column" no-select none>
     <label>
       <input type="checkbox" autocomplete="off">
       <div class="toggle"></div><p>Checkbox Toggle</p>
@@ -21,7 +59,7 @@
       <div class="toggle"></div><p>Radio Toggle 2</p>
     </label>
   </div>
-  <div class="list-column" no-select>
+  <div class="list-column" no-select none>
     <label>
       <input type="checkbox" autocomplete="off" disabled>
       <div class="toggle"></div><p>Disabled Checkbox Toggle</p>
@@ -35,7 +73,7 @@
       <div class="toggle"></div><p>Disabled Radio Toggle 2</p>
     </label>
   </div>
-  <div class="list-column">
+  <div class="list-column" none>
     <label>
       <i class="xi-search"></i><p>검색</p>
       <input type="text" size="10" placeholder="" autocomplete="off">
@@ -45,7 +83,7 @@
       <input type="text" size="10" placeholder="" autocomplete="off">
     </label>
   </div>
-  <div class="list-column">
+  <div class="list-column" none>
     <input type="text" size="10" placeholder="disabled" autocomplete="off" value="Disabled Input" disabled>
     <label>
       <i class="xi-search"></i><p>검색</p>
@@ -57,7 +95,7 @@
     Lorem ipsum dolor, sit amet <a href="#">consectetur adipisicing</a> elit. Saepe, esse ipsa! Amet quia corrupti <span highlight>nesciunt</span> dolore repudiandae! <span red>Cumque</span>, nulla! Libero quod, praesentium corporis laudantium ut obcaecati illum nihil repellendus impedit.
   </p>
   <br>
-  <div class="list-row">
+  <div class="list-row" none>
     <div class="list-column">
       <p><input type="checkbox" autocomplete="off"><span>Checkbox</span></p>
       <p><input type="checkbox" checked autocomplete="off"><span>Checked Checkbox</span></p>
@@ -73,7 +111,7 @@
       <p><input type="radio" name="radio-disabled" checked autocomplete="off" disabled><span>Disabled Checked Radio</span></p>
     </div>
   </div>
-  <table style="width: 700px" table-fixed>
+  <table style="width: 700px" table-fixed none>
     <caption>가나다라</caption>
     <thead>
       <tr>
@@ -124,7 +162,7 @@
       </tr>
     </tfoot>
   </table>
-  <div class="list-column">
+  <div class="list-column" none>
     <div class="list-row" align-center>
       <p>버튼</p>
       <button><span>버튼</span></button>
