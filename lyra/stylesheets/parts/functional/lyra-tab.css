@@ -11,9 +11,10 @@
 
 /* 탭 목록 */
 :is(.tabs, .tabs-row, .tabs-column) {
-  display: block;
+  display: flex;
   position: relative;
   overflow-y: hidden;
+  /* overflow: hidden; */
 
   height: var(--tab-size);
 }
@@ -32,6 +33,8 @@
   min-width: var(--tab-size);
   width: fit-content;
   height: var(--tab-size);
+
+  flex-shrink: 0;
 
   line-height: 1.3;
 }
@@ -110,13 +113,14 @@
   opacity: 1;
 }
 
-/* 종렬 탭 */
+/* 횡렬 탭 */
 :is(.tabs, .tabs-row) > label:not(:first) { margin-left: var(--tab-gap); }
 
 :is(.tabs, .tabs-row) > label { float: left; }
 
-/* 횡렬 탭 */
+/* 종렬 탭 */
 .tabs-column {
+  flex-direction: column;
   overflow-x: hidden;
   overflow-y: auto;
 

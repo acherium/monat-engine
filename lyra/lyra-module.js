@@ -22,6 +22,8 @@ export const DEFAULT_WINDOW_HEIGHT = 400;
 export const DEFAULT_WINDOW_X = 10;
 export const DEFAULT_WINDOW_Y = 10;
 
+export const DRAG_SCROLLING_THRESHOLD = 50;
+
 export const TEMPLATE_CUBIC_BEZIER_0 = "cubic-bezier(.17, .67, .51, .98)";
 
 /**
