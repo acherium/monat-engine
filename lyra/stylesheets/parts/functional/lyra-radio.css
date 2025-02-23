@@ -59,3 +59,10 @@ input[type="radio"]:disabled { background-color: var(--palette-2-gs); }
 input[type="radio"]:disabled:hover { cursor: no-drop; }
 
 input[type="radio"]:disabled:checked::before { opacity: 1; }
+
+/* 라벨 */
+label:has(input[type="radio"]) * { color: inherit; }
+label:has(input[type="radio"]:disabled) {
+  color: var(--palette-3-gs);
+  cursor: no-drop;
+}

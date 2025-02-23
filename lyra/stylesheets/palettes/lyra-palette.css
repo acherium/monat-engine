@@ -137,7 +137,7 @@
     --palette-0: var(--black);
     --palette-1: var(--accent-dark);
     --palette-2: var(--accent-deep);
-    --palette-3: var(--accent);
+    --palette-3: oklch(from var(--accent) 75% c h);
     --palette-4: var(--accent-medium);
     --palette-5: var(--accent-light);
     --palette-6: var(--white);

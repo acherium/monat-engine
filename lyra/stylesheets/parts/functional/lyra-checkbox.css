@@ -84,3 +84,10 @@ input[type="checkbox"]:disabled:indeterminate {
 
 input[type="checkbox"]:disabled:not(:indeterminate):checked::before,
 input[type="checkbox"]:disabled:indeterminate::after { opacity: 1; }
+
+/* 라벨 */
+label:has(input[type="checkbox"]) * { color: inherit; }
+label:has(input[type="checkbox"]:disabled) {
+  color: var(--palette-3-gs);
+  cursor: no-drop;
+}

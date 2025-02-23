@@ -16,6 +16,8 @@ label:has(:is(input[type="checkbox"], input[type="radio"])):has(.toggle) {
   gap: var(--toggle-label-gap);
 }
 
+label:has(:is(input[type="checkbox"], input[type="radio"])):has(.toggle) * { color: inherit; }
+
 label:has(:is(input[type="checkbox"], input[type="radio"])):has(.toggle) > :is(input[type="checkbox"], input[type="radio"]) { display: none; }
 
 /* 토글 */
@@ -75,7 +77,10 @@ label:has(:is(input[type="checkbox"]:not(:disabled), input[type="radio"]:not(:di
 label:has(:is(input[type="checkbox"]:not(:disabled), input[type="radio"]:not(:disabled))):has(.toggle):active > .toggle::after { opacity: 0.2; }
 
 /* 비활성화된 토글 */
-label:has(:is(input[type="checkbox"]:disabled, input[type="radio"]:disabled)):has(.toggle) { cursor: no-drop; }
+label:has(:is(input[type="checkbox"]:disabled, input[type="radio"]:disabled)):has(.toggle) {
+  color: var(--palette-3-gs);
+  cursor: no-drop;
+}
 
 label:has(:is(input[type="checkbox"]:disabled, input[type="radio"]:disabled)):has(.toggle) > .toggle { background-color: var(--palette-2-gs); }
 label:has(:is(input[type="checkbox"]:disabled, input[type="radio"]:disabled)):has(.toggle) > .toggle::before { background-color: var(--palette-3-gs); }
