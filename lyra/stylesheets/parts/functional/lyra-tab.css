@@ -13,8 +13,8 @@
 :is(.tabs, .tabs-row, .tabs-column) {
   display: flex;
   position: relative;
+  gap: var(--tab-gap);
   overflow-y: hidden;
-  /* overflow: hidden; */
 
   height: var(--tab-size);
 }

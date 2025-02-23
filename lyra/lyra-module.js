@@ -32,6 +32,12 @@ export const TEMPLATE_CUBIC_BEZIER_0 = "cubic-bezier(.17, .67, .51, .98)";
  */
 export const body = document.body;
 
+/**
+ * 문서의 헤드 요소입니다.
+ * @see {@link https://developer.mozilla.org/ko/docs/Web/API/Document/head | MDNS 레퍼런스> Document.head}
+ */
+export const head = document.head;
+
 // 환경 변수
 export const lyraEnv = {
   theme: "auto"

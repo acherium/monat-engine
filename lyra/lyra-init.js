@@ -1,5 +1,5 @@
 import {
-  body, $, $a,
+  body, head, $, $a, create, append, revoke,
   get, set, unset,
   DRAG_SCROLLING_THRESHOLD
 } from "./lyra-module.js";
@@ -9,14 +9,23 @@ import {
  * @param {HTMLElement} target 초기화 대상
  */
 const init = (target) => {
+  // 패비콘 없으면 기본 아이콘으로 설정
+  // console.log();
+  if (!$(`link[rel="shortcut icon"]`)) {
+    append(create("link", {
+      properties: {
+        rel: "shortcut icon",
+        href: "./lyra/assets/essentials/favicon.svg",
+        type: "image/x-icon"
+      }
+    }), head);
+  };
+
   // 탭 관련 기능 초기화
   // 탭 목록 넘칠 시 드래그로 스크롤
   const $tabLists = $a(`:is(.tabs, .tabs-row, .tabs-column)`, target);
   for (const $tabList of $tabLists) {
-    if (
-      ($tabList.classList.contains("tabs") || $tabList.classList.contains("tabs-row")) &&
-      ($tabList.clientWidth !== $tabList.scrollWidth)
-    ) {
+    if ($tabList.classList.contains("tabs") || $tabList.classList.contains("tabs-row")) {
       // 횡렬 탭 목록의 경우
       $tabList.onpointerdown = (pointer) => {
         if (pointer.pointerType !== "mouse") return;
@@ -43,10 +52,7 @@ const init = (target) => {
           $tabList.onpointercancel = null;
         };
       };
-    } else if(
-      $tabList.classList.contains("tabs-column") &&
-      ($tabList.clientHeight !== $tabList.scrollHeight)
-    ) {
+    } else if($tabList.classList.contains("tabs-column")) {
       // 종렬 탭 목록의 경우
       $tabList.onpointerdown = (pointer) => {
         if (pointer.pointerType !== "mouse") return;

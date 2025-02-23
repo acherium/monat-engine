@@ -7,6 +7,11 @@
 [flex] { display: flex !important; }
 [grid] { display: grid !important; }
 
+/* 박스 모델, 레이아웃 수치 관련 */
+[no-margin] { margin: 0 !important; }
+[no-padding] { padding: 0 !important; }
+[no-gap] { gap: 0 !important; }
+
 /* 크기 옵션 */
 [width-full] { width: 100% !important; }
 [height-full] { height: 100% !important; }
