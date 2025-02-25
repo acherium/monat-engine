@@ -42,6 +42,7 @@ input[type="number"] {
 
   border-radius: var(--input-radius);
   background-color: var(--palette-2);
+  user-select: none;
 }
 
 :is(label:has(input[type="text"]), label:has(input[type="number"])) > * { color: inherit; }

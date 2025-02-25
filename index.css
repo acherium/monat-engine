@@ -4,9 +4,8 @@ body {
   display: flex;
   position: relative;
 
-  min-height: 100dvh;
-  width: 100%;
-  height: max-content;
+  width: 100dvw;
+  height: 100dvh;
 }
 
 #left {

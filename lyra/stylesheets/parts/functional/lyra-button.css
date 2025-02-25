@@ -23,6 +23,7 @@ button {
   border: unset;
   border-radius: var(--button-radius);
   background-color: unset;
+  user-select: none;
 }
 
 button::before {

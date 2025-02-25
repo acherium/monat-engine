@@ -17,6 +17,8 @@
   overflow-y: hidden;
 
   height: var(--tab-size);
+
+  user-select: none;
 }
 
 :is(.tabs, .tabs-row, .tabs-column) > label > input[type="radio"] { display: none; }
