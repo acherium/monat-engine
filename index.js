@@ -1,6 +1,4 @@
-import {
-  datetime, date, time
-} from "./lyra/lyra-module.js";
+import * as l from "./lyra/lyra-module.js";
 
 (() => {
 })();
