@@ -3,6 +3,10 @@
 const _TIMEZONE_DATA = [
   // 포맷: [ 키, [ 영문, 한글, 오프셋(분) ] ]
   [ "UTC", [ "Coordinated Universal Time", "협정 세계시", 0 ] ],
+  // UTC-12:00
+  [ "AoE", "Anywhere on Earth", "Anywhere on Earth", 720 ],
+  // UTC-11:00
+  [ "SST", [ "Samoa Standard Time", "사모아 표준시", 660 ] ],
   // UTC-10:00
   [ "HST", [ "Hawaii-Aleutian Time Zone", "하와이-알류샨 시간대", 600 ] ],
   // UTC-09:00
