@@ -146,8 +146,8 @@
     
     /* 기본 요소 */
     --main: oklch(0% 0 0);
-    --sub: oklch(10% 0 0);
-    --border: oklch(20% 0 0);
+    --sub: oklch(30% 0 0);
+    --border: oklch(40% 0 0);
     --font: oklch(100% 0 0);
     --font-sub: oklch(50% 0 0);
     --icon: oklch(100% 0 0/0.5);
