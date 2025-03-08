@@ -6,6 +6,10 @@
   --button-gap: 4px;
   --button-radius: 6px;
 
+  --float-button-size: 44px;
+  --float-button-padding: 12px;
+  --float-button-radius: 22px;
+
   --button-border: var(--border);
   --button-background: oklch(from var(--anti) l c h/0.05);
 }
@@ -212,3 +216,17 @@ button[pink]:disabled {
 
 /* 버튼 내부 문자열 */
 button > span { margin: 0 2px; }
+
+/* 플로팅 버튼 */
+button[float] {
+  padding: var(--float-button-padding);
+
+  min-width: var(--float-button-size);
+  min-height: var(--float-button-size);
+
+  color: var(--main);
+  border-radius: var(--float-button-radius);
+  background-color: var(--anti);
+  --icon: var(--main);
+}
+button[float]::before { content: unset; }
