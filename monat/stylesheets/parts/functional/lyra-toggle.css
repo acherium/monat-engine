@@ -21,7 +21,11 @@ label:has(:is(input[type="checkbox"], input[type="radio"])):has(.toggle) {
 
 label:has(:is(input[type="checkbox"], input[type="radio"])):has(.toggle) * { color: inherit; }
 
-label:has(:is(input[type="checkbox"], input[type="radio"])):has(.toggle) > :is(input[type="checkbox"], input[type="radio"]) { display: none; }
+label:has(:is(input[type="checkbox"], input[type="radio"])):has(.toggle) > :is(input[type="checkbox"], input[type="radio"]) {
+  position: absolute;
+
+  opacity: 0;
+}
 
 /* 토글 */
 label:has(:is(input[type="checkbox"], input[type="radio"])):has(.toggle) > .toggle {
@@ -34,6 +38,8 @@ label:has(:is(input[type="checkbox"], input[type="radio"])):has(.toggle) > .togg
   border-radius: var(--toggle-radius);
   background-color: transparent;
 }
+
+label:has(:is(input[type="checkbox"], input[type="radio"]):focus-visible):has(.toggle) > .toggle { outline: solid 2px var(--accent); }
 
 label:has(:is(input[type="checkbox"], input[type="radio"])):has(.toggle) > .toggle::before {
   position: absolute;

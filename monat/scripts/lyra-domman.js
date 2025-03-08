@@ -96,7 +96,6 @@ export const get = (node, name) => node.getAttribute(name);
  * @see {@link https://developer.mozilla.org/ko/docs/Web/API/Element/setAttribute | MDN 레퍼런스> Element.setAttribute()}
  */
 export const set = (node, name, value) => {
-  console.log(node);
   node.setAttribute(name, value);
   return node;
 };
