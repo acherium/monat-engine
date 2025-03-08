@@ -3,44 +3,44 @@
 [none] { display: none !important; }
 [block] { display: block !important; }
 [inline] { display: inline !important; }
-[inline-block] { display: inline-block !important; }
+[inlineblock] { display: inline-block !important; }
 [flex] { display: flex !important; }
 [grid] { display: grid !important; }
 
 /* 박스 모델, 레이아웃 수치 관련 */
-[no-margin] { margin: 0 !important; }
-[no-padding] { padding: 0 !important; }
-[no-gap] { gap: 0 !important; }
+[nomargin] { margin: 0 !important; }
+[nopadding] { padding: 0 !important; }
+[nogap] { gap: 0 !important; }
 
 /* 크기 옵션 */
-[width-full] { width: 100% !important; }
-[height-full] { height: 100% !important; }
-[flex-full] { flex: 1 !important; }
+[widthfull] { width: 100% !important; }
+[heightfull] { height: 100% !important; }
+[flexfull] { flex: 1 !important; }
 
 /* 텍스트 옵션 */
 [no-select] { user-select: none !important; }
 
 [bolder] { font-weight: 900 !important; }
 [bold] { font-weight: 700 !important; }
-[weight-normal] { font-weight: 400 !important; }
+[weightnormal] { font-weight: 400 !important; }
 [light] { font-weight: 200 !important; }
 [lighter] { font-weight: 100 !important; }
 
-[style-normal] { font-style: normal !important; }
+[stylenormal] { font-style: normal !important; }
 [italic] { font-style: italic !important; }
 [oblique] { font-style: oblique !important; }
 
 [underline] { text-decoration-line: underline !important;}
-[line-through] { text-decoration-line: line-through !important;}
+[linethrough] { text-decoration-line: line-through !important;}
 [overline] { text-decoration-line: overline !important;}
-[underline][line-through] { text-decoration-line: underline line-through !important; }
-[line-through][overline] { text-decoration-line: line-through overline !important; }
+[underline][linethrough] { text-decoration-line: underline line-through !important; }
+[linethrough][overline] { text-decoration-line: line-through overline !important; }
 [underline][overline] { text-decoration-line: underline overline !important; }
-[underline][line-through][overline] { text-decoration-line: underline line-through overline !important; }
+[underline][linethrough][overline] { text-decoration-line: underline line-through overline !important; }
 
-[text-left] { text-align: left !important; }
-[text-center] { text-align: center !important; }
-[text-right] { text-align: right !important; }
+[textleft] { text-align: left !important; }
+[textcenter] { text-align: center !important; }
+[textright] { text-align: right !important; }
 
 [color-normal] { color: var(--font) !important; }
 [red]:not(:is(button)) { color: var(--red) !important; }
@@ -80,17 +80,17 @@
 [highlight][pink] { background-color: oklch(from var(--pink) l c h/0.15); }
 
 /* align-items 값 */
-[align-start] { align-items: start !important; }
-[align-center] { align-items: center !important; }
-[align-end] { align-items: end !important; }
+[alignstart] { align-items: start !important; }
+[aligncenter] { align-items: center !important; }
+[alignend] { align-items: end !important; }
 
 /* justify-content 값 */
-[justify-start] { justify-content: start !important; }
-[justify-center] { justify-content: center !important; }
-[justify-end] { justify-content: end !important; }
-[justify-around] { justify-content: space-around !important; }
-[justify-between] { justify-content: space-between !important; }
-[justify-around] { justify-content: space-around !important; }
+[justifystart] { justify-content: start !important; }
+[justifycenter] { justify-content: center !important; }
+[justifyend] { justify-content: end !important; }
+[justifyaround] { justify-content: space-around !important; }
+[justifybetween] { justify-content: space-between !important; }
+[justifyaround] { justify-content: space-around !important; }
 
 /* 테이블 값 */
 [table-fixed] { table-layout: fixed !important; }

@@ -10,7 +10,6 @@ import {
  */
 const init = (target) => {
   // 패비콘 없으면 기본 아이콘으로 설정
-  // console.log();
   if (!$(`link[rel="shortcut icon"]`)) {
     append(create("link", {
       properties: {
@@ -21,9 +20,13 @@ const init = (target) => {
     }), head);
   };
 
+  // :indeterminate 상태의 체크박스 초기화
+  const $indeterminateCheckboxes = $a(`input[type="checkbox"][indeterminate]`);
+  for (const $checkbox of ($indeterminateCheckboxes)) $checkbox.indeterminate = true;
+
   // 탭 관련 기능 초기화
   // 탭 목록 넘칠 시 드래그로 스크롤
-  const $tabLists = $a(`:is(.tabs, .tabs-row, .tabs-column)`, target);
+  const $tabLists = $a(":is(.tabs, .tabs-row, .tabs-column)", target);
   for (const $tabList of $tabLists) {
     if ($tabList.classList.contains("tabs") || $tabList.classList.contains("tabs-row")) {
       // 횡렬 탭 목록의 경우
