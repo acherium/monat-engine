@@ -1,0 +1,9 @@
+@charset "UTF-8";
+@import url("./lyra-icons.css");
+
+/* 로딩 휠 애니메이션 */
+.loading-wheel { animation: linear 1s both infinite ani-rotate-loading-wheel; }
+@keyframes ani-rotate-loading-wheel {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

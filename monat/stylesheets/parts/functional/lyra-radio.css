@@ -18,7 +18,7 @@ input[type="radio"] {
   min-height: var(--radio-size);
 
   vertical-align: calc(var(--radio-size) / 7 * -1);
-  border: solid 2px var(--accent-gs);
+  border: solid 2px var(--icon);
   border-radius: var(--radio-radius);
   background-color: transparent;
 }

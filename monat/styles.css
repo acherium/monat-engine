@@ -9,7 +9,7 @@
 @import url("./stylesheets/parts/lyra-parts-all.css");
 
 /* 아이콘 팩 */
-@import url("./stylesheets/icons/lyra-icons.css");
+@import url("./stylesheets/icons/lyra-icons-master.css");
 
 /* 초기화 */
 :root {
