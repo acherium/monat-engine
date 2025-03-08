@@ -18,7 +18,7 @@ header {
   z-index: 10;
 
   width: 100%;
-  height: 101px;
+  height: 65px;
 
   border-bottom: solid 1px oklch(from var(--anti) l c h/0.1);
   background-color: oklch(from var(--main) l c h/0.5);
@@ -30,7 +30,7 @@ main {
   position: relative;
   justify-content: center;
   overflow-x: hidden;
-  padding-top: 101px;
+  padding-top: 65px;
 }
 
 .wrap {
@@ -57,12 +57,8 @@ main {
   gap: 10px;
 }
 
-#symbol { height: 32px; }
-#logotype {
-  margin-top: 8px;
-
-  height: 32px;
-}
+#symbol,
+#logotype { height: 48px; }
 
 @media screen and (max-width: 1216px) {
   #logotype { display: none; }
