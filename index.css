@@ -1,0 +1,69 @@
+@charset "UTF-8";
+/* 데모 페이지용 스타일 */
+body {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  overflow: hidden;
+
+  width: 100%;
+  height: 100dvh;
+}
+
+header {
+  display: flex;
+  position: absolute;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+
+  width: 100%;
+  height: 101px;
+
+  border-bottom: solid 1px oklch(from var(--anti) l c h/0.1);
+  background-color: oklch(from var(--main) l c h/0.5);
+  backdrop-filter: blur(15px);
+}
+
+main {
+  display: flex;
+  position: relative;
+  justify-content: center;
+  overflow-x: hidden;
+  padding-top: 101px;
+}
+
+.wrap {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  gap: var(--gap);
+  padding: var(--padding);
+
+  max-width: 100%;
+  width: calc(1200px + var(--padding) * 2);
+  height: max-content;
+  flex-shrink: 0;
+}
+
+.wrap > * {
+  width: fit-content;
+  height: fit-content;
+}
+
+#logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#symbol { height: 32px; }
+#logotype {
+  margin-top: 8px;
+
+  height: 32px;
+}
+
+@media screen and (max-width: 1216px) {
+  #logotype { display: none; }
+}
