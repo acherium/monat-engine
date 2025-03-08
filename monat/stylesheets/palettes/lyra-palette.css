@@ -82,11 +82,13 @@
   --palette-6-gs: oklch(from var(--palette-6) l 0 h);
 
   /* 기본 요소 */
-  --main: var(--palette-1);
-  --sub: var(--palette-2);
-  --border: var(--palette-4);
-  --font: var(--palette-5);
-  --anti: var(--palette-5);
+  --main: oklch(100% 0 0);
+  --sub: oklch(90% 0 0);
+  --border: oklch(80% 0 0);
+  --font: oklch(0% 0 0);
+  --font-sub: oklch(50% 0 0);
+  --icon: oklch(0% 0 0/0.5);
+  --anti: oklch(0% 0 0);
   --shadow: oklch(from var(--palette-5) l c h/0.1);
 
   /* 기본 요소 - 그레이스케일 */

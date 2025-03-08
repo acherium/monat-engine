@@ -3,13 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Monat Engine Demonstration</title>
-
+  <title>Monat Engine Demo</title>
   <link rel="stylesheet" href="./monat/styles.css">
-
   <script type="module" src="./monat/init.js"></script>
 </head>
 <body>
-  <il class="misc-test"></il>
+  <div class="list-row">
+    <button><i class="placeholder"></i><span>버튼</span></button>
+    <button outline><i class="placeholder"></i><span>버튼</span></button>
+    <button blank><i class="placeholder"></i><span>버튼</span></button>
+    <button accent><i class="placeholder"></i><span>버튼</span></button>
+</div>
+  <div class="list-row">
+    <label><input type="checkbox" autocomplete="off"><span>가나다</span></label>
+    <label><input type="checkbox" autocomplete="off" checked><span>가나다</span></label>
+    <label><input type="checkbox" autocomplete="off" disabled><span>가나다</span></label>
+    <label><input type="checkbox" autocomplete="off" checked disabled><span>가나다</span></label>
+  </div>
+  <div class="list-row">
+    <label><input type="radio" autocomplete="off"><span>가나다</span></label>
+    <label><input type="radio" autocomplete="off" checked><span>가나다</span></label>
+    <label><input type="radio" autocomplete="off" disabled><span>가나다</span></label>
+    <label><input type="radio" autocomplete="off" checked disabled><span>가나다</span></label>
+  </div>
 </body>
 </html>
