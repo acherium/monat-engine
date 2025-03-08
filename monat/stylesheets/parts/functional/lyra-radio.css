@@ -23,6 +23,8 @@ input[type="radio"] {
   background-color: transparent;
 }
 
+input[type="radio"]:focus-visible { outline: solid 2px var(--accent); }
+
 /* 활성화된 라디오 버튼 */
 input[type="radio"]:not(:disabled):hover {
   border-color: var(--accent);

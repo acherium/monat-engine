@@ -11,7 +11,7 @@
   --float-button-radius: 22px;
 
   --button-border: var(--border);
-  --button-background: oklch(from var(--anti) l c h/0.05);
+  --button-background: oklch(from var(--anti) l c h/0);
 }
 
 /* 버튼 공통 */
@@ -32,6 +32,8 @@ button {
   background-color: var(--button-background);
   user-select: none;
 }
+
+button:focus-visible { outline: solid 2px var(--accent); }
 
 button::before,
 button::after {

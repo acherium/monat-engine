@@ -6,6 +6,9 @@
   --toggle-size: 28px;
   --toggle-length: 20px;
   --toggle-radius: calc(var(--toggle-size) / 2);
+  --toggle-border-width: 1px;
+
+  --toggle-border: var(--border);
 }
 
 /* 토글 라벨 */
@@ -27,8 +30,9 @@ label:has(:is(input[type="checkbox"], input[type="radio"])):has(.toggle) > .togg
   width: calc(var(--toggle-size) + var(--toggle-length));
   height: var(--toggle-size);
 
+  border: solid var(--toggle-border-width) var(--toggle-border);
   border-radius: var(--toggle-radius);
-  background-color: var(--palette-2);
+  background-color: transparent;
 }
 
 label:has(:is(input[type="checkbox"], input[type="radio"])):has(.toggle) > .toggle::before {
@@ -36,20 +40,23 @@ label:has(:is(input[type="checkbox"], input[type="radio"])):has(.toggle) > .togg
   left: var(--toggle-padding);
   top: var(--toggle-padding);
 
-  width: calc(var(--toggle-size) - var(--toggle-padding) * 2);
-  height: calc(var(--toggle-size) - var(--toggle-padding) * 2);
+  width: calc(var(--toggle-size) - var(--toggle-padding) * 2 - var(--toggle-border-width) * 2);
+  height: calc(var(--toggle-size) - var(--toggle-padding) * 2 - var(--toggle-border-width) * 2);
 
   border-radius: inherit;
-  background-color: var(--palette-1);
+  background-color: var(--toggle-border);
   content: "";
 
   transform: translateX(0);
   transition: transform var(--duration-ui);
 }
 
-label:has(:is(input[type="checkbox"]:checked, input[type="radio"]:checked)):has(.toggle) > .toggle { background-color: var(--palette-3); }
+label:has(:is(input[type="checkbox"]:checked, input[type="radio"]:checked)):has(.toggle) > .toggle {
+  border-color: var(--accent);
+  background-color: oklch(from var(--palette-3) l c h/0.4);
+}
 label:has(:is(input[type="checkbox"]:checked, input[type="radio"]:checked)):has(.toggle) > .toggle::before {
-  background-color: var(--palette-2);
+  background-color: var(--accent);
 
   transform: translateX(var(--toggle-length));
 }
@@ -82,8 +89,14 @@ label:has(:is(input[type="checkbox"]:disabled, input[type="radio"]:disabled)):ha
   cursor: no-drop;
 }
 
-label:has(:is(input[type="checkbox"]:disabled, input[type="radio"]:disabled)):has(.toggle) > .toggle { background-color: var(--palette-2-gs); }
-label:has(:is(input[type="checkbox"]:disabled, input[type="radio"]:disabled)):has(.toggle) > .toggle::before { background-color: var(--palette-3-gs); }
+label:has(:is(input[type="checkbox"]:disabled, input[type="radio"]:disabled)):has(.toggle) > .toggle {
+  border-color: var(--toggle-border);
+  background-color: oklch(from var(--toggle-border) l c h/0.5);
+}
+label:has(:is(input[type="checkbox"]:disabled, input[type="radio"]:disabled)):has(.toggle) > .toggle::before { background-color: var(--toggle-border); }
 
-label:has(:is(input[type="checkbox"]:disabled:checked, input[type="radio"]:disabled:checked)):has(.toggle) > .toggle { background-color: var(--palette-3-gs); }
-label:has(:is(input[type="checkbox"]:disabled:checked, input[type="radio"]:disabled:checked)):has(.toggle) > .toggle::before { background-color: var(--palette-2-gs); }
+label:has(:is(input[type="checkbox"]:disabled:checked, input[type="radio"]:disabled:checked)):has(.toggle) > .toggle {
+  border-color: var(--toggle-border);
+  background-color: oklch(from var(--toggle-border) l c h/0.5);
+}
+label:has(:is(input[type="checkbox"]:disabled:checked, input[type="radio"]:disabled:checked)):has(.toggle) > .toggle::before { background-color: var(--toggle-border); }

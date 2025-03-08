@@ -24,6 +24,8 @@ input[type="checkbox"] {
   background-color: transparent;
 }
 
+input[type="checkbox"]:focus-visible { outline: solid 2px var(--accent); }
+
 /* 체크박스 표시 */
 input[type="checkbox"]::before,
 input[type="checkbox"]::after {
