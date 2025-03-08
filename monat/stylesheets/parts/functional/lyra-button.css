@@ -1,8 +1,8 @@
 @charset "UTF-8";
 /* 버튼 속성값 */
 :root {
-  --button-size: 32px;
-  --button-padding: 6px;
+  --button-size: 36px;
+  --button-padding: 8px;
   --button-gap: 4px;
   --button-radius: 6px;
 
