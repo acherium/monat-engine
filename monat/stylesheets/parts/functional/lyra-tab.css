@@ -116,7 +116,7 @@
 }
 
 /* 횡렬 탭 */
-:is(.tabs, .tabs-row) > label:not(:first) { margin-left: var(--tab-gap); }
+:is(.tabs, .tabs-row) > label:not(:first-child) { margin-left: var(--tab-gap); }
 
 :is(.tabs, .tabs-row) > label { float: left; }
 

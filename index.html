@@ -20,6 +20,10 @@
   </header>
   <main>
     <div class="wrap">
+      <div class="list-row" aligncenter>
+        <label><input type="checkbox" id="toggle-darkmode" autocomplete="off"><div class="toggle"></div></label>
+        <i class="misc-darkmode-indicator"></i>
+      </div>
       <nav class="tabs">
         <label target="#demo-inputs"><input type="radio" name="tab-demo-section" value="0" autocomplete="off" checked><i class="text"></i><span>각종 입력, 버튼 요소</span></label>
         <label target="#demo-paragraphs"><input type="radio" name="tab-demo-section" value="1" autocomplete="off"><i class="menu"></i><span>텍스트 요소</span></label>
@@ -72,6 +76,10 @@
         </p>
       </div>
       <div id="demo-icons" class="demo-view list-column">
+        <div class="list-row" widthfull>
+          <label withnext flexfull><i class="search"></i><input type="text" id="search-icon-name-input" placeholder="아이콘 이름으로 검색"></label>
+          <button id="search-icon-name-do"><i class="arrow-e"></i></button>
+        </div>
         <div id="icon-table"></div>
       </div>
     </div>
@@ -80,7 +88,6 @@
     <button float><i class="search"></i><span>검색</span></button>
     <button float><i class="sort"></i></button>
     <button float><i class="arrow-n"></i></button>
-    <button float><i class="loading-wheel"></i></button>
   </div>
 </body>
 </html>

@@ -155,3 +155,24 @@
     --shadow: oklch(from var(--palette-5) l c h/0.1);
   }
 }
+
+:root[forcedarkmode] {
+  /* 동적 팔레트 */
+  --palette-0: var(--black);
+  --palette-1: var(--accent-dark);
+  --palette-2: var(--accent-deep);
+  --palette-3: oklch(from var(--accent) 75% c h);
+  --palette-4: var(--accent-medium);
+  --palette-5: var(--accent-light);
+  --palette-6: var(--white);
+  
+  /* 기본 요소 */
+  --main: oklch(0% 0 0);
+  --sub: oklch(30% 0 0);
+  --border: oklch(40% 0 0);
+  --font: oklch(100% 0 0);
+  --font-sub: oklch(50% 0 0);
+  --icon: oklch(100% 0 0/0.5);
+  --anti: oklch(100% 0 0);
+  --shadow: oklch(from var(--palette-5) l c h/0.1);
+}

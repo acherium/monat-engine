@@ -111,7 +111,7 @@ label:has(input[type="text"]:disabled, input[type="number"]:disabled) {
 }
 label:has(input[type="text"]:disabled, input[type="number"]:disabled) > :is(input[type="text"], input[type="number"]) { background-color: transparent; }
 
-label:hs(input[type="text"], input[type="number"]) > :is(input[type="text"], input[type="number"]) { background-color: transparent; }
+label:has(input[type="text"], input[type="number"]) > :is(input[type="text"], input[type="number"]) { background-color: transparent; }
 
 /* 버튼 내부 아이콘 */
 label:has(input[type="text"], input[type="number"]) > i::before { font-size: calc(1rem * 1.3); }

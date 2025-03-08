@@ -20,7 +20,7 @@ header {
   width: 100%;
   height: 65px;
 
-  border-bottom: solid 1px oklch(from var(--anti) l c h/0.1);
+  border-bottom: solid 1px var(--border);
   background-color: oklch(from var(--main) l c h/0.5);
   backdrop-filter: blur(15px);
 }

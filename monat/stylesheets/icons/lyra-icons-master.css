@@ -10,3 +10,10 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+/* 다크모드 인디케이터 */
+:is(i, il).misc-darkmode-indicator { mask-image: var(--lyra-icon-sun); }
+:root[forcedarkmode] :is(i, il).misc-darkmode-indicator { mask-image: var(--lyra-icon-moon); }
+@media (prefers-color-scheme: dark) {
+  :is(i, il).misc-darkmode-indicator { mask-image: var(--lyra-icon-moon); }
+}
