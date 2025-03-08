@@ -143,5 +143,15 @@
     --palette-4: var(--accent-medium);
     --palette-5: var(--accent-light);
     --palette-6: var(--white);
+    
+    /* 기본 요소 */
+    --main: oklch(0% 0 0);
+    --sub: oklch(10% 0 0);
+    --border: oklch(20% 0 0);
+    --font: oklch(100% 0 0);
+    --font-sub: oklch(50% 0 0);
+    --icon: oklch(100% 0 0/0.5);
+    --anti: oklch(100% 0 0);
+    --shadow: oklch(from var(--palette-5) l c h/0.1);
   }
 }
