@@ -5,6 +5,8 @@ import {
   LyraWindowManager, LyraWindow
 } from "./module.js";
 
+const master = {};
+
 /**
  * 대상을 Lyra Engine으로 초기화합니다.
  * @param {HTMLElement} target 초기화 대상
@@ -136,25 +138,19 @@ const init = (target) => {
   };
 
   // 창 초기화
-  const winman = new LyraWindowManager();
-  const $btnOpenWin0 = $("#demo-open-window-0");
-  const $btnOpenWin1 = $("#demo-open-window-1");
-  $btnOpenWin0.onclick = () => winman.reserve["demo-window-0"].show();
-  $btnOpenWin1.onclick = () => new LyraWindow({
-    includes: [
-      "titlebar",
-      "titlebar-left",
-      "titlebar-right",
-      "bottom",
-      "close-button",
-      "maximize-button",
-      "minimize-button"
-    ]
-  }).setTitle("새 창")
-    .setIcon(create("i", { classes: [ "spreadsheet" ] }))
-    .setBody(create("windowbody", { properties: { innerHTML: "<p>1234</p>" } })).show();
+  master.winman = new LyraWindowManager();
+  master.winman.retrieve();
 };
 
 (() => {
+  // 초기화
   init(body);
+
+  // 모듈 로드
+  for (const script of $a("script[runner]")) {
+    import(script.src).then((x) => {
+      x.default(master);
+    });
+    revoke(script);
+  };
 })();

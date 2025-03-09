@@ -8,7 +8,13 @@ import { COMMON_INTERVAL, WINDOW_ANIMATION_DURATION } from "./lyra-envman.js";
 
 export const LyraWindowManager = class {
   constructor() {
+    this.reserve = [];
+    return this;
+  };
+
+  retrieve = () => {
     this.reserve = Object.fromEntries(Array.from($a("window[id]")).map((x) => [ x.id, new LyraWindow({}, x) ]));
+    return this;
   };
 };
 
@@ -62,6 +68,8 @@ export const LyraWindow = class {
     this.closed = true;
     this.maximized = false;
     this.minimized = false;
+    this.maximizable = true;
+    this.minimizable = true;
     this.movable = true;
     this.rect = {
       x: 0,
@@ -143,6 +151,10 @@ export const LyraWindow = class {
 
       // overlay 요소
       if (includeList.includes("overlay")) this.parts.overlay.$ = append(create("overlay"), this.parts.$);
+
+      // 최대화/최소화 가능 여부 조절
+      if (typeof param.maximizable !== "undefined") this.maximizable = !!param.maximizable;
+      if (typeof param.minimizable !== "undefined") this.minimizable = !!param.minimizable;
     };
 
     // 이벤트 초기화
@@ -150,7 +162,7 @@ export const LyraWindow = class {
     const closeTriggers = $a("[closewindow]", this.parts.$);
     for (const node of closeTriggers) {
       if ($a("*", node).length < 1) append(create("i", { classes: [ "close" ] }), node);
-      node.addEventListener("click", this.close);
+      node.addEventListener("pointerup", this.close);
     };
 
     // 창 최대화
@@ -161,7 +173,12 @@ export const LyraWindow = class {
         this.toggleMaximize();
       });
     };
-    if (this.parts.inner.titlebar.$) this.parts.inner.titlebar.$.addEventListener("dblclick", this.toggleMaximize);
+    if (this.parts.inner.titlebar.$) {
+      this.parts.inner.titlebar.$.addEventListener("dblclick", (event) => {
+        if (event.target !== this.parts.inner.titlebar.$) return;
+        this.toggleMaximize();
+      });
+    };
 
     // 창 최소화
     const minimizeTriggers = $a("[minimizewindow]", this.parts.$);
@@ -238,6 +255,7 @@ export const LyraWindow = class {
   };
 
   toggleMaximize = () => {
+    if (!this.maximizable) return;
     this.maximized = !this.maximized;
     
     const maximizeTriggers = $a("[maximizewindow]:not([noiconchange])", this.parts.$);
@@ -253,9 +271,10 @@ export const LyraWindow = class {
   };
 
   toggleMinimize = () => {
-    const minimizeTriggers = $a("[minimizewindow]:not([noiconchange])", this.parts.$);
-
+    if (!this.minimizable) return;
     this.minimized = !this.minimized;
+
+    const minimizeTriggers = $a("[minimizewindow]:not([noiconchange])", this.parts.$);
     if (this.minimized) {
       set(this.parts.$, "minimized", "");
       for (const x of minimizeTriggers) for (const y of $a("i.minimize", x)) y.className = "arrow-n";
@@ -349,24 +368,9 @@ export const LyraWindow = class {
       // this.parts.$.setPointerCapture(pointer.pointerId);
 
       const cb = (event) => this.addPosition(event.movementX, event.movementY);
-
       document.addEventListener("pointermove", cb);
       document.addEventListener("pointerup", () => { document.removeEventListener("pointermove", cb); }, { once: true });
       document.addEventListener("pointercancel", () => { document.removeEventListener("pointermove", cb); }, { once: true });
-
-      // this.parts.inner.titlebar.$.onpointermove = (event) => this.addPosition(event.movementX, event.movementY);
-
-      // this.parts.inner.titlebar.$.onpointerup = () => {
-      //   this.parts.inner.titlebar.$.onpointermove = null;
-      //   this.parts.inner.titlebar.$.onpointerup = null;
-      //   this.parts.inner.titlebar.$.onpointercancel = null;
-      // };
-
-      // this.parts.inner.titlebar.$.onpointercancel = () => {
-      //   this.parts.inner.titlebar.$.onpointermove = null;
-      //   this.parts.inner.titlebar.$.onpointerup = null;
-      //   this.parts.inner.titlebar.$.onpointercancel = null;
-      // };
     };
 
     return this;

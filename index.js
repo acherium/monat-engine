@@ -4,7 +4,7 @@ import {
   xhr
 } from "./monat/module.js";
 
-(() => {
+export default function(master) {
   // 아이콘 목록
   const $tabLblIcons = $(`label[target="#demo-icons"]`);
   const $tableIcons = $("#icon-table");
@@ -53,5 +53,21 @@ import {
     }, 1000);
   };
 
-  // 테스트
-})();
+  // 창 데모
+  const $btnOpenWin0 = $("#demo-open-window-0");
+  const $btnOpenWin1 = $("#demo-open-window-1");
+  $btnOpenWin0.onclick = () => master.winman.reserve["demo-window-0"].show();
+  $btnOpenWin1.onclick = () => new LyraWindow({
+    includes: [
+      "titlebar",
+      "titlebar-left",
+      "titlebar-right",
+      "bottom",
+      "close-button",
+      "maximize-button",
+      "minimize-button"
+    ]
+  }).setTitle("새 창")
+    .setIcon(create("i", { classes: [ "spreadsheet" ] }))
+    .setBody(create("windowbody", { properties: { innerHTML: "<p>1234</p>" } })).show();
+};
