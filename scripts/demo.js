@@ -1,8 +1,9 @@
 import {
   $, $p, $pa, $s, $sa, create, append, after, before,
   set, unset, seal, unseal,
-  xhr
-} from "./monat/module.js";
+  xhr,
+  LyraWindow
+} from "../monat/module.js";
 
 export default function(master) {
   // 아이콘 목록
