@@ -1,6 +1,12 @@
 // domman - HTML 조작 관련 모듈 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 // 변수
 /**
+ * 문서의 루트 요소입니다.
+ * @see {@link https://developer.mozilla.org/ko/docs/Web/API/Document/documentElement | MDN 레퍼런스> Document.documentElement}
+ */
+export const root = document.documentElement;
+
+/**
  * 문서 본문 요소입니다.
  * @see {@link https://developer.mozilla.org/ko/docs/Web/HTML/Element/body | MDN 레퍼런스> <body>: 문서 본문 요소}
  */
@@ -30,6 +36,80 @@ export const $ = (query, target = document) => target.querySelector(query);
  * @see {@link https://developer.mozilla.org/ko/docs/Web/API/Document/querySelectorAll | MDN 레퍼런스> Document.querySelectorAll()}
  */
 export const $a = (query, target = document) => target.querySelectorAll(query);
+
+/**
+ * 탐색 대상 요소의 모든 부모 요소 중 제공한 선택자와 일치하는 첫 번째 요소를 반환하고, 일치하는 개체가 없다면 null을 반환합니다.
+ * @param {string} query 선택자.
+ * @param {Element} [target] 탐색 대상 요소. 제공되지 않으면 기본적으로 루트 요소에서 탐색합니다.
+ * @returns {Element | null}
+ */
+export const $p = (query, target = root) => {
+  const checker = $a(query);
+  let result = target;
+
+  while (result !== null) {
+    result = result.parentElement;
+    if (Array.from(checker).find((x) => x === result)) break;
+  };
+
+  return result;
+};
+
+/**
+ * 탐색 대상 요소의 모든 부모 요소 중 제공한 선택자와 일치하는 모든 요소를 배열로 반환합니다.
+ * @param {string} query 선택자.
+ * @param {Element} [target] 탐색 대상 요소. 제공되지 않으면 기본적으로 루트 요소에서 탐색합니다.
+ * @returns {array}
+ */
+export const $pa = (query, target = root) => {
+  const checker = $a(query);
+  const result = [];
+  let last = target;
+
+  while (last !== null) {
+    last = last.parentElement;
+    if (Array.from(checker).find((x) => x === last)) result.push(last);
+  };
+
+  return result;
+};
+
+/**
+ * 탐색 대상 요소의 모든 형제 중 제공한 선택자와 일치하는 첫 번째 요소를 반환하고, 일치하는 개체가 없다면 null을 반환합니다.
+ * @param {string} query 선택자.
+ * @param {Element} [target] 탐색 대상 요소. 제공되지 않으면 기본적으로 루트 요소에서 탐색합니다.
+ * @returns {Element | null}
+ */
+export const $s = (query, target = root) => {
+  const checker = $a(query);
+  const siblings = target.parentNode.children;
+  let result = null;
+
+  for (const node of Array.from(siblings)) {
+    if (Array.from(checker).find((x) => x === node)) {
+      result = node;
+      break;
+    };
+  };
+
+  return result;
+};
+
+/**
+ * 탐색 대상 요소의 모든 형제 중 제공한 선택자와 일치하는 모든 요소를 배열로 반환합니다.
+ * @param {string} query 선택자.
+ * @param {Element} [target] 탐색 대상 요소. 제공되지 않으면 기본적으로 루트 요소에서 탐색합니다.
+ * @returns {array}
+ */
+export const $sa = (query, target = root) => {
+  const checker = $a(query);
+  const siblings = target.parentNode.children;
+  const result = [];
+
+  for (const node of Array.from(siblings)) if (Array.from(checker).find((x) => x === node)) result.push(node);
+
+  return result;
+};
 
 /**
  * create 함수 매개변수 구조체
