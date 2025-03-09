@@ -1,6 +1,7 @@
 import {
   $, $p, $pa, $s, $sa, create, append,
-  set, unset
+  set, unset,
+  xhr
 } from "./monat/module.js";
 
 (() => {
@@ -19,9 +20,10 @@ import {
       };
     };
 
-    fetch("./monat/stylesheets/icons/lyra-icons.css").then((res) => res.text()).then((raw) => {
-      const iconList = raw.split("\n").map((x) => x.trim()).filter((x) => x.startsWith("--lyra-icon-")).map((x) => x.split(":")[0].substring("--lyra-icon-".length));
-      appendIconTable(iconList);
+    (async () => {
+      const iconListRaw = await xhr("./monat/stylesheets/icons/lyra-icons.css");
+      const iconList = await iconListRaw.target.response.split("\n").map((x) => x.trim()).filter((x) => x.startsWith("--lyra-icon-")).map((x) => x.split(":")[0].substring("--lyra-icon-".length));
+      appendIconTable(await iconList);
 
       const $btnSearchIcon = $("#search-icon-name-do");
       const $inputSearchIcon = $("#search-icon-name-input");
@@ -31,7 +33,7 @@ import {
         appendIconTable(filteredList);
       };
       $inputSearchIcon.onkeydown = (event) => { if (event.key === "Enter") $btnSearchIcon.click(); };
-    });
+    })();
   });
 
   // 다크모드 토글
