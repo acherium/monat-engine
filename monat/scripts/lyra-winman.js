@@ -1,0 +1,374 @@
+// winman - 창 요소 조작 관련 모듈 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+import {
+  $, $a, create, append, revoke, after, before,
+  get, set, unset,
+  body
+} from "./lyra-domman.js";
+import { COMMON_INTERVAL, WINDOW_ANIMATION_DURATION } from "./lyra-envman.js";
+
+export const LyraWindowManager = class {
+  constructor() {
+    this.reserve = Object.fromEntries(Array.from($a("window[id]")).map((x) => [ x.id, new LyraWindow({}, x) ]));
+  };
+};
+
+export const LyraWindow = class {
+  constructor(param = {}, origin = null) {
+    // 초기화
+    this.parent = null;
+    this.parts = {
+      $: null,
+      outer: {
+        $: null
+      },
+      inner: {
+        $: null,
+        titlebar: {
+          $: null,
+          left: {
+            $: null,
+            icon: {
+              $: null
+            },
+            title: {
+              $: null,
+              text: null
+            }
+          },
+          right: {
+            $: null
+          }
+        },
+        top: {
+          $: null
+        },
+        body: {
+          $: null
+        },
+        bottom: {
+          $: null,
+          left: {
+            $: null
+          },
+          right: {
+            $: null
+          }
+        }
+      },
+      overlay: {
+        $: null
+      }
+    };
+    this.closed = true;
+    this.maximized = false;
+    this.minimized = false;
+    this.movable = true;
+    this.rect = {
+      x: 0,
+      y: 0,
+      width: 500,
+      height: 300
+    };
+
+    const includeList = param.includes || [];
+
+    // 원본 요소가 있으면 원본에서 지정함
+    if (origin) {
+      this.parent = origin.parentNode;
+
+      // main 요소
+      this.parts.$ = revoke(origin);
+
+      // outer 요소
+      this.parts.outer.$ = $("outer", this.parts.$);
+
+      // inner 요소
+      this.parts.inner.$ = $("inner", this.parts.$);
+
+      // inner - titlebar 요소
+      this.parts.inner.titlebar.$ = $("titlebar", this.parts.inner.$);
+
+      this.parts.inner.titlebar.left.$ = $(".left", this.parts.inner.titlebar.$);
+      this.parts.inner.titlebar.left.icon.$ = $(".icon", this.parts.inner.titlebar.left.$);
+      this.parts.inner.titlebar.left.title.$ = $("span", this.parts.inner.titlebar.left.$);
+      this.parts.inner.titlebar.left.title.text = this.parts.inner.titlebar.left.title.$?.innerText || null;
+
+      this.parts.inner.titlebar.right.$ = $(".left", this.parts.inner.titlebar.$);
+
+      // inner - top 요소
+      this.parts.inner.top.$ = $("top", this.parts.inner.$);
+
+      // inner - body 요소
+      this.parts.inner.body.$ = $("windowbody", this.parts.inner.$);
+
+      // inner - bottom 요소
+      this.parts.inner.bottom.$ = $("bottom", this.parts.inner.$);
+      this.parts.inner.bottom.left.$ = $(".left", this.parts.inner.bottom.$);
+      this.parts.inner.bottom.right.$ = $(".right", this.parts.inner.bottom.$);
+
+      // overlay 요소
+      this.parts.overlay.$ = $("overlay", this.parts.$);
+    } else {
+      this.parent = body;
+
+      // main 요소
+      this.parts.$ = create("window");
+
+      // outer 요소
+      if (includeList.includes("outer")) this.parts.outer.$ = append(create("outer"), this.parts.$);
+
+      // inner 요소
+      this.parts.inner.$ = append(create("inner"), this.parts.$);
+
+      // inner - titlebar 요소
+      if (includeList.includes("titlebar")) this.parts.inner.titlebar.$ = append(create("titlebar"), this.parts.inner.$);
+
+      if (includeList.includes("titlebar-left")) this.parts.inner.titlebar.left.$ = append(create("div", { classes: [ "left" ] }), this.parts.inner.titlebar.$);
+      
+      if (includeList.includes("titlebar-right")) this.parts.inner.titlebar.right.$ = append(create("div", { classes: [ "right" ] }), this.parts.inner.titlebar.$);
+      if (includeList.includes("close-button")) append(create("button", { attributes: { "closewindow": "" } }), this.parts.inner.titlebar.right.$);
+      if (includeList.includes("maximize-button")) append(create("button", { attributes: { "maximizewindow": "" } }), this.parts.inner.titlebar.right.$);
+      if (includeList.includes("minimize-button")) append(create("button", { attributes: { "minimizewindow": "" } }), this.parts.inner.titlebar.right.$);
+
+      // inner - top 요소
+      if (includeList.includes("top")) this.parts.inner.top.$ = append(create("top"), this.parts.inner.$);
+
+      // inner - body 요소
+      this.parts.inner.body.$ = append(create("windowbody"), this.parts.inner.$);
+
+      // inner - bottom 요소
+      if (includeList.includes("bottom")) this.parts.inner.bottom.$ = append(create("bottom"), this.parts.inner.$);
+      if (includeList.includes("bottom-left")) this.parts.inner.bottom.left.$ = append(create("div", { classes: [ "left" ] }), this.parts.inner.bottom.$);
+      if (includeList.includes("bottom-right")) this.parts.inner.bottom.right.$ = append(create("div", { classes: [ "right" ] }), this.parts.inner.bottom.$);
+
+      // overlay 요소
+      if (includeList.includes("overlay")) this.parts.overlay.$ = append(create("overlay"), this.parts.$);
+    };
+
+    // 이벤트 초기화
+    // 창 닫기
+    const closeTriggers = $a("[closewindow]", this.parts.$);
+    for (const node of closeTriggers) {
+      if ($a("*", node).length < 1) append(create("i", { classes: [ "close" ] }), node);
+      node.addEventListener("click", this.close);
+    };
+
+    // 창 최대화
+    const maximizeTriggers = $a("[maximizewindow]", this.parts.$);
+    for (const node of maximizeTriggers) {
+      if ($a("*", node).length < 1) append(create("i", { classes: [ (this.minimized ? "undo-maximize" : "maximize" ) ] }), node);
+      node.addEventListener("click", () => {
+        this.toggleMaximize();
+      });
+    };
+    if (this.parts.inner.titlebar.$) this.parts.inner.titlebar.$.addEventListener("dblclick", this.toggleMaximize);
+
+    // 창 최소화
+    const minimizeTriggers = $a("[minimizewindow]", this.parts.$);
+    for (const node of minimizeTriggers) {
+      if ($a("*", node).length < 1) append(create("i", { classes: [ (this.minimized ? "arrow-n" : "minimize" ) ] }), node);
+      node.addEventListener("click", () => {
+        this.toggleMinimize();
+      });
+    };
+
+    // 창 이동
+    if (this.movable) this.setMoveEvent();
+
+    // 창 활성화
+    this.parts.inner.$.addEventListener("pointerdown", () => { this.active(); });
+
+    return this;
+  };
+
+  show = () => {
+    this.closed = false;
+    this.active();
+    
+    this.parts.inner.$.animate([ { opacity: "0" } ], { fill: "both" });
+    this.parts.inner.$.animate([ { transform: "translateY(10px) scale(0.95)" } ],
+    {
+      fill: "both",
+      composite: "accumulate"
+    });
+
+    append(this.parts.$, this.parent);
+
+    this.parts.inner.$.animate([ { opacity: "0" }, { opacity: "1" } ],
+    {
+      duration: WINDOW_ANIMATION_DURATION,
+      fill: "both",
+      ease: "cubic-bezier(0.02, 0.61, 0.47, 0.99)"
+    });
+    this.parts.inner.$.animate([ { transform: "translateY(10px) scale(0.95)" }, { transform: "translateY(0px) scale(1)" } ],
+    {
+      duration: WINDOW_ANIMATION_DURATION,
+      fill: "both",
+      ease: "cubic-bezier(0.02, 0.61, 0.47, 0.99)",
+      composite: "accumulate"
+    });
+  
+    this.refreshRect();
+    return this;
+  };
+
+  close = () => {
+    this.closed = true;
+    this.inactive();
+
+    this.parts.inner.$.animate([ { opacity: "1" }, { opacity: "0" } ],
+    {
+      duration: WINDOW_ANIMATION_DURATION,
+      fill: "both",
+      ease: "cubic-bezier(0.02, 0.61, 0.47, 0.99)"
+    });
+    this.parts.inner.$.animate([ { transform: "translateY(0px) scale(1)" }, { transform: "translateY(10px) scale(0.95)" } ],
+    {
+      duration: WINDOW_ANIMATION_DURATION,
+      fill: "both",
+      ease: "cubic-bezier(0.02, 0.61, 0.47, 0.99)",
+      composite: "accumulate"
+    });
+
+    setTimeout(() => {
+      this.parts.$ = revoke(this.parts.$);
+    }, WINDOW_ANIMATION_DURATION + COMMON_INTERVAL);
+
+    return this;
+  };
+
+  toggleMaximize = () => {
+    this.maximized = !this.maximized;
+    
+    const maximizeTriggers = $a("[maximizewindow]:not([noiconchange])", this.parts.$);
+    if (this.maximized) {
+      set(this.parts.$, "maximized", "");
+      for (const x of maximizeTriggers) for (const y of $a("i.maximize", x)) y.className = "undo-maximize";
+    } else {
+      unset(this.parts.$, "maximized");
+      for (const x of maximizeTriggers) for (const y of $a("i.undo-maximize", x)) y.className = "maximize";
+    };
+
+    return this;
+  };
+
+  toggleMinimize = () => {
+    const minimizeTriggers = $a("[minimizewindow]:not([noiconchange])", this.parts.$);
+
+    this.minimized = !this.minimized;
+    if (this.minimized) {
+      set(this.parts.$, "minimized", "");
+      for (const x of minimizeTriggers) for (const y of $a("i.minimize", x)) y.className = "arrow-n";
+    } else {
+      unset(this.parts.$, "minimized");
+      for (const x of minimizeTriggers) for (const y of $a("i.arrow-n", x)) y.className = "minimize";
+    };
+
+    return this;
+  };
+
+  active = () => {
+    for (const node of Array.from($a("window[active]")).filter((x) => x !== this.parts.$)) unset(node, "active");
+    if (get(this.parts.$, "active") === null) {
+      set(this.parts.$, "active", "");
+      this.parent.insertAdjacentElement("beforeend", this.parts.$);
+    };
+    return this;
+  };
+
+  inactive = () => {
+    unset(this.parts.$, "active");
+    return this;
+  };
+
+  setTitle = (string) => {
+    if (!this.parts.inner.$ || !this.parts.inner.titlebar.$ || !this.parts.inner.titlebar.left.$) return;
+    if (!this.parts.inner.titlebar.left.title.$) this.parts.inner.titlebar.left.title.$ = append(create("span"), this.parts.inner.titlebar.left.$);
+
+    this.parts.inner.titlebar.left.title.$.innerText = string;
+    this.parts.inner.titlebar.left.title.text = string;
+
+    return this;
+  };
+
+  setIcon = (node) => {
+    if (!this.parts.inner.$ || !this.parts.inner.titlebar.$ || !this.parts.inner.titlebar.left.$) return;
+    if (!this.parts.inner.titlebar.left.icon.$) this.parts.inner.titlebar.left.icon.$ = append(create("div", { classes: [ "icon" ] }), this.parts.inner.titlebar.left.$);
+
+    this.parts.inner.titlebar.left.icon.$.textContent = "";
+    append(node, this.parts.inner.titlebar.left.icon.$);
+
+    return this;
+  };
+
+  setBody = (node) => {
+    if (!this.parts.inner.$ || !this.parts.inner.body.$) return;
+    after(this.parts.inner.body.$, node);
+    revoke(this.parts.inner.body.$);
+    this.parts.inner.body.$ = node;
+    return this;
+  };
+
+  refreshRect = () => {
+    this.parts.inner.$.animate([
+      {
+        transform: `translate(${this.rect.x}px, ${this.rect.y}px)`,
+        width: `${this.rect.width}px`,
+        height: `${this.rect.height}px`
+      }
+    ], {
+      fill: "both",
+      composite: "accumulate"
+    });
+    return this;
+  };
+
+  setPosition = (x = null, y = null) => {
+    if (x !== null) this.rect.x = x;
+    if (y !== null) this.rect.y = y;
+    this.refreshRect();
+    return this;
+  };
+
+  addPosition = (x = null, y = null) => {
+    if (x !== null) this.rect.x += x;
+    if (y !== null) this.rect.y += y;
+    this.refreshRect();
+    return this;
+  };
+
+  setMoveEvent = () => {
+    if (!this.parts.inner.$ || !this.parts.inner.titlebar.$) return;
+    this.movable = true;
+
+    this.parts.inner.titlebar.$.onpointerdown = (pointer) => {
+      if (
+        ( pointer.target !== this.parts.inner.titlebar.$ ) ||
+        this.maximized
+      ) return;
+      // this.parts.$.setPointerCapture(pointer.pointerId);
+
+      const cb = (event) => this.addPosition(event.movementX, event.movementY);
+
+      document.addEventListener("pointermove", cb);
+      document.addEventListener("pointerup", () => { document.removeEventListener("pointermove", cb); }, { once: true });
+      document.addEventListener("pointercancel", () => { document.removeEventListener("pointermove", cb); }, { once: true });
+
+      // this.parts.inner.titlebar.$.onpointermove = (event) => this.addPosition(event.movementX, event.movementY);
+
+      // this.parts.inner.titlebar.$.onpointerup = () => {
+      //   this.parts.inner.titlebar.$.onpointermove = null;
+      //   this.parts.inner.titlebar.$.onpointerup = null;
+      //   this.parts.inner.titlebar.$.onpointercancel = null;
+      // };
+
+      // this.parts.inner.titlebar.$.onpointercancel = () => {
+      //   this.parts.inner.titlebar.$.onpointermove = null;
+      //   this.parts.inner.titlebar.$.onpointerup = null;
+      //   this.parts.inner.titlebar.$.onpointercancel = null;
+      // };
+    };
+
+    return this;
+  };
+};

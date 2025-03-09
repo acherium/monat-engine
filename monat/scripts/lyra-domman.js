@@ -26,7 +26,10 @@ export const head = document.head;
  * @returns {Element | null}
  * @see {@link https://developer.mozilla.org/ko/docs/Web/API/Document/querySelector | MDN 레퍼런스> Document.querySelector()}
  */
-export const $ = (query, target = document) => target.querySelector(query);
+export const $ = (query, target = document) => {
+  if (!target) return null;
+  return target.querySelector(query);
+};
 
 /**
  * 제공한 선택자와 일치하는 모든 요소를 NodeList로 반환합니다.
@@ -151,6 +154,28 @@ export const create = (tag = "div", params = { id: null, classes: [], attributes
 export const append = (node, target = body) => target.appendChild(node);
 
 /**
+ * 지정한 요소를 기준 요소 다음에 추가하고, 추가한 요소를 배열로 반환합니다.
+ * @param {Element} target 기준 요소.
+ * @param {Element} node 추가할 요소.
+ * @returns {array} 추가한 요소를 반환합니다.
+ */
+export const after = (target, ...node) => {
+  target.after(...node);
+  return node;
+};
+
+/**
+ * 지정한 요소를 기준 요소 이전에 추가하고, 추가한 요소를 배열로 반환합니다.
+ * @param {Element} target 기준 요소.
+ * @param {Element} node 추가할 요소.
+ * @returns {array} 추가한 요소를 반환합니다.
+ */
+export const before = (target, ...node) => {
+  target.before(...node);
+  return node;
+};
+
+/**
  * 지정한 요소를 부모 요소로부터 회수합니다. 회수된 요소는 삭제되지 않고 DOM에 남아있으므로 재사용이 가능해집니다.
  * @param {Element} node 요소
  * @returns {Element} 회수한 자손 요소.
@@ -189,5 +214,31 @@ export const set = (node, name, value) => {
  */
 export const unset = (node, name) => {
   node.removeAttribute(name);
+  return node;
+};
+
+/**
+ * 지정한 요소를 새로운 밀봉 요소로 감싸고 반환합니다.
+ * @param {Element} node 요소.
+ * @returns {Element} 밀봉 요소.
+ */
+export const seal = (node) => {
+  const sealNode = create("seal");
+  before(node, sealNode);
+  append(node, sealNode);
+  return sealNode;
+};
+
+/**
+ * 지정한 요소를 감싸고 있던 밀봉 요소에서 빼내고 바로 다음에 추가한 뒤 반환합니다. 지정한 요소가 밀봉 요소로 감싸져 있지 않으면 null을 반환합니다.
+ * 지정한 요소를 빼낸 뒤 밀봉 요소 내부에 아무 요소도 없으면 밀봉 요소를 제거합니다.
+ * @param {*} node 요소.
+ * @returns {Element | null} 요소.
+ */
+export const unseal = (node) => {
+  const parent = node.parentElement;
+  if (parent.nodeName !== "SEAL") return null;
+  after(parent, node);
+  if ($a("*", parent).length < 1) revoke(parent);
   return node;
 };

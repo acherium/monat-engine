@@ -11,7 +11,7 @@
   --float-button-radius: 22px;
 
   --button-border: var(--border);
-  --button-background: oklch(from var(--anti) l c h/0);
+  --button-background: oklch(from var(--main) l c h/1);
 }
 
 /* 버튼 공통 */
@@ -49,7 +49,8 @@ button::after {
   border-radius: inherit;
   content: "";
 
-  transition: opacity var(--duration-ui);
+  transition: var(--duration-ui);
+  transition-property: opacity, border-color;
 }
 
 button::before { border: solid 1px var(--button-border); }

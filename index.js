@@ -1,6 +1,6 @@
 import {
-  $, $p, $pa, $s, $sa, create, append,
-  set, unset,
+  $, $p, $pa, $s, $sa, create, append, after, before,
+  set, unset, seal, unseal,
   xhr
 } from "./monat/module.js";
 
@@ -35,10 +35,6 @@ import {
       $inputSearchIcon.onkeydown = (event) => { if (event.key === "Enter") $btnSearchIcon.click(); };
     })();
   });
-
-  // 다크모드 토글
-  const $chkDarkmode = $("#toggle-darkmode");
-  $chkDarkmode.onchange = () => $chkDarkmode.checked ? set(document.documentElement, "forcedarkmode", "") : unset(document.documentElement, "forcedarkmode");
 
   // 누르면 로딩 상태 되는 버튼 데모
   const $btnDemoSendLoading = $("#demo-button-send-loading");

@@ -1,7 +1,8 @@
 import {
-  body, head, $, $a, create, append, revoke,
+  root, body, head, $, $a, create, append, revoke,
   get, set, unset,
-  DRAG_SCROLLING_THRESHOLD
+  DRAG_SCROLLING_THRESHOLD,
+  LyraWindowManager, LyraWindow
 } from "./module.js";
 
 /**
@@ -118,6 +119,40 @@ const init = (target) => {
       };
     };
   };
+
+  // 다크모드 강제 토글
+  const $tglForceDarkmode = $a("[toggledarkmode]", target);
+  const toggleForceDarkmode = (flag = null) => {
+    flag = flag || get(root, "forcedarkmode") === null;
+    flag ? set(root, "forcedarkmode", "") : unset(root, "forcedarkmode");
+    Array.from($a(`input[toggledarkmode]:is([type="checkbox"], [type="radio"])`)).forEach(($node) => $node.checked = flag);
+  };
+  for (const $node of $tglForceDarkmode) {
+    if ($node.nodeName === "INPUT" && [ "checkbox", "radio" ].includes($node.type)) {
+      $node.addEventListener("change", () => toggleForceDarkmode($node.checked));
+    } else {
+      $node.addEventListener("click", () => toggleForceDarkmode());
+    };
+  };
+
+  // 창 초기화
+  const winman = new LyraWindowManager();
+  const $btnOpenWin0 = $("#demo-open-window-0");
+  const $btnOpenWin1 = $("#demo-open-window-1");
+  $btnOpenWin0.onclick = () => winman.reserve["demo-window-0"].show();
+  $btnOpenWin1.onclick = () => new LyraWindow({
+    includes: [
+      "titlebar",
+      "titlebar-left",
+      "titlebar-right",
+      "bottom",
+      "close-button",
+      "maximize-button",
+      "minimize-button"
+    ]
+  }).setTitle("새 창")
+    .setIcon(create("i", { classes: [ "spreadsheet" ] }))
+    .setBody(create("windowbody", { properties: { innerHTML: "<p>1234</p>" } })).show();
 };
 
 (() => {

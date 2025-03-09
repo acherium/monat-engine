@@ -54,7 +54,8 @@ label:has(:is(input[type="checkbox"], input[type="radio"])):has(.toggle) > .togg
   content: "";
 
   transform: translateX(0);
-  transition: transform var(--duration-ui);
+  transition: var(--duration-ui);
+  transition-property: transform, background-color;
 }
 
 label:has(:is(input[type="checkbox"]:checked, input[type="radio"]:checked)):has(.toggle) > .toggle {

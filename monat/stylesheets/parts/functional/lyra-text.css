@@ -33,7 +33,11 @@ input[type="number"] {
 :is(input[type="text"], input[type="number"]):focus-visible { outline: solid 2px var(--accent); }
 
 /* 플레이스홀더 */
-:is(input[type="text"], input[type="number"])::placeholder { color: oklch(from var(--font) l c h/0.5); }
+:is(input[type="text"], input[type="number"])::placeholder {
+  color: oklch(from var(--font) l c h/0.5);
+
+  transition: color var(--duration-ui);
+}
 
 /* 라벨 내 입력 칸 */
 :is(label:has(input[type="text"]), label:has(input[type="number"])) {
