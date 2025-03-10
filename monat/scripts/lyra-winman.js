@@ -80,6 +80,7 @@ export const LyraWindow = class {
     this.maximizable = true;
     this.minimizable = true;
     this.movable = true;
+    this.resizable = true;
     this.rect = {
       x: 0,
       y: 0,
@@ -154,6 +155,25 @@ export const LyraWindow = class {
           this.rect.preset.y = raw[1] !== "pixel" ? raw[1] : null;
         };
       };
+
+      // 크기 프리셋 불러오기
+      if (get(this.parts.$, "size")) {
+        const raw = revokeAttribute(this.parts.$, "size").split(/ +/).map((x) => x.trim()).filter((x) => x.length);
+        
+        if (raw.length === 1) {
+          if (!SIZE_PARAMETERS.includes(raw[0])) return;
+          this.rect.preset.width = raw[0] !== "pixel" ? raw[0] : null;
+          this.rect.preset.height = raw[0] !== "pixel" ? raw[0] : null;
+        } else if (raw.length > 1) {
+          if (!SIZE_PARAMETERS.includes(raw[0]) || !SIZE_PARAMETERS.includes(raw[1])) return;
+          this.rect.preset.width = raw[0] !== "pixel" ? raw[0] : null;
+          this.rect.preset.height = raw[1] !== "pixel" ? raw[1] : null;
+        };
+      };
+
+      // 위치, 크기 조정 불가 여부 불러오기
+      if (typeof get(this.parts.$, "fixedposition") !== "undefined") this.movable = false;
+      if (typeof get(this.parts.$, "fixedsize") !== "undefined") this.resizable = false;
     } else {
       this.parent = body;
 
@@ -229,6 +249,10 @@ export const LyraWindow = class {
           this.rect.preset.height = raw[1] !== "pixel" ? raw[1] : null;
         };
       };
+
+      // 위치, 크기 조정 불가 여부 불러오기
+      if (typeof param.movable !== "undefined") this.movable = param.movable;
+      if (typeof param.resizable !== "undefined") this.resizable = param.resizable;
     };
 
     // 이벤트 초기화
@@ -439,24 +463,10 @@ export const LyraWindow = class {
   refreshRect = () => {
     this.parts.$.style["justify-content"] = this.rect.preset.x || null;
     this.parts.$.style["align-items"] = this.rect.preset.y || null;
-    
-    if (!(this.rect.preset.x !== null && this.rect.preset.y !== null)) {
-      this.parts.inner.$.animate([ {
-          transform: `${this.rect.preset.x === null ? `translateX(${this.rect.x}px)` : ""}` + `${this.rect.preset.y === null ? `translateY(${this.rect.y}px)` : ""}`
-        }
-      ], {
-        fill: "both",
-        composite: "accumulate"
-      });
-    } else {
-      this.parts.inner.$.animate([ { transform: `translate(0px, 0px)` } ], {
-        fill: "both",
-        composite: "accumulate"
-      });
-    };
 
     this.parts.inner.$.animate([
       {
+        transform: `translate(${this.rect.x}px, ${this.rect.y}px)`,
         width: `${this.rect.preset.width || `${this.rect.width}px`}`,
         height: `${this.rect.preset.height || `${this.rect.height}px`}`
       }
@@ -470,16 +480,18 @@ export const LyraWindow = class {
   };
 
   setPosition = (x = null, y = null) => {
-    if (x !== null && this.rect.preset.x === null) this.rect.x = x;
-    if (y !== null && this.rect.preset.y === null) this.rect.y = y;
+    if (!this.movable) return this;
+    if (x !== null) this.rect.x = x;
+    if (y !== null) this.rect.y = y;
     this.refreshRect();
     this.listener.dispatchEvent(new Event("positionmove"));
     return this;
   };
 
   addPosition = (x = null, y = null) => {
-    if (x !== null && this.rect.preset.x === null) this.rect.x += x;
-    if (y !== null && this.rect.preset.y === null) this.rect.y += y;
+    if (!this.movable) return this;
+    if (x !== null) this.rect.x += x;
+    if (y !== null) this.rect.y += y;
     this.refreshRect();
     this.listener.dispatchEvent(new Event("positionmove"));
     return this;
@@ -487,7 +499,6 @@ export const LyraWindow = class {
 
   setMoveEvent = () => {
     if (!this.parts.inner.$ || !this.parts.inner.titlebar.$) return;
-    this.movable = true;
 
     this.parts.inner.titlebar.$.onpointerdown = (pointer) => {
       if (
