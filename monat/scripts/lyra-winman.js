@@ -354,11 +354,11 @@ export const LyraWindow = class {
     const minimizeTriggers = $a("[minimizewindow]:not([noiconchange])", this.parts.$);
     if (this.minimized) {
       set(this.parts.$, "minimized", "");
-      for (const x of minimizeTriggers) for (const y of $a("i.minimize", x)) y.className = "arrow-n";
+      for (const x of minimizeTriggers) for (const y of $a("i.minimize", x)) y.className = "undo-minimize";
       this.listener.dispatchEvent(new Event("minimizestart"));
     } else {
       unset(this.parts.$, "minimized");
-      for (const x of minimizeTriggers) for (const y of $a("i.arrow-n", x)) y.className = "minimize";
+      for (const x of minimizeTriggers) for (const y of $a("i.undo-minimize", x)) y.className = "minimize";
       this.listener.dispatchEvent(new Event("minimizeend"));
     };
 

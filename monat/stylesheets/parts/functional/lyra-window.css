@@ -210,10 +210,13 @@ window[active] > inner > titlebar > .left > span { color: var(--window-titlebar-
 window[active] > inner > titlebar > .right > button { --icon: var(--window-titlebar-font-active); }
 
 /* 최대화 */
+window[maximized]:not([minimized]) { padding: 0 !important; }
 window[maximized]:not([minimized]) > inner {
   left: 0 !important;
   top: 0 !important;
 
+  max-width: 100dvw !important;
+  max-height: 100dvh !important;
   width: 100% !important;
   height: 100% !important;
 
