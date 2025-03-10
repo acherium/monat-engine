@@ -167,11 +167,28 @@ export const after = (target, ...node) => {
 /**
  * 지정한 요소를 기준 요소 이전에 추가하고, 추가한 요소를 배열로 반환합니다.
  * @param {Element} target 기준 요소.
- * @param {Element} node 추가할 요소.
+ * @param {...Element} node 추가할 요소.
  * @returns {array} 추가한 요소를 반환합니다.
  */
 export const before = (target, ...node) => {
   target.before(...node);
+  return node;
+};
+
+/**
+ * 지정한 요소를 기준 요소 인근의 특정 위치에 추가하고, 추가한 요소를 배열로 반환합니다.
+ * @param {Element} target 
+ * @param {string} position 
+ * @param  {...Element} node 
+ * @returns {array} 추가한 요소를 반환합니다.
+ * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Element/insertAdjacentElement | MDN 레퍼런스(영문)> Element: insertAdjacentElement() method}
+ */
+export const adjacent = (target = document, position, ...node) => {
+  let last = target;
+  for (const x of node) {
+    last.insertAdjacentElement(position, x);
+    last = x;
+  };
   return node;
 };
 

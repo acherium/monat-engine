@@ -1,0 +1,26 @@
+// errorman - 오류 로그 및 안내창 출력 관련 모듈 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+import { create } from "./lyra-domman.js";
+import { LYRA_NAME, LYRA_DISPLAY_NAME, LYRA_VERSION, LYRA_DATE } from "./lyra-envman.js";
+import { LyraWindow } from "./lyra-winman.js";
+
+export const error = (message) => {
+  const e = new Error(message);
+  new LyraWindow({
+    includes: [
+      "titlebar",
+      "titlebar-left",
+      "titlebar-right",
+      "close-button"
+    ],
+    height: 300,
+    position: "center",
+    size: "pixel fit-content",
+    maximizable: false,
+    minimizable: false
+  }).setIcon(create("div", { classes: [ "lyra-icon" ] }))
+    .setTitle(LYRA_NAME)
+    .setBody(create("windowbody", { attributes: { flex: "", aligncenter: "", gap: "" }, properties: { innerHTML: `<il class="error"></il><p>An error has occurred.<br><br><span highlight red wordbreak>${message}</span><br><br>For more information for this error, please check the console.<br><span sub>${LYRA_DISPLAY_NAME} build ${LYRA_VERSION}@${LYRA_DATE}</span></p>` } }))
+    .show();
+  console.error(e);
+  return message;
+};

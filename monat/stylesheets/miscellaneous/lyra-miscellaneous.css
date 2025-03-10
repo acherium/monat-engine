@@ -11,6 +11,9 @@
 [nomargin] { margin: 0 !important; }
 [nopadding] { padding: 0 !important; }
 [nogap] { gap: 0 !important; }
+[gap] { gap: var(--gap) !important; }
+[flexrow] { flex-direction: row !important; }
+[flexcolumn] { flex-direction: column !important; }
 
 /* 크기 옵션 */
 [widthfull] { width: 100% !important; }
@@ -37,6 +40,8 @@
 [linethrough][overline] { text-decoration-line: line-through overline !important; }
 [underline][overline] { text-decoration-line: underline overline !important; }
 [underline][linethrough][overline] { text-decoration-line: underline line-through overline !important; }
+
+[wordbreak] { word-break: break-all !important; }
 
 [textleft] { text-align: left !important; }
 [textcenter] { text-align: center !important; }
@@ -78,6 +83,11 @@
 [highlight][turquoise] { background-color: oklch(from var(--turquoise) l c h/0.15); }
 [highlight][skyblue] { background-color: oklch(from var(--skyblue) l c h/0.15); }
 [highlight][pink] { background-color: oklch(from var(--pink) l c h/0.15); }
+
+[sub] {
+  font-size: small !important;
+  color: var(--font-sub) !important;
+}
 
 /* align-items 값 */
 [alignstart] { align-items: start !important; }

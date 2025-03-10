@@ -1,4 +1,12 @@
 // envman - 환경 변수 관련 모듈 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// 모듈 정보 변수 초기화
+export const LYRA_NAME = "Project Lyra";
+export const LYRA_DISPLAY_NAME = "Monat Engine";
+export const LYRA_AUTHOR = "Acherium";
+export const LYRA_CONTACT = "acherium@pm.me";
+export const LYRA_VERSION = "2000";
+export const LYRA_DATE = "25-03-2";
+
 // 기본 변수 초기화
 export const COMMON_INTERVAL = 30;
 export const ANIMATION_INTERVAL = 30;
@@ -16,4 +24,5 @@ export const DEFAULT_WINDOW_HEIGHT = 400;
 export const DEFAULT_WINDOW_X = 10;
 export const DEFAULT_WINDOW_Y = 10;
 export const POSITION_PARAMETERS = [ "start", "center", "end", "pixel" ];
+export const SIZE_PARAMETERS = [ "min-content", "fit-content", "max-content", "pixel" ];
 export const DRAG_SCROLLING_THRESHOLD = 50;

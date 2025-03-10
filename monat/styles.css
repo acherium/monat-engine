@@ -36,3 +36,10 @@ body { background-color: var(--main); }
   font-size: small;
   color: oklch(from var(--font) l c h/0.5);
 }
+
+.lyra-icon {
+  width: 100%;
+  height: 100%;
+
+  background: no-repeat center/100% url("./assets/essentials/symbol.svg");
+}

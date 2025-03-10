@@ -1,9 +1,10 @@
 import {
-  root, body, head, $, $a, create, append, revoke,
+  root, body, head, $, $a, create, append, revoke, after, before, adjacent,
   get, set, unset,
   xhr,
   DRAG_SCROLLING_THRESHOLD,
-  LyraWindowManager, LyraWindow
+  LyraWindowManager, LyraWindow,
+  error
 } from "./module.js";
 
 const master = {};
@@ -127,6 +128,35 @@ const init = (target) => {
     };
   };
 
+  // 뷰 모듈 초기화
+  for (const partial of $a("partial", target)) {
+    const partialType = get(partial, "type");
+    const partialSrc = get(partial, "src");
+    const partialParent = partial.parentNode;
+    
+    xhr(partialSrc, {
+      load: (data) => {
+        if (data.target.status !== 200) {
+          error(`Failed to load this partial HTML >>> [${partialType ?? "plain"}]"${partialSrc}"@${partialParent.nodeName} >>> ${data.target.status} ${data.target.statusText}`);
+          return;
+        };
+
+        const raw = data.target.response;
+        const sealed = create("seal", { properties: { innerHTML: raw } });
+
+        const partialman = {};
+
+        if (partialType === "window") partialman.windowReserved = master.winman.retrieve(init(sealed), { parent: partialParent });
+        else adjacent(partial, "afterend", ...$a("*", init(sealed)));
+
+        const partialRunners = $a("script[runner][partial]", sealed);
+        for (const runner of partialRunners) initPartialRunner(runner, partialman);
+        sealed.remove();
+        revoke(partial);
+      }
+    });
+  };
+
   return target;
 };
 
@@ -170,32 +200,6 @@ const initPartialRunner = (runner, partialman = null) => {
   // 창 초기화
   master.winman = new LyraWindowManager();
   master.winman.retrieve(root);
-
-  // 뷰 모듈 초기화
-  for (const partial of $a("partial")) {
-    const partialType = get(partial, "type");
-    const partialSrc = get(partial, "src");
-    const partialParent = partial.parentNode;
-    
-    xhr(partialSrc, {
-      load: (data) => {
-        if (data.target.status !== 200) return;
-
-        const raw = data.target.response;
-        const sealed = create("seal", { properties: { innerHTML: raw } });
-
-        const partialman = {};
-
-        if (partialType === "window") partialman.windowReserved = master.winman.retrieve(init(sealed), { parent: partialParent });
-
-        const partialRunners = $a("script[runner][partial]", sealed);
-        for (const runner of partialRunners) initPartialRunner(runner, partialman);
-        sealed.remove();
-      }
-    });
-
-    revoke(partial);
-  };
 
   // 초기화
   init(body);

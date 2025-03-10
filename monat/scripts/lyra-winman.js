@@ -1,5 +1,5 @@
 // winman - 창 요소 조작 관련 모듈 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-import { COMMON_INTERVAL, WINDOW_ANIMATION_DURATION, POSITION_PARAMETERS } from "./lyra-envman.js";
+import { COMMON_INTERVAL, WINDOW_ANIMATION_DURATION, POSITION_PARAMETERS, SIZE_PARAMETERS } from "./lyra-envman.js";
 import {
   $, $a, create, append, revoke, after, before,
   get, set, unset, revokeAttribute,
@@ -87,7 +87,9 @@ export const LyraWindow = class {
       height: 480,
       preset: {
         x: null,
-        y: null
+        y: null,
+        width: null,
+        height: null
       }
     };
     this.rectOrigin = {};
@@ -212,6 +214,21 @@ export const LyraWindow = class {
           this.rect.preset.y = raw[1] !== "pixel" ? raw[1] : null;
         };
       };
+
+      // 크기 프리셋 불러오기
+      if (typeof param.size !== "undefined") {
+        const raw = `${param.size}`.split(/ +/).map((x) => x.trim()).filter((x) => x.length);
+        
+        if (raw.length === 1) {
+          if (!SIZE_PARAMETERS.includes(raw[0])) return;
+          this.rect.preset.width = raw[0] !== "pixel" ? raw[0] : null;
+          this.rect.preset.height = raw[0] !== "pixel" ? raw[0] : null;
+        } else if (raw.length > 1) {
+          if (!SIZE_PARAMETERS.includes(raw[0]) || !SIZE_PARAMETERS.includes(raw[1])) return;
+          this.rect.preset.width = raw[0] !== "pixel" ? raw[0] : null;
+          this.rect.preset.height = raw[1] !== "pixel" ? raw[1] : null;
+        };
+      };
     };
 
     // 이벤트 초기화
@@ -273,7 +290,7 @@ export const LyraWindow = class {
     };
     
     this.parts.inner.$.animate([ { opacity: "0" } ], { fill: "both" });
-    this.parts.inner.$.animate([ { transform: "translateY(10px) scale(0.95)" } ],
+    this.parts.inner.$.animate([ { transform: "translateY(2px) scale(0.99)" } ],
     {
       fill: "both",
       composite: "accumulate"
@@ -288,7 +305,7 @@ export const LyraWindow = class {
         fill: "both",
         ease: "cubic-bezier(0.02, 0.61, 0.47, 0.99)"
       });
-    this.parts.inner.$.animate([ { transform: "translateY(10px) scale(0.95)" }, { transform: "translateY(0px) scale(1)" } ],
+    this.parts.inner.$.animate([ { transform: "translateY(2px) scale(0.99)" }, { transform: "translateY(0px) scale(1)" } ],
       {
         duration: WINDOW_ANIMATION_DURATION,
         fill: "both",
@@ -312,7 +329,7 @@ export const LyraWindow = class {
       fill: "both",
       ease: "cubic-bezier(0.02, 0.61, 0.47, 0.99)"
     });
-    this.parts.inner.$.animate([ { transform: "translateY(0px) scale(1)" }, { transform: "translateY(10px) scale(0.95)" } ],
+    this.parts.inner.$.animate([ { transform: "translateY(0px) scale(1)" }, { transform: "translateY(2px) scale(0.99)" } ],
     {
       duration: WINDOW_ANIMATION_DURATION,
       fill: "both",
@@ -411,6 +428,14 @@ export const LyraWindow = class {
     return this;
   };
 
+  setBottom = (node) => {
+    if (!this.parts.inner.$ || !this.parts.inner.bottom.$) return;
+    after(this.parts.inner.bottom.$, node);
+    revoke(this.parts.inner.bottom.$);
+    this.parts.inner.bottom.$ = node;
+    return this;
+  };
+
   refreshRect = () => {
     this.parts.$.style["justify-content"] = this.rect.preset.x || null;
     this.parts.$.style["align-items"] = this.rect.preset.y || null;
@@ -432,8 +457,8 @@ export const LyraWindow = class {
 
     this.parts.inner.$.animate([
       {
-        width: `${this.rect.width}px`,
-        height: `${this.rect.height}px`
+        width: `${this.rect.preset.width || `${this.rect.width}px`}`,
+        height: `${this.rect.preset.height || `${this.rect.height}px`}`
       }
     ], {
       fill: "both",
