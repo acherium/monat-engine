@@ -1,6 +1,8 @@
 @charset "UTF-8";
 /* 창 속성 값 */
 :root {
+  --window-area-padding: 4px;
+  
   --window-border-width: 1px;
   --window-radius: 6px;
   --window-border-active: var(--accent);
@@ -23,10 +25,11 @@
 
 /* 창 */
 window {
-  display: block;
+  display: flex;
   position: fixed;
   left: 0;
   top: 0;
+  padding: var(--window-area-padding);
   z-index: 100;
   overflow: hidden;
 
@@ -45,8 +48,8 @@ window > inner {
   z-index: 1;
   overflow: hidden;
 
-  max-width: 100dvw;
-  max-height: 100dvh;
+  max-width: calc(100dvw - var(--window-area-padding) * 2);
+  max-height: calc(100dvh - var(--window-area-padding) * 2);
   width: max-content;
   height: max-content;
   flex-shrink: 0;

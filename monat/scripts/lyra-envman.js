@@ -15,5 +15,5 @@ export const DEFAULT_WINDOW_WIDTH = 600;
 export const DEFAULT_WINDOW_HEIGHT = 400;
 export const DEFAULT_WINDOW_X = 10;
 export const DEFAULT_WINDOW_Y = 10;
-
+export const POSITION_PARAMETERS = [ "start", "center", "end", "pixel" ];
 export const DRAG_SCROLLING_THRESHOLD = 50;

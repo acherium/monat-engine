@@ -218,6 +218,18 @@ export const unset = (node, name) => {
 };
 
 /**
+ * 지정한 요소의 속성 값을 제거하고 반환합니다.
+ * @param {Element} node 요소.
+ * @param {string} name 제거할 속성 이름.
+ * @returns {string}
+ */
+export const revokeAttribute = (node, name) => {
+  const result = get(node, name);
+  unset(node, name);
+  return result;
+};
+
+/**
  * 지정한 요소를 새로운 밀봉 요소로 감싸고 반환합니다.
  * @param {Element} node 요소.
  * @returns {Element} 밀봉 요소.

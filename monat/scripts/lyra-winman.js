@@ -1,8 +1,8 @@
 // winman - 창 요소 조작 관련 모듈 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-import { COMMON_INTERVAL, WINDOW_ANIMATION_DURATION } from "./lyra-envman.js";
+import { COMMON_INTERVAL, WINDOW_ANIMATION_DURATION, POSITION_PARAMETERS } from "./lyra-envman.js";
 import {
   $, $a, create, append, revoke, after, before,
-  get, set, unset,
+  get, set, unset, revokeAttribute,
   body
 } from "./lyra-domman.js";
 import {
@@ -83,8 +83,12 @@ export const LyraWindow = class {
     this.rect = {
       x: 0,
       y: 0,
-      width: 500,
-      height: 300
+      width: 600,
+      height: 480,
+      preset: {
+        x: null,
+        y: null
+      }
     };
     this.rectOrigin = {};
     this.listener = new EventTarget();
@@ -127,6 +131,27 @@ export const LyraWindow = class {
 
       // overlay 요소
       this.parts.overlay.$ = $("overlay", this.parts.$);
+
+      // 기본 Rect값 불러오기
+      if (get(this.parts.$, "x")) this.rect.x = parseInt(revokeAttribute(this.parts.$, "x"));
+      if (get(this.parts.$, "y")) this.rect.y = parseInt(revokeAttribute(this.parts.$, "y"));
+      if (get(this.parts.$, "width")) this.rect.width = parseInt(revokeAttribute(this.parts.$, "width"));
+      if (get(this.parts.$, "height")) this.rect.height = parseInt(revokeAttribute(this.parts.$, "height"));
+
+      // 위치 프리셋 불러오기
+      if (get(this.parts.$, "position")) {
+        const raw = revokeAttribute(this.parts.$, "position").split(/ +/).map((x) => x.trim()).filter((x) => x.length);
+        
+        if (raw.length === 1) {
+          if (!POSITION_PARAMETERS.includes(raw[0])) return;
+          this.rect.preset.x = raw[0] !== "pixel" ? raw[0] : null;
+          this.rect.preset.y = raw[0] !== "pixel" ? raw[0] : null;
+        } else if (raw.length > 1) {
+          if (!POSITION_PARAMETERS.includes(raw[0]) || !POSITION_PARAMETERS.includes(raw[1])) return;
+          this.rect.preset.x = raw[0] !== "pixel" ? raw[0] : null;
+          this.rect.preset.y = raw[1] !== "pixel" ? raw[1] : null;
+        };
+      };
     } else {
       this.parent = body;
 
@@ -166,6 +191,27 @@ export const LyraWindow = class {
       // 최대화/최소화 가능 여부 조절
       if (typeof param.maximizable !== "undefined") this.maximizable = !!param.maximizable;
       if (typeof param.minimizable !== "undefined") this.minimizable = !!param.minimizable;
+
+      // 기본 Rect값 불러오기
+      if (typeof param.x !== "undefined") this.rect.x = param.x;
+      if (typeof param.y !== "undefined") this.rect.y = param.y;
+      if (typeof param.width !== "undefined") this.rect.width = param.width;
+      if (typeof param.height !== "undefined") this.rect.height = param.height;
+      
+      // 위치 프리셋 불러오기
+      if (typeof param.position !== "undefined") {
+        const raw = `${param.position}`.split(/ +/).map((x) => x.trim()).filter((x) => x.length);
+        
+        if (raw.length === 1) {
+          if (!POSITION_PARAMETERS.includes(raw[0])) return;
+          this.rect.preset.x = raw[0] !== "pixel" ? raw[0] : null;
+          this.rect.preset.y = raw[0] !== "pixel" ? raw[0] : null;
+        } else if (raw.length > 1) {
+          if (!POSITION_PARAMETERS.includes(raw[0]) || !POSITION_PARAMETERS.includes(raw[1])) return;
+          this.rect.preset.x = raw[0] !== "pixel" ? raw[0] : null;
+          this.rect.preset.y = raw[1] !== "pixel" ? raw[1] : null;
+        };
+      };
     };
 
     // 이벤트 초기화
@@ -175,6 +221,7 @@ export const LyraWindow = class {
       if ($a("*", node).length < 1) append(create("i", { classes: [ "close" ] }), node);
       node.addEventListener("pointerup", this.close);
     };
+    if (this.parts.outer.$) this.parts.outer.$.onclick = this.close;
 
     // 창 최대화
     const maximizeTriggers = $a("[maximizewindow]", this.parts.$);
@@ -236,18 +283,18 @@ export const LyraWindow = class {
 
     if (this.parts.outer.$) this.parts.outer.$.animate([ { opacity: "0" }, { opacity: "1" }], { duration: WINDOW_ANIMATION_DURATION, fill: "both" });
     this.parts.inner.$.animate([ { opacity: "0" }, { opacity: "1" } ],
-    {
-      duration: WINDOW_ANIMATION_DURATION,
-      fill: "both",
-      ease: "cubic-bezier(0.02, 0.61, 0.47, 0.99)"
-    });
+      {
+        duration: WINDOW_ANIMATION_DURATION,
+        fill: "both",
+        ease: "cubic-bezier(0.02, 0.61, 0.47, 0.99)"
+      });
     this.parts.inner.$.animate([ { transform: "translateY(10px) scale(0.95)" }, { transform: "translateY(0px) scale(1)" } ],
-    {
-      duration: WINDOW_ANIMATION_DURATION,
-      fill: "both",
-      ease: "cubic-bezier(0.02, 0.61, 0.47, 0.99)",
-      composite: "accumulate"
-    });
+      {
+        duration: WINDOW_ANIMATION_DURATION,
+        fill: "both",
+        ease: "cubic-bezier(0.02, 0.61, 0.47, 0.99)",
+        composite: "accumulate"
+      });
   
     this.refreshRect();
     this.listener.dispatchEvent(new Event("show"));
@@ -365,9 +412,21 @@ export const LyraWindow = class {
   };
 
   refreshRect = () => {
+    this.parts.$.style["justify-content"] = this.rect.preset.x || null;
+    this.parts.$.style["align-items"] = this.rect.preset.y || null;
+    
+    if (!(this.rect.preset.x !== null && this.rect.preset.y !== null)) {
+      this.parts.inner.$.animate([ {
+          transform: `${this.rect.preset.x === null ? `translateX(${this.rect.x}px)` : ""}` + `${this.rect.preset.y === null ? `translateY(${this.rect.y}px)` : ""}`
+        }
+      ], {
+        fill: "both",
+        composite: "accumulate"
+      });
+    };
+
     this.parts.inner.$.animate([
       {
-        transform: `translate(${this.rect.x}px, ${this.rect.y}px)`,
         width: `${this.rect.width}px`,
         height: `${this.rect.height}px`
       }
@@ -375,21 +434,22 @@ export const LyraWindow = class {
       fill: "both",
       composite: "accumulate"
     });
+
     this.listener.dispatchEvent(new Event("refresh"));
     return this;
   };
 
   setPosition = (x = null, y = null) => {
-    if (x !== null) this.rect.x = x;
-    if (y !== null) this.rect.y = y;
+    if (x !== null && this.rect.preset.x === null) this.rect.x = x;
+    if (y !== null && this.rect.preset.y === null) this.rect.y = y;
     this.refreshRect();
     this.listener.dispatchEvent(new Event("positionmove"));
     return this;
   };
 
   addPosition = (x = null, y = null) => {
-    if (x !== null) this.rect.x += x;
-    if (y !== null) this.rect.y += y;
+    if (x !== null && this.rect.preset.x === null) this.rect.x += x;
+    if (y !== null && this.rect.preset.y === null) this.rect.y += y;
     this.refreshRect();
     this.listener.dispatchEvent(new Event("positionmove"));
     return this;
