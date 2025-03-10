@@ -57,6 +57,7 @@ export default function(master) {
   // 창 데모
   const $btnOpenWin0 = $("#demo-open-window-0");
   const $btnOpenWin1 = $("#demo-open-window-1");
+  const $btnOpenWin2 = $("#demo-open-window-2");
   $btnOpenWin0.onclick = () => master.winman.reserve["demo-window-0"].show();
   $btnOpenWin1.onclick = () => new LyraWindow({
     includes: [
@@ -71,4 +72,7 @@ export default function(master) {
   }).setTitle("새 창")
     .setIcon(create("i", { classes: [ "spreadsheet" ] }))
     .setBody(create("windowbody", { properties: { innerHTML: "<p>1234</p>" } })).show();
+  $btnOpenWin2.onclick = () => {
+    master.winman.reserve["partial-test-window"].show();
+  };
 };

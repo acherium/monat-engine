@@ -1,20 +1,27 @@
 // winman - 창 요소 조작 관련 모듈 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+import { COMMON_INTERVAL, WINDOW_ANIMATION_DURATION } from "./lyra-envman.js";
 import {
   $, $a, create, append, revoke, after, before,
   get, set, unset,
   body
 } from "./lyra-domman.js";
-import { COMMON_INTERVAL, WINDOW_ANIMATION_DURATION } from "./lyra-envman.js";
+import {
+  copy
+} from "./lyra-objman.js";
 
 export const LyraWindowManager = class {
   constructor() {
-    this.reserve = [];
+    this.reserve = {};
     return this;
   };
 
-  retrieve = () => {
-    this.reserve = Object.fromEntries(Array.from($a("window[id]")).map((x) => [ x.id, new LyraWindow({}, x) ]));
-    return this;
+  retrieve = (target = document, param = {}) => {
+    const retrieveTargets = {};
+    for (const x of Array.from($a("window[id]", target)).map((x) => [ x.id, new LyraWindow(param, x) ])) {
+      this.reserve[x[0]] = x[1];
+      retrieveTargets[x[0]] = x[1];
+    };
+    return retrieveTargets;
   };
 };
 
@@ -65,7 +72,9 @@ export const LyraWindow = class {
         $: null
       }
     };
+    this.partsOrigin = {};
     this.closed = true;
+    this.resetOnClosed = false;
     this.maximized = false;
     this.minimized = false;
     this.maximizable = true;
@@ -77,6 +86,8 @@ export const LyraWindow = class {
       width: 500,
       height: 300
     };
+    this.rectOrigin = {};
+    this.listener = new EventTarget();
 
     const includeList = param.includes || [];
 
@@ -195,12 +206,24 @@ export const LyraWindow = class {
     // 창 활성화
     this.parts.inner.$.addEventListener("pointerdown", () => { this.active(); });
 
+    // 파라미터 재정의
+    for (const key of Object.keys(param)) if (typeof this[key] !== "undefined") this[key] = param[key];
+
+    // 최초 데이터 정의
+    this.partsOrigin = copy(this.parts);
+    this.rectOrigin = copy(this.rect);
+
     return this;
   };
 
   show = () => {
-    this.closed = false;
     this.active();
+    if (!this.closed) return this;
+    this.closed = false;
+
+    if (this.resetOnClosed) {
+      this.rect = this.rectOrigin;
+    };
     
     this.parts.inner.$.animate([ { opacity: "0" } ], { fill: "both" });
     this.parts.inner.$.animate([ { transform: "translateY(10px) scale(0.95)" } ],
@@ -211,6 +234,7 @@ export const LyraWindow = class {
 
     append(this.parts.$, this.parent);
 
+    if (this.parts.outer.$) this.parts.outer.$.animate([ { opacity: "0" }, { opacity: "1" }], { duration: WINDOW_ANIMATION_DURATION, fill: "both" });
     this.parts.inner.$.animate([ { opacity: "0" }, { opacity: "1" } ],
     {
       duration: WINDOW_ANIMATION_DURATION,
@@ -226,6 +250,7 @@ export const LyraWindow = class {
     });
   
     this.refreshRect();
+    this.listener.dispatchEvent(new Event("show"));
     return this;
   };
 
@@ -233,6 +258,7 @@ export const LyraWindow = class {
     this.closed = true;
     this.inactive();
 
+    if (this.parts.outer.$) this.parts.outer.$.animate([ { opacity: "1" }, { opacity: "0" }], { duration: WINDOW_ANIMATION_DURATION, fill: "both" });
     this.parts.inner.$.animate([ { opacity: "1" }, { opacity: "0" } ],
     {
       duration: WINDOW_ANIMATION_DURATION,
@@ -251,6 +277,7 @@ export const LyraWindow = class {
       this.parts.$ = revoke(this.parts.$);
     }, WINDOW_ANIMATION_DURATION + COMMON_INTERVAL);
 
+    this.listener.dispatchEvent(new Event("close"));
     return this;
   };
 
@@ -262,11 +289,14 @@ export const LyraWindow = class {
     if (this.maximized) {
       set(this.parts.$, "maximized", "");
       for (const x of maximizeTriggers) for (const y of $a("i.maximize", x)) y.className = "undo-maximize";
+      this.listener.dispatchEvent(new Event("maximizestart"));
     } else {
       unset(this.parts.$, "maximized");
       for (const x of maximizeTriggers) for (const y of $a("i.undo-maximize", x)) y.className = "maximize";
+      this.listener.dispatchEvent(new Event("maximizeend"));
     };
 
+    this.listener.dispatchEvent(new Event("maximize"));
     return this;
   };
 
@@ -278,11 +308,14 @@ export const LyraWindow = class {
     if (this.minimized) {
       set(this.parts.$, "minimized", "");
       for (const x of minimizeTriggers) for (const y of $a("i.minimize", x)) y.className = "arrow-n";
+      this.listener.dispatchEvent(new Event("minimizestart"));
     } else {
       unset(this.parts.$, "minimized");
       for (const x of minimizeTriggers) for (const y of $a("i.arrow-n", x)) y.className = "minimize";
+      this.listener.dispatchEvent(new Event("minimizeend"));
     };
 
+    this.listener.dispatchEvent(new Event("minimize"));
     return this;
   };
 
@@ -292,11 +325,14 @@ export const LyraWindow = class {
       set(this.parts.$, "active", "");
       this.parent.insertAdjacentElement("beforeend", this.parts.$);
     };
+
+    this.listener.dispatchEvent(new Event("active"));
     return this;
   };
 
   inactive = () => {
     unset(this.parts.$, "active");
+    this.listener.dispatchEvent(new Event("inactive"));
     return this;
   };
 
@@ -339,6 +375,7 @@ export const LyraWindow = class {
       fill: "both",
       composite: "accumulate"
     });
+    this.listener.dispatchEvent(new Event("refresh"));
     return this;
   };
 
@@ -346,6 +383,7 @@ export const LyraWindow = class {
     if (x !== null) this.rect.x = x;
     if (y !== null) this.rect.y = y;
     this.refreshRect();
+    this.listener.dispatchEvent(new Event("positionmove"));
     return this;
   };
 
@@ -353,6 +391,7 @@ export const LyraWindow = class {
     if (x !== null) this.rect.x += x;
     if (y !== null) this.rect.y += y;
     this.refreshRect();
+    this.listener.dispatchEvent(new Event("positionmove"));
     return this;
   };
 

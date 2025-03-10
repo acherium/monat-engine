@@ -26,10 +26,10 @@
         <button toggledarkmode><i class="misc-darkmode-indicator"></i></button>
       </div>
       <nav class="tabs">
-        <label target="#demo-inputs"><input type="radio" name="tab-demo-section" value="0" autocomplete="off" checked><i class="text"></i><span>각종 입력, 버튼 요소</span></label>
+        <label target="#demo-inputs"><input type="radio" name="tab-demo-section" value="0" autocomplete="off"><i class="text"></i><span>각종 입력, 버튼 요소</span></label>
         <label target="#demo-paragraphs"><input type="radio" name="tab-demo-section" value="1" autocomplete="off"><i class="menu"></i><span>텍스트 요소</span></label>
         <label target="#demo-icons"><input type="radio" name="tab-demo-section" value="2" autocomplete="off"><i class="gallery"></i><span>아이콘 목록</span></label>
-        <label target="#demo-windows"><input type="radio" name="tab-demo-section" value="3" autocomplete="off"><i class="tasks"></i><span>창 요소</span></label>
+        <label target="#demo-windows"><input type="radio" name="tab-demo-section" value="3" autocomplete="off" checked><i class="tasks"></i><span>창 요소</span></label>
       </nav>
       <div id="demo-inputs" class="demo-view list-column">
         <div class="list-row">
@@ -88,6 +88,7 @@
         <div class="list-row">
           <button id="demo-open-window-0"><i class="tasks"></i><span>창 열기 1</span></button>
           <button id="demo-open-window-1"><i class="tasks"></i><span>창 열기 2</span></button>
+          <button id="demo-open-window-2"><i class="tasks"></i><span>창 열기 3</span></button>
         </div>
       </div>
     </div>
@@ -122,6 +123,7 @@
       </bottom>
     </inner>
   </window>
+  <partial type="window" src="./views/windows/window-test.html"></partial>
   <div id="float-menu">
     <button float><i class="search"></i><span>검색</span></button>
     <button float><i class="sort"></i></button>

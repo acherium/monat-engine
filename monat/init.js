@@ -1,6 +1,7 @@
 import {
   root, body, head, $, $a, create, append, revoke,
   get, set, unset,
+  xhr,
   DRAG_SCROLLING_THRESHOLD,
   LyraWindowManager, LyraWindow
 } from "./module.js";
@@ -9,20 +10,9 @@ const master = {};
 
 /**
  * 대상을 Lyra Engine으로 초기화합니다.
- * @param {HTMLElement} target 초기화 대상
+ * @param {HTMLElement} target 대상 요소.
  */
 const init = (target) => {
-  // 패비콘 없으면 기본 아이콘으로 설정
-  if (!$(`link[rel="shortcut icon"]`)) {
-    append(create("link", {
-      properties: {
-        rel: "shortcut icon",
-        href: "./monat/assets/essentials/favicon-alt.svg",
-        type: "image/x-icon"
-      }
-    }), head);
-  };
-
   // :indeterminate 상태의 체크박스 초기화
   const $indeterminateCheckboxes = $a(`input[type="checkbox"][indeterminate]`);
   for (const $checkbox of ($indeterminateCheckboxes)) $checkbox.indeterminate = true;
@@ -91,7 +81,7 @@ const init = (target) => {
   // 탭 항목 숨김/표시
   const $tabs = $a(`:is(.tabs, .tabs-row, .tabs-column) > label:has(input[type="radio"])`, target);
   for (const $tab of $tabs) {
-    const $targets = $a(get($tab, "target"));
+    const $targets = $a(get($tab, "target"), target);
     const $radio = $(`input[type="radio"]`, $tab);
     if (!$targets || !$radio) continue;
 
@@ -137,20 +127,77 @@ const init = (target) => {
     };
   };
 
-  // 창 초기화
-  master.winman = new LyraWindowManager();
-  master.winman.retrieve();
+  return target;
 };
 
-(() => {
-  // 초기화
-  init(body);
-
-  // 모듈 로드
-  for (const script of $a("script[runner]")) {
+/**
+ * 대상 요소 내부에 정의된 모듈 실행자를 Lyra Engine으로 초기화합니다.
+ * @param {HTMLElement} target 대상 요소.
+ */
+const initRunner = (target) => {
+  for (const script of $a("script[runner]", target)) {
     import(script.src).then((x) => {
       x.default(master);
     });
     revoke(script);
   };
+};
+
+/**
+ * 대상 부분 모듈 실행자를 Lyra Engine으로 초기화합니다.
+ * @param {HTMLScriptElement} runner 대상 부분 모듈 실행자.
+ * @param {*} partialman 대상 실행자에 제공할 값.
+ */
+const initPartialRunner = (runner, partialman = null) => {
+  import(runner.src).then((x) => {
+    x.default(master, partialman);
+  });
+  revoke(runner);
+};
+
+(() => {
+  // 패비콘 없으면 기본 아이콘으로 설정
+  if (!$(`link[rel="shortcut icon"]`)) {
+    append(create("link", {
+      properties: {
+        rel: "shortcut icon",
+        href: "./monat/assets/essentials/favicon-alt.svg",
+        type: "image/x-icon"
+      }
+    }), head);
+  };
+
+  // 창 초기화
+  master.winman = new LyraWindowManager();
+  master.winman.retrieve(root);
+
+  // 뷰 모듈 초기화
+  for (const partial of $a("partial")) {
+    const partialType = get(partial, "type");
+    const partialSrc = get(partial, "src");
+    const partialParent = partial.parentNode;
+    
+    xhr(partialSrc, {
+      load: (data) => {
+        if (data.target.status !== 200) return;
+
+        const raw = data.target.response;
+        const sealed = create("seal", { properties: { innerHTML: raw } });
+
+        const partialman = {};
+
+        if (partialType === "window") partialman.windowReserved = master.winman.retrieve(init(sealed), { parent: partialParent });
+
+        const partialRunners = $a("script[runner][partial]", sealed);
+        for (const runner of partialRunners) initPartialRunner(runner, partialman);
+        sealed.remove();
+      }
+    });
+
+    revoke(partial);
+  };
+
+  // 초기화
+  init(body);
+  initRunner(root);
 })();
