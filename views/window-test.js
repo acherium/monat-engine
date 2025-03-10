@@ -1,6 +1,6 @@
 import {
   $
-} from "../../monat/module.js";
+} from "../monat/module.js";
 
 export default function(master, partial) {
   const win = partial.windowReserved["partial-test-window"];

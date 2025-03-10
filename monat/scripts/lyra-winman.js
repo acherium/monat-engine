@@ -423,6 +423,11 @@ export const LyraWindow = class {
         fill: "both",
         composite: "accumulate"
       });
+    } else {
+      this.parts.inner.$.animate([ { transform: `translate(0px, 0px)` } ], {
+        fill: "both",
+        composite: "accumulate"
+      });
     };
 
     this.parts.inner.$.animate([
