@@ -1,5 +1,5 @@
 import {
-  root, body, head, $, $a, create, append, revoke, after, before, adjacent,
+  root, body, head, $, $a, $p, create, append, revoke, after, before, adjacent,
   get, set, unset,
   xhr,
   DRAG_SCROLLING_THRESHOLD,
@@ -203,6 +203,8 @@ const initPartialRunner = (runner, partialman = null) => {
   // 창 초기화
   master.winman = new LyraWindowManager();
   master.winman.retrieve(root);
+  body.addEventListener("pointerdown", (event) => { if($p("window", event.target) === null) for (const node of $a("window[active]")) unset(node, "active"); });
+
 
   // 초기화
   init(body);

@@ -65,6 +65,7 @@ export default function(master) {
       "titlebar-left",
       "titlebar-right",
       "bottom",
+      "resize-pointer",
       "close-button",
       "maximize-button",
       "minimize-button"

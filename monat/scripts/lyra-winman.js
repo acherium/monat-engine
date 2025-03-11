@@ -1,7 +1,7 @@
 // winman - 창 요소 조작 관련 모듈 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 import { COMMON_INTERVAL, WINDOW_ANIMATION_DURATION, POSITION_PARAMETERS, SIZE_PARAMETERS } from "./lyra-envman.js";
 import {
-  $, $a, create, append, revoke, after, before,
+  $, $a, $p, $pa, create, append, revoke, after, before,
   get, set, unset, revokeAttribute,
   body
 } from "./lyra-domman.js";
@@ -29,6 +29,8 @@ export const LyraWindow = class {
   constructor(param = {}, origin = null) {
     // 초기화
     this.parent = null;
+    this.master = null;
+    
     this.parts = {
       $: null,
       outer: {
@@ -66,6 +68,9 @@ export const LyraWindow = class {
           right: {
             $: null
           }
+        },
+        resizePointer: {
+          $: null
         }
       },
       overlay: {
@@ -131,6 +136,9 @@ export const LyraWindow = class {
       this.parts.inner.bottom.$ = $("bottom", this.parts.inner.$);
       this.parts.inner.bottom.left.$ = $(".left", this.parts.inner.bottom.$);
       this.parts.inner.bottom.right.$ = $(".right", this.parts.inner.bottom.$);
+
+      // inner - resizePointer 요소
+      this.parts.inner.resizePointer.$ = $("resizepointer", this.parts.inner.$);
 
       // overlay 요소
       this.parts.overlay.$ = $("overlay", this.parts.$);
@@ -207,6 +215,9 @@ export const LyraWindow = class {
       if (includeList.includes("bottom-left")) this.parts.inner.bottom.left.$ = append(create("div", { classes: [ "left" ] }), this.parts.inner.bottom.$);
       if (includeList.includes("bottom-right")) this.parts.inner.bottom.right.$ = append(create("div", { classes: [ "right" ] }), this.parts.inner.bottom.$);
 
+      // inner - resizePointer 요소
+      if (includeList.includes("resize-pointer")) this.parts.inner.resizePointer.$ = append(create("resizepointer"), this.parts.inner.$);
+
       // overlay 요소
       if (includeList.includes("overlay")) this.parts.overlay.$ = append(create("overlay"), this.parts.$);
 
@@ -268,7 +279,7 @@ export const LyraWindow = class {
     const maximizeTriggers = $a("[maximizewindow]", this.parts.$);
     for (const node of maximizeTriggers) {
       if ($a("*", node).length < 1) append(create("i", { classes: [ (this.minimized ? "undo-maximize" : "maximize" ) ] }), node);
-      node.addEventListener("click", () => {
+      node.addEventListener("pointerup", () => {
         this.toggleMaximize();
       });
     };
@@ -283,13 +294,14 @@ export const LyraWindow = class {
     const minimizeTriggers = $a("[minimizewindow]", this.parts.$);
     for (const node of minimizeTriggers) {
       if ($a("*", node).length < 1) append(create("i", { classes: [ (this.minimized ? "arrow-n" : "minimize" ) ] }), node);
-      node.addEventListener("click", () => {
+      node.addEventListener("pointerup", () => {
         this.toggleMinimize();
       });
     };
 
-    // 창 이동
+    // 창 조절
     if (this.movable) this.setMoveEvent();
+    if (this.resizable) this.setResizeEvent();
 
     // 창 활성화
     this.parts.inner.$.addEventListener("pointerdown", () => { this.active(); });
@@ -497,6 +509,25 @@ export const LyraWindow = class {
     return this;
   };
 
+  setSize = (width = null, height = null) => {
+    if (!this.resizable) return this;
+    if (width !== null) this.rect.width = width;
+    if (height !== null) this.rect.height = height;
+    this.refreshRect();
+    this.listener.dispatchEvent(new Event("sizechange"));
+    return this;
+  };
+
+  addSize = (width = null, height = null) => {
+    if (!this.resizable) return this;
+    if (width !== null) this.rect.width += width;
+    if (height !== null) this.rect.height += height;
+    if (this.rect.preset.x === "end" || this.rect.preset.y === "end") this.addPosition((this.rect.preset.x === "end" ? width : null), (this.rect.preset.y === "end" ? height : null));
+    this.refreshRect();
+    this.listener.dispatchEvent(new Event("sizechange"));
+    return this;
+  };
+
   setMoveEvent = () => {
     if (!this.parts.inner.$ || !this.parts.inner.titlebar.$) return;
 
@@ -505,7 +536,6 @@ export const LyraWindow = class {
         ( pointer.target !== this.parts.inner.titlebar.$ ) ||
         this.maximized
       ) return;
-      // this.parts.$.setPointerCapture(pointer.pointerId);
 
       const cb = (event) => this.addPosition(event.movementX, event.movementY);
       document.addEventListener("pointermove", cb);
@@ -514,5 +544,18 @@ export const LyraWindow = class {
     };
 
     return this;
+  };
+
+  setResizeEvent = () => {
+    if (!this.parts.inner.$ || !this.parts.inner.resizePointer.$) return;
+
+    this.parts.inner.resizePointer.$.onpointerdown = (pointer) => {
+      if (pointer.target !== this.parts.inner.resizePointer.$) return;
+
+      const cb = (event) => this.addSize(event.movementX, event.movementY);
+      document.addEventListener("pointermove", cb);
+      document.addEventListener("pointerup", () => { document.removeEventListener("pointermove", cb); }, { once: true });
+      document.addEventListener("pointercancel", () => { document.removeEventListener("pointermove", cb); }, { once: true });
+    };
   };
 };

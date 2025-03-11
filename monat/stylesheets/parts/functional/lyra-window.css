@@ -6,7 +6,7 @@
   --window-border-width: 1px;
   --window-radius: 6px;
   --window-border-active: var(--accent);
-  --window-border-inactive: var(--sub);
+  --window-border-inactive: var(--border);
 
   --window-inner-padding: 8px;
   --window-inner-background: var(--main);
@@ -21,6 +21,7 @@
 
   --window-bottom-padding: 8px;
   --window-bottom-gap: 4px;
+  --window-bottom-border: var(--border);
   --window-bottom-background: var(--sub);
 }
 
@@ -179,6 +180,7 @@ window > inner > bottom {
 
   width: 100%;
 
+  border-top: solid 1px var(--window-bottom-border);
   background-color: var(--window-bottom-background);
 }
 
@@ -204,6 +206,22 @@ window > inner > bottom > .right {
 }
 
 window > inner > bottom > :is(.left, .right) > button[accent] { order: -1; }
+
+/* 크기 조절 포인터 */
+window > inner > resizepointer {
+  display: block;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  z-index: 1;
+
+  width: 10px;
+  height: 10px;
+
+  cursor: nwse-resize;
+  user-select: none;
+  touch-action: none;
+}
 
 /* 활성 상태 창 */
 window[active] > inner { border-color: var(--window-border-active); }
