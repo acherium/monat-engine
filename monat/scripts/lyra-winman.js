@@ -172,8 +172,8 @@ export const LyraWindow = class {
       };
 
       // 위치, 크기 조정 불가 여부 불러오기
-      if (typeof get(this.parts.$, "fixedposition") !== "undefined") this.movable = false;
-      if (typeof get(this.parts.$, "fixedsize") !== "undefined") this.resizable = false;
+      if (get(this.parts.$, "fixedposition") !== null) this.movable = false;
+      if (get(this.parts.$, "fixedsize") !== null) this.resizable = false;
     } else {
       this.parent = body;
 

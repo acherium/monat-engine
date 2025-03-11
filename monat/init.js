@@ -151,6 +151,9 @@ const init = (target) => {
 
         const partialRunners = $a("script[runner][partial]", sealed);
         for (const runner of partialRunners) initPartialRunner(runner, partialman);
+
+        adjacent(partial, "beforebegin", ...$a("link", sealed));
+
         sealed.remove();
         revoke(partial);
       }
