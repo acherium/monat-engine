@@ -29,7 +29,7 @@ main {
   display: flex;
   position: relative;
   justify-content: center;
-  overflow-x: hidden;
+  /* overflow-x: hidden; */
   padding-top: 65px;
 
   height: max-content;

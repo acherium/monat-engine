@@ -26,44 +26,13 @@
         <button toggledarkmode><i class="misc-darkmode-indicator"></i></button>
       </div>
       <nav class="tabs">
-        <label target="#demo-inputs"><input type="radio" name="tab-demo-section" value="0" autocomplete="off"><i class="text"></i><span>각종 입력, 버튼 요소</span></label>
+        <label target="#demo-inputs"><input type="radio" name="tab-demo-section" value="0" autocomplete="off" checked><i class="text"></i><span>각종 입력, 버튼 요소</span></label>
         <label target="#demo-paragraphs"><input type="radio" name="tab-demo-section" value="1" autocomplete="off"><i class="menu"></i><span>텍스트 요소</span></label>
         <label target="#demo-icons"><input type="radio" name="tab-demo-section" value="2" autocomplete="off"><i class="gallery"></i><span>아이콘 목록</span></label>
-        <label target="#demo-windows"><input type="radio" name="tab-demo-section" value="3" autocomplete="off" checked><i class="tasks"></i><span>창 요소</span></label>
+        <label target="#demo-windows"><input type="radio" name="tab-demo-section" value="3" autocomplete="off"><i class="tasks"></i><span>창 요소</span></label>
       </nav>
       <div id="demo-inputs" class="demo-view list-column">
-        <div class="list-row">
-          <label style="width:200px;" withnext><i class="search"></i><input type="text" placeholder="검색"></label>
-          <button><i class="arrow-e"></i></button>
-          <label><input type="checkbox" autocomplete="off"><div class="toggle"></div><span>검색</span></label>
-        </div>
-        <div class="list-row" aligncenter>
-          <span>버튼 그룹화</span>
-          <button withnext><span>버튼 1</span></button>
-          <button withnext><span>버튼 2</span></button>
-          <button withnext><span>버튼 3</span></button>
-        </div>
-        <div class="list-row">
-          <button><i class="menu"></i></button>
-          <button outline><i class="flag"></i></button>
-          <button id="demo-button-send-loading"><i class="location-arrow"></i><span>누르면 로딩 표시</span></button>
-          <button blank><i class="sparkle"></i>버튼</button>
-          <button accent><i class="toggle-on"></i><span>악센트 색상</span></button>
-        </div>
-        <div class="list-row">
-          <label><input type="checkbox" autocomplete="off"><span>가나다</span></label>
-          <label><input type="checkbox" autocomplete="off" checked><span>가나다</span></label>
-          <label><input type="checkbox" autocomplete="off" indeterminate><span>가나다</span></label>
-          <label><input type="checkbox" autocomplete="off" disabled><span>가나다</span></label>
-          <label><input type="checkbox" autocomplete="off" checked disabled><span>가나다</span></label>
-        </div>
-        <div class="list-row">
-          <label><input type="radio" autocomplete="off"><span>가나다</span></label>
-          <label><input type="radio" autocomplete="off" checked><span>가나다</span></label>
-          <label><input type="radio" autocomplete="off" disabled><span>가나다</span></label>
-          <label><input type="radio" autocomplete="off" checked disabled><span>가나다</span></label>
-        </div>
-        <il class="loading-wheel"></il>
+        <partial src="./views/demo-inputs.html"></partial>
       </div>
       <div id="demo-paragraphs" class="demo-view list-column">
         <p>

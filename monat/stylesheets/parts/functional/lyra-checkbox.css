@@ -89,7 +89,7 @@ input[type="checkbox"]:disabled:not(:indeterminate):checked::before,
 input[type="checkbox"]:disabled:indeterminate::after { opacity: 0.7; }
 
 /* 라벨 */
-label:has(input[type="checkbox"]) {
+label:has(>input[type="checkbox"]) {
   display: inline-flex;
   align-items: center;
   gap: var(--checkbox-label-gap);
@@ -97,11 +97,11 @@ label:has(input[type="checkbox"]) {
   user-select: none;
 }
 
-label:has(input[type="checkbox"]) * { color: inherit; }
+label:has(>input[type="checkbox"]) * { color: inherit; }
 
-label:has(input[type="checkbox"]:not(:disabled)) { cursor: pointer; }
+label:has(>input[type="checkbox"]:not(:disabled)) { cursor: pointer; }
 
-label:has(input[type="checkbox"]:disabled) {
+label:has(>input[type="checkbox"]:disabled) {
   color: var(--palette-3-gs);
   cursor: no-drop;
 }

@@ -40,7 +40,7 @@ input[type="number"] {
 }
 
 /* 라벨 내 입력 칸 */
-:is(label:has(input[type="text"]), label:has(input[type="number"])) {
+:is(label:has(>input[type="text"]), label:has(>input[type="number"])) {
   display: inline-flex;
   position: relative;
   align-items: center;
@@ -57,7 +57,7 @@ input[type="number"] {
   user-select: none;
 }
 
-:is(label:has(input[type="text"]), label:has(input[type="number"])) > * { color: inherit; }
+:is(label:has(>input[type="text"]), label:has(>input[type="number"])) > * { color: inherit; }
 
 label > :is(input[type="text"], input[type="number"]) {
   padding: 0 var(--input-padding-offset);
@@ -69,7 +69,7 @@ label > :is(input[type="text"], input[type="number"]) {
   background-color: transparent;
 }
 
-:is(label:has(input[type="text"]), label:has(input[type="number"]))::after {
+:is(label:has(>input[type="text"]), label:has(>input[type="number"]))::after {
   position: absolute;
   top: 0;
   left: 0;
@@ -92,14 +92,14 @@ label > p + input[type="text"] {
   border-left: solid 2px oklch(from var(--font) l c h/0.2);
 }
 
-:is(label:has(input[type="text"]:not(:disabled)), label:has(input[type="number"]:not(:disabled))):hover::after { opacity: 0.1; }
-:is(label:has(input[type="text"]:not(:disabled)), label:has(input[type="number"]:not(:disabled))):active::after { opacity: 0.2; }
+:is(label:has(>input[type="text"]:not(:disabled)), label:has(>input[type="number"]:not(:disabled))):hover::after { opacity: 0.1; }
+:is(label:has(>input[type="text"]:not(:disabled)), label:has(>input[type="number"]:not(:disabled))):active::after { opacity: 0.2; }
 
-:is(label:has(input[type="text"]:focus-visible), label:has(input[type="number"]:focus-visible)) { outline: solid 2px var(--accent); }
-:is(label:has(input[type="text"]:focus-visible), label:has(input[type="number"]:focus-visible)) > :is(input[type="text"], input[type="number"]) { outline: unset; }
+:is(label:has(>input[type="text"]:focus-visible), label:has(>input[type="number"]:focus-visible)) { outline: solid 2px var(--accent); }
+:is(label:has(>input[type="text"]:focus-visible), label:has(>input[type="number"]:focus-visible)) > :is(input[type="text"], input[type="number"]) { outline: unset; }
 
 /* 활성화된 입력 칸 */
-label:has(input[type="text"]:not(:disabled), input[type="number"]:not(:disabled)) { cursor: text; }
+label:has(>input[type="text"]:not(:disabled), input[type="number"]:not(:disabled)) { cursor: text; }
 
 /* 비활성화된 입력 칸 */
 :is(input[type="text"], input[type="number"]):disabled {
@@ -108,14 +108,14 @@ label:has(input[type="text"]:not(:disabled), input[type="number"]:not(:disabled)
   cursor: no-drop;
 }
 
-label:has(input[type="text"]:disabled, input[type="number"]:disabled) {
+label:has(>input[type="text"]:disabled, input[type="number"]:disabled) {
   color: var(--border);
   background-color: var(--input-background-disabled);
   cursor: no-drop;
 }
-label:has(input[type="text"]:disabled, input[type="number"]:disabled) > :is(input[type="text"], input[type="number"]) { background-color: transparent; }
+label:has(>input[type="text"]:disabled, input[type="number"]:disabled) > :is(input[type="text"], input[type="number"]) { background-color: transparent; }
 
-label:has(input[type="text"], input[type="number"]) > :is(input[type="text"], input[type="number"]) { background-color: transparent; }
+label:has(>input[type="text"], input[type="number"]) > :is(input[type="text"], input[type="number"]) { background-color: transparent; }
 
 /* 버튼 내부 아이콘 */
-label:has(input[type="text"], input[type="number"]) > i::before { font-size: calc(1rem * 1.3); }
+label:has(>input[type="text"], input[type="number"]) > i::before { font-size: calc(1rem * 1.3); }

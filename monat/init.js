@@ -1,5 +1,5 @@
 import {
-  root, body, head, $, $a, $p, create, append, revoke, after, before, adjacent,
+  root, body, head, $, $a, $p, $s, create, append, revoke, after, before, adjacent,
   get, set, unset,
   xhr,
   DRAG_SCROLLING_THRESHOLD,
@@ -128,6 +128,123 @@ const init = (target) => {
     };
   };
 
+  // 선택 목록 초기화
+  const $selects = $a("label > select", target);
+  for (const $select of $selects) {
+    const isMultiple = (typeof get($select, "multiple") === "string" && get($select, "multiple") !== "false");
+    const defaultText = $(`option[value=""]`, $select) ? $(`option[value=""]`, $select).innerText : "선택";
+    const $options = $a("option", $select);
+    const $selectedOrigin = Array.from($select.options).filter((x) => x.selected);
+
+    const $label = $select.parentElement;
+    const $displayText = append(create("span"), $label);
+    const $icon = append(create("i", { classes: [ "expand-s" ] }), $label);
+    const setText = () => {
+      const $selected = Array.from($select.options).filter((x) => x.selected);
+      $displayText.innerText = $selected.length < 1 ? defaultText : $selected.map((x) => x.innerText).join(", ");
+      $displayText.title = $selected.length < 1 ? defaultText : $selected.map((x) => x.innerText).join(", ");
+      if ($selected.length > 1) $displayText.innerHTML = `<span highlight bold>${$selected.length}개</span> ${$displayText.innerHTML}`;
+    };
+    setText();
+
+    const $listBody = append(create("div", { classes: [ "immersive-select-list" ] }), $label);
+
+    const $searchLabel = append(create("label"), $listBody);
+    const $searchIcon = append(create("i", { classes: [ "search" ] }), $searchLabel);
+    const $search = append(create("input", { properties: { type: "text", placeholder: "검색" } }), $searchLabel);
+    $search.oninput = () => {
+      const $itemLis = Array.from($a("li", $list));
+      if ($search.value) {
+        const regex = new RegExp($search.value.trim().replace(/ +/g, ""), "gi");
+        for (const $li of $itemLis) {
+          const liText = $("span", $li).innerText.trim().replace(/ +/g, "");
+          $li.style["display"] = regex.exec(liText) ? null : "none";
+        };
+      } else {
+        for (const $li of $itemLis) $li.style["display"] = null;
+      };
+    };
+
+    const $list = append(create("ul"), $listBody);
+
+    for (const $option of $options) {
+      const $li = create("li");
+      const $optionLabel = append(create("label"), $li);
+      const $optionCheckbox = append(create("input", { properties: { type: "checkbox", value: $option.value } }), $optionLabel);
+      const $optionIcon = append(create("i", { classes: [ "blank" ] }), $optionLabel);
+      const $optionText = append(create("span", { properties: { innerText: $option.innerText } }), $optionLabel);
+      $optionLabel.title = $option.innerText;
+
+      if ((typeof get($option, "disabled") === "string" && get($option, "disabled") !== "false")) set($optionCheckbox, "disabled", "");
+      if ((typeof get($option, "selected") === "string" && get($option, "selected") !== "false")) {
+        set($optionCheckbox, "checked", "");
+        $optionIcon.className = "accept";
+      };
+
+      $optionCheckbox.onchange = () => {
+        if ($optionCheckbox.checked) {
+          $option.selected = true;
+          $optionIcon.className = "accept";
+          if (!isMultiple) {
+            const $others = Array.from($a(`input[type="checkbox"]:checked`, $list)).filter((x) => x !== $optionCheckbox);
+            for (const $other of $others) $other.checked = false;
+          };
+        } else {
+          $option.selected = false;
+          $optionIcon.className = "blank";
+        };
+
+        setText();
+      };
+      append($li, $list);
+    };
+
+    const $btnList = append(create("div", { classes: [ "button-list" ] }), $listBody);
+    const $btnUnselect = append(create("button", { properties: { innerHTML: `<span>전체 해제</span>` } }), $btnList);
+    const $btnSelect = append(create("button", { properties: { innerHTML: `<span>전체 선택</span>` } }), $btnList);
+    const $btnReset = append(create("button", { properties: { innerHTML: `<span>초기화</span>` } }), $btnList);
+    $btnUnselect.onclick = () => {
+      const $items = $a(`input[type="checkbox"]`, $list);
+      for (const $option of $options) $option.selected = false;
+      for (const $checkbox of $items) {
+        $checkbox.checked = false;
+        $s("i", $checkbox).className = "blank";
+      };
+      setText();
+    };
+    $btnSelect.onclick = () => {
+      if (!isMultiple) return;
+      const $itemsAble = $a(`input[type="checkbox"]:not(:disabled)`, $list);
+      const $optionsAble = $a("option:not(:disabled)", $select);
+      for (const $option of $optionsAble) $option.selected = true;
+      for (const $checkbox of $itemsAble) {
+        $checkbox.checked = true;
+        $s("i", $checkbox).className = "accept";
+      };
+      setText();
+    };
+    $btnReset.onclick = () => {
+      const $items = $a(`input[type="checkbox"]`, $list);
+      for (const $option of $options) $option.selected = false;
+      for (const $checkbox of $items) {
+        $checkbox.checked = false;
+        $s("i", $checkbox).className = "blank";
+      };
+
+      const $itemsOrigin = Array.from($items).filter((x) => $selectedOrigin.map((x) => x.value).includes(x.value));
+      for (const $originOption of $selectedOrigin) $originOption.selected = true;
+      for (const $originItem of $itemsOrigin) {
+        $originItem.checked = true;
+        $s("i", $originItem).className = "accept";
+      };
+      setText();
+    };
+    
+    if (!isMultiple) $btnSelect.style["display"] = "none";
+    if (get($label, "nobuttons") !== null) $btnList.style["display"] = "none";
+    if (get($label, "nosearch") !== null) $searchLabel.style["display"] = "none";
+  };
+
   // 뷰 모듈 초기화
   for (const partial of $a("partial", target)) {
     const partialType = get(partial, "type");
@@ -143,14 +260,15 @@ const init = (target) => {
 
         const raw = data.target.response;
         const sealed = create("seal", { properties: { innerHTML: raw } });
+        init(sealed);
 
         const partialman = {};
-
-        if (partialType === "window") partialman.windowReserved = master.winman.retrieve(init(sealed), { parent: partialParent });
-        else adjacent(partial, "afterend", ...$a("*", init(sealed)));
-
         const partialRunners = $a("script[runner][partial]", sealed);
         for (const runner of partialRunners) initPartialRunner(runner, partialman);
+
+        if (partialType === "window") partialman.windowReserved = master.winman.retrieve(sealed, { parent: partialParent });
+        else adjacent(partial, "afterend", ...sealed.children);
+
 
         adjacent(partial, "beforebegin", ...$a("link", sealed));
 
