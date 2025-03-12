@@ -2,7 +2,7 @@ import {
   root, body, head, $, $a, $p, $s, create, append, revoke, after, before, adjacent,
   get, set, unset,
   xhr,
-  DRAG_SCROLLING_THRESHOLD,
+  DRAG_SCROLLING_THRESHOLD, COMMON_INTERVAL, WINDOW_ANIMATION_DURATION,
   LyraWindowManager, LyraWindow,
   error
 } from "./module.js";
@@ -147,9 +147,39 @@ const init = (target) => {
     };
     setText();
 
-    const $listBody = append(create("div", { classes: [ "immersive-select-list" ] }), $label);
+    const $listBody = append(create("div", { classes: [ "immersive-select-list" ], properties: { style: "display: none; pointer-events: none;" } }), $label);
+    const open = () => {
+      if ($label.getBoundingClientRect().top > innerHeight / 2) set($label, "listontop", "");
+      else unset($label, "listontop");
 
-    const $searchLabel = append(create("label"), $listBody);
+      set($label, "expanded", "");
+      $icon.className = "expand-n";
+
+      $listBody.animate([ { opacity: "0", transform: "translateY(2px) scale(0.99)" } ], { fill: "both" });
+      $listBody.style["display"] = null;
+      $listBody.style["pointer-events"] = null;
+      $listBody.animate([ { opacity: "1", transform: "translateY(0px) scale(1)" } ], { duration: WINDOW_ANIMATION_DURATION, fill: "both", easing: "cubic-bezier(0.02, 0.61, 0.47, 0.99)" });
+    };
+    const close = () => {
+      unset($label, "expanded");
+      $icon.className = "expand-s";
+
+      $listBody.animate([ { opacity: "0", transform: "translateY(2px) scale(0.99)" } ], { duration: WINDOW_ANIMATION_DURATION, fill: "both", easing: "cubic-bezier(0.02, 0.61, 0.47, 0.99)" });
+      $listBody.style["pointer-events"] = "none";
+      setTimeout(() => {
+        $listBody.style["display"] = "none";
+
+        if ($label.getBoundingClientRect().top > innerHeight / 2) set($label, "listontop", "");
+        else unset($label, "listontop");
+      }, COMMON_INTERVAL + WINDOW_ANIMATION_DURATION);
+    };
+    $select.onclick = () => {
+      if (get($label, "expanded") === null) open();
+      else close();
+    };
+
+    const $topList = append(create("div", { classes: [ "top-list", "list-row" ], attributes: { "nogap": "", "widthfull": "" } }), $listBody);
+    const $searchLabel = append(create("label", { attributes: { "withnext": "", "widthfull": "", "flexfull": "" }}), $topList);
     const $searchIcon = append(create("i", { classes: [ "search" ] }), $searchLabel);
     const $search = append(create("input", { properties: { type: "text", placeholder: "검색" } }), $searchLabel);
     $search.oninput = () => {
@@ -164,6 +194,8 @@ const init = (target) => {
         for (const $li of $itemLis) $li.style["display"] = null;
       };
     };
+    const $btnClose = append(create("button", { properties: { innerHTML: `<i class="close"></i>` } }), $topList);
+    $btnClose.onclick = close;
 
     const $list = append(create("ul"), $listBody);
 
@@ -239,6 +271,8 @@ const init = (target) => {
       };
       setText();
     };
+
+    const $outer = append(create("div", { classes: [ "outer" ] }), $label);
     
     if (!isMultiple) $btnSelect.style["display"] = "none";
     if (get($label, "nobuttons") !== null) $btnList.style["display"] = "none";
@@ -322,7 +356,6 @@ const initPartialRunner = (runner, partialman = null) => {
   master.winman = new LyraWindowManager();
   master.winman.retrieve(root);
   body.addEventListener("pointerdown", (event) => { if($p("window", event.target) === null) for (const node of $a("window[active]")) unset(node, "active"); });
-
 
   // 초기화
   init(body);
