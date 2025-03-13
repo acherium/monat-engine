@@ -175,6 +175,18 @@ const init = (target) => {
       if (get($label, "expanded") === null) open();
       else close();
     };
+    $select.onkeydown = (event) => {
+      if (event.key === " " || event.key === "Enter") {
+        if (get($label, "expanded") === null) open();
+        else close();
+      } else if (event.key === "ArrowDown") {
+        if (get($label, "expanded") === null) open();
+        else {
+          console.log($(`input[type="checkbox"]:not(:disabled)`, $list));
+          $(`input[type="checkbox"]:not(:disabled)`, $list).focus();
+        }
+      } else if (event.key === "ArrowUp") close();
+    };
 
     const $topList = append(create("div", { classes: [ "top-list", "list-row" ], attributes: { "nogap": "", "widthfull": "" } }), $listBody);
     const $searchLabel = append(create("label", { attributes: { "withnext": "", "widthfull": "", "flexfull": "" }}), $topList);
