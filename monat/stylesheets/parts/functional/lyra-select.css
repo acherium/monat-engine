@@ -43,11 +43,13 @@ label:has(>select) > select {
   opacity: 0 !important;
 }
 
-label:has(>select) > i {
+label:has(>select) > i.select-arrow {
   width: 12px;
 
   mask-position: center;
+  mask-image: var(--lyra-icon-expand-s);
 }
+label:has(>select)[expanded] > i.select-arrow { mask-image: var(--lyra-icon-expand-n); }
 
 label:has(>select) > span {
   overflow: hidden;

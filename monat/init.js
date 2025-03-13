@@ -138,7 +138,7 @@ const init = (target) => {
 
     const $label = $select.parentElement;
     const $displayText = append(create("span"), $label);
-    const $icon = append(create("i", { classes: [ "expand-s" ] }), $label);
+    const $icon = append(create("i", { classes: [ "select-arrow" ] }), $label);
     const setText = () => {
       const $selected = Array.from($select.options).filter((x) => x.selected);
       $displayText.innerText = $selected.length < 1 ? defaultText : $selected.map((x) => x.innerText).join(", ");
@@ -153,7 +153,6 @@ const init = (target) => {
       else unset($label, "listontop");
 
       set($label, "expanded", "");
-      $icon.className = "expand-n";
 
       $listBody.animate([ { opacity: "0", transform: "translateY(2px) scale(0.99)" } ], { fill: "both" });
       $listBody.style["display"] = null;
@@ -162,7 +161,6 @@ const init = (target) => {
     };
     const close = () => {
       unset($label, "expanded");
-      $icon.className = "expand-s";
 
       $listBody.animate([ { opacity: "0", transform: "translateY(2px) scale(0.99)" } ], { duration: WINDOW_ANIMATION_DURATION, fill: "both", easing: "cubic-bezier(0.02, 0.61, 0.47, 0.99)" });
       $listBody.style["pointer-events"] = "none";
@@ -356,6 +354,29 @@ const initPartialRunner = (runner, partialman = null) => {
   master.winman = new LyraWindowManager();
   master.winman.retrieve(root);
   body.addEventListener("pointerdown", (event) => { if($p("window", event.target) === null) for (const node of $a("window[active]")) unset(node, "active"); });
+
+  // 선택 목록 닫기
+  const closeSelect = ($label) => {
+    const $listBody = $("div.immersive-select-list", $label);
+    if (!$label || !$listBody) return;
+
+    unset($label, "expanded");
+
+    $listBody.animate([ { opacity: "0", transform: "translateY(2px) scale(0.99)" } ], { duration: WINDOW_ANIMATION_DURATION, fill: "both", easing: "cubic-bezier(0.02, 0.61, 0.47, 0.99)" });
+    $listBody.style["pointer-events"] = "none";
+    setTimeout(() => {
+      $listBody.style["display"] = "none";
+
+      if ($label.getBoundingClientRect().top > innerHeight / 2) set($label, "listontop", "");
+      else unset($label, "listontop");
+    }, COMMON_INTERVAL + WINDOW_ANIMATION_DURATION);
+  };
+  document.addEventListener("pointerdown", (event) => {
+    if ($p("label:has(>select)", event.target) === null && !Array.from($a("label:has(>select)")).find((x) => x === event.target)) {
+      const $expandedSelects = $a("label[expanded]:has(>select)");
+      for (const $label of $expandedSelects) closeSelect($label);
+    };
+  });
 
   // 초기화
   init(body);
