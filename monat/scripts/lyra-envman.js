@@ -5,7 +5,7 @@ export const LYRA_DISPLAY_NAME = "Monat Engine";
 export const LYRA_AUTHOR = "Acherium";
 export const LYRA_CONTACT = "acherium@pm.me";
 export const LYRA_VERSION = "2000";
-export const LYRA_DATE = "25-03-11";
+export const LYRA_DATE = "25-03-15";
 
 // 기본 변수 초기화
 export const COMMON_INTERVAL = 30;

@@ -3,6 +3,7 @@ import {
   get, set, unset,
   xhr,
   DRAG_SCROLLING_THRESHOLD, COMMON_INTERVAL, WINDOW_ANIMATION_DURATION,
+  LYRA_NAME, LYRA_DISPLAY_NAME, LYRA_AUTHOR, LYRA_VERSION, LYRA_DATE,
   LyraWindowManager, LyraWindow,
   error
 } from "./module.js";
@@ -321,6 +322,13 @@ const init = (target) => {
       }
     });
   };
+
+  // 프로젝트명, 버전 정보 텍스트 초기화
+  for (const $span of $a("span[LYRA_NAME]", target)) $span.innerText = LYRA_NAME;
+  for (const $span of $a("span[LYRA_DISPLAY_NAME]", target)) $span.innerText = LYRA_DISPLAY_NAME;
+  for (const $span of $a("span[LYRA_AUTHOR]", target)) $span.innerText = LYRA_AUTHOR;
+  for (const $span of $a("span[LYRA_VERSION]", target)) $span.innerText = LYRA_VERSION;
+  for (const $span of $a("span[LYRA_DATE]", target)) $span.innerText = LYRA_DATE;
 
   return target;
 };
