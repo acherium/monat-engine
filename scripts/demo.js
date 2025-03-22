@@ -38,25 +38,49 @@ export default function(master) {
   });
 
   // 창 데모
+  const $btnCloseActiveWin = $("#demo-close-active-window");
+  const $btnShowAllWin = $("#demo-show-all-window");
+  const $btnCloseAllWin = $("#demo-close-all-window");
+  const $btnBroadcastAllWin = $("#demo-broadcast-all-window");
+  $btnCloseActiveWin.onpointerdown = () => { master.winman.current?.close(); };
+  $btnShowAllWin.onclick = () => { master.winman.showAll(); };
+  $btnCloseAllWin.onclick = () => { master.winman.closeAll(); };
+  $btnBroadcastAllWin.onclick = () => { master.winman.broadcast(new Event("debugging")); };
+
+  const $chkDebuggingWinman = $("#demo-master-winman-debugging");
+  $chkDebuggingWinman.onchange = () => {
+    master.winman.debugging = $chkDebuggingWinman.checked;
+
+    const debuggingStatus = new Event("debuggingstatus");
+    debuggingStatus.status = $chkDebuggingWinman.checked;
+    master.winman.broadcast(debuggingStatus);
+  };
+
+  let demoWinId = -1;
   const $btnOpenWin0 = $("#demo-open-window-0");
   const $btnOpenWin1 = $("#demo-open-window-1");
   const $btnOpenWin2 = $("#demo-open-window-2");
-  $btnOpenWin0.onclick = () => master.winman.reserve["demo-window-0"].show();
-  $btnOpenWin1.onclick = () => new LyraWindow({
-    includes: [
-      "titlebar",
-      "titlebar-left",
-      "titlebar-right",
-      "bottom",
-      "resize-pointer",
-      "close-button",
-      "maximize-button",
-      "minimize-button"
-    ]
-  }).setTitle("새 창")
-    .setIcon(create("i", { classes: [ "spreadsheet" ] }))
-    .setBody(create("windowbody", { properties: { innerHTML: "<p>1234</p>" } })).show();
+  $btnOpenWin0.onclick = () => master.winman.show("demo-window-0");
+  $btnOpenWin1.onclick = () => {
+    const demowin = new LyraWindow({
+      id: `demo-${++demoWinId}`,
+      includes: [
+        "titlebar",
+        "titlebar-left",
+        "titlebar-right",
+        "bottom",
+        "resize-pointer",
+        "close-button",
+        "maximize-button",
+        "minimize-button"
+      ]
+    }).setTitle("새 창")
+      .setIcon(create("i", { classes: [ "spreadsheet" ] }))
+      .setBody(create("windowmain", { properties: { innerHTML: "<p>1234</p>" } }));
+    master.winman.register(demowin);
+    master.winman.show(demowin.id);
+  };
   $btnOpenWin2.onclick = () => {
-    master.winman.reserve["partial-test-window"].show();
+    master.winman.show("partial-test-window");
   };
 };

@@ -1,6 +1,6 @@
 <script src="./views/window-test.js" runner partial></script>
 <link rel="stylesheet" href="./views/window-test.css">
-<window id="partial-test-window" position="center">
+<window id="partial-test-window" position="center" resetonshow>
   <outer></outer>
   <inner>
     <titlebar>
@@ -24,7 +24,7 @@
         <div id="test-box"></div>
         <h1>Hello, world!</h1>
         <p id="partial-window-position"></p>
-        <partial src="./views/test.html"></partial>
+        <!-- <partial src="./views/test.html"></partial> -->
       </windowmain>
       <bottom>
         <div class="left"></div>

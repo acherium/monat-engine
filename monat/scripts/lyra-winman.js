@@ -6,12 +6,23 @@ import {
   body
 } from "./lyra-domman.js";
 import {
-  copy
+  freeze, copy
 } from "./lyra-objman.js";
 
 export const LyraWindowManager = class {
-  constructor() {
-    this.reserve = {};
+  name = null;
+  debugging = false;
+
+  reserve = {};
+  opened = {};
+  current = null;
+
+  listener = new EventTarget();
+
+  constructor(name, debugging = false) {
+    if (name && typeof name === "string") this.name = name;
+    this.debugging = debugging;
+
     return this;
   };
 
@@ -19,96 +30,162 @@ export const LyraWindowManager = class {
     const retrieveTargets = {};
     for (const x of Array.from($a("window[id]", target)).map((x) => [ x.id, new LyraWindow(param, x) ])) {
       this.reserve[x[0]] = x[1];
+      this.reserve[x[0]].master = this;
       retrieveTargets[x[0]] = x[1];
     };
     return retrieveTargets;
   };
+
+  register = (target) => {
+    if (!target || target.constructor !== LyraWindow || !target.id) return this;
+    target.master = this;
+    this.reserve[target.id] = target;
+    return this;
+  };
+
+  show = (id, f = true) => {
+    if (!id || typeof id !== "string") return;
+
+    const target = this.reserve[id];
+    if (!target) return;
+
+    this.opened[id] = target;
+    if (f) target.show();
+
+    return this;
+  };
+
+  close = (id, f = true) => {
+    if (!id || typeof id !== "string") return;
+
+    const target = this.reserve[id];
+    if (!target) return;
+
+    delete this.opened[id];
+    if (f) target.close(false);
+
+    return this;
+  };
+
+  active = (id, f = true) => {
+    if (!id || typeof id !== "string") return this;
+    
+    const target = this.reserve[id];
+    if (!target) return;
+
+    this.current = target;
+    if (f) target.active();
+
+    return this;
+  };
+
+  inactive = (f = true) => {
+    if (!this.current) return this;
+
+    if (f) this.current.inactive();
+    this.current = null;
+
+    return this;
+  };
+
+  showAll = () => { for (const x of Object.values(this.reserve)) x.show(); };
+
+  closeAll = () => { for (const x of Object.values(this.reserve)) x.close(); };
+
+  broadcast = (event) => { for (const x of Object.values(this.reserve)) x.listener.dispatchEvent(event); };
 };
 
 export const LyraWindow = class {
-  constructor(param = {}, origin = null) {
-    // 초기화
-    this.parent = null;
-    this.master = null;
-    
-    this.parts = {
+  parent = null;
+  master = null;
+  id = null;
+
+  status = false;
+  closed = true;
+  resetOnShow = false;
+
+  parts = {
+    $: null,
+    outer: {
+      $: null
+    },
+    inner: {
       $: null,
-      outer: {
-        $: null
-      },
-      inner: {
+      titlebar: {
         $: null,
-        titlebar: {
+        left: {
+          $: null,
+          icon: {
+            $: null
+          },
+          title: {
+            $: null,
+            text: null
+          }
+        },
+        right: {
+          $: null
+        }
+      },
+      body: {
+        $: null,
+        top: {
+          $: null
+        },
+        main: {
+          $: null
+        },
+        bottom: {
           $: null,
           left: {
-            $: null,
-            icon: {
-              $: null
-            },
-            title: {
-              $: null,
-              text: null
-            }
+            $: null
           },
           right: {
             $: null
           }
         },
-        body: {
-          $: null,
-          top: {
-            $: null
-          },
-          main: {
-            $: null
-          },
-          bottom: {
-            $: null,
-            left: {
-              $: null
-            },
-            right: {
-              $: null
-            }
-          },
-        },
-        resizePointer: {
-          $: null
-        }
       },
-      overlay: {
+      resizePointer: {
         $: null
       }
-    };
-    this.partsOrigin = {};
-    this.closed = true;
-    this.resetOnClosed = false;
-    this.maximized = false;
-    this.minimized = false;
-    this.maximizable = true;
-    this.minimizable = true;
-    this.movable = true;
-    this.resizable = true;
-    this.rect = {
-      x: 0,
-      y: 0,
-      width: 600,
-      height: 480,
-      preset: {
-        x: null,
-        y: null,
-        width: null,
-        height: null
-      }
-    };
-    this.rectOrigin = {};
-    this.listener = new EventTarget();
+    },
+    overlay: {
+      $: null
+    }
+  };
+  partsOrigin = {};
+
+  rect = {
+    x: 0,
+    y: 0,
+    width: 600,
+    height: 480,
+    preset: {
+      x: null,
+      y: null,
+      width: null,
+      height: null
+    }
+  };
+  rectOrigin = {};
+
+  maximized = false;
+  minimized = false;
+  maximizable = true;
+  minimizable = true;
+  movable = true;
+  resizable = true;
+
+  listener = new EventTarget();
+
+  constructor(param = {}, origin = null) {
 
     const includeList = param.includes || [];
 
     // 원본 요소가 있으면 원본에서 지정함
     if (origin) {
       this.parent = origin.parentNode;
+      this.id = origin.id;
 
       // main 요소
       this.parts.$ = revoke(origin);
@@ -188,6 +265,9 @@ export const LyraWindow = class {
       // 위치, 크기 조정 불가 여부 불러오기
       if (get(this.parts.$, "fixedposition") !== null) this.movable = false;
       if (get(this.parts.$, "fixedsize") !== null) this.resizable = false;
+
+      // 실행시 위치, 크기 초기화 여부 불러오기
+      if (get(this.parts.$, "resetonshow") !== null) this.resetOnShow = true;
     } else {
       this.parent = body;
 
@@ -273,6 +353,12 @@ export const LyraWindow = class {
       // 위치, 크기 조정 불가 여부 불러오기
       if (typeof param.movable !== "undefined") this.movable = param.movable;
       if (typeof param.resizable !== "undefined") this.resizable = param.resizable;
+
+      // ID 불러오기
+      if (typeof param.id !== "undefined") {
+        this.id = param.id;
+        this.parts.$.id = param.id;
+      };
     };
 
     // 이벤트 초기화
@@ -282,7 +368,7 @@ export const LyraWindow = class {
       if ($a("*", node).length < 1) append(create("i", { classes: [ "close" ] }), node);
       node.addEventListener("pointerup", this.close);
     };
-    if (this.parts.outer.$) this.parts.outer.$.onclick = this.close;
+    if (this.parts.outer.$) this.parts.outer.$.onclick = () => { this.close(this.id); };
 
     // 창 최대화
     const maximizeTriggers = $a("[maximizewindow]", this.parts.$);
@@ -319,8 +405,20 @@ export const LyraWindow = class {
     for (const key of Object.keys(param)) if (typeof this[key] !== "undefined") this[key] = param[key];
 
     // 최초 데이터 정의
-    this.partsOrigin = copy(this.parts);
-    this.rectOrigin = copy(this.rect);
+    this.partsOrigin = JSON.stringify(this.parts);
+    this.rectOrigin = JSON.stringify(this.rect);
+
+    // 디버깅용 이벤트 정의
+    this.listener.addEventListener("debugging", () => {
+      if (!this.master || !this.master.debugging) return;
+      console.log(this);
+    });
+    this.listener.addEventListener("debuggingstatus", (event) => {
+      if (this.parts.inner.titlebar.left.title.$) {
+        if (this.master.debugging) this.parts.inner.titlebar.left.title.$.innerHTML = `${this.parts.inner.titlebar.left.title.text} (master: ${this.master.name}, id: ${this.id})`;
+        else this.parts.inner.titlebar.left.title.$.innerText = this.parts.inner.titlebar.left.title.text;
+      };
+    });
 
     return this;
   };
@@ -330,8 +428,9 @@ export const LyraWindow = class {
     if (!this.closed) return this;
     this.closed = false;
 
-    if (this.resetOnClosed) {
-      this.rect = this.rectOrigin;
+    if (this.resetOnShow) {
+      this.rect = JSON.parse(this.rectOrigin);
+      this.refreshRect();
     };
     
     this.parts.inner.$.animate([ { opacity: "0" } ], { fill: "both" });
@@ -358,12 +457,22 @@ export const LyraWindow = class {
         composite: "accumulate"
       });
   
+    if (this.master) {
+      this.master.show(this.id, false);
+
+      if (this.parts.inner.titlebar.left.title.$) {
+        if (this.master.debugging) this.parts.inner.titlebar.left.title.$.innerHTML = `${this.parts.inner.titlebar.left.title.text} (master: ${this.master.name}, id: ${this.id})`;
+        else this.parts.inner.titlebar.left.title.$.innerText = this.parts.inner.titlebar.left.title.text;
+      };
+    };
+
     this.refreshRect();
     this.listener.dispatchEvent(new Event("show"));
     return this;
   };
 
   close = () => {
+    if (this.closed) return this;
     this.closed = true;
     this.inactive();
 
@@ -385,6 +494,8 @@ export const LyraWindow = class {
     setTimeout(() => {
       this.parts.$ = revoke(this.parts.$);
     }, WINDOW_ANIMATION_DURATION + COMMON_INTERVAL);
+
+    if (this.master) this.master.close(this.id, false);
 
     this.listener.dispatchEvent(new Event("close"));
     return this;
@@ -435,12 +546,21 @@ export const LyraWindow = class {
       this.parent.insertAdjacentElement("beforeend", this.parts.$);
     };
 
+    if (this.status) return this;
+    this.status = true;
+    if (this.master) this.master.active(this.id, false);
+
     this.listener.dispatchEvent(new Event("active"));
     return this;
   };
 
   inactive = () => {
     unset(this.parts.$, "active");
+    
+    if (!this.status) return this;
+    this.status = false;
+    if (this.master) this.master.inactive(false);
+
     this.listener.dispatchEvent(new Event("inactive"));
     return this;
   };

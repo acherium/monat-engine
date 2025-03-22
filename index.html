@@ -26,10 +26,11 @@
         <button toggledarkmode><i class="misc-darkmode-indicator"></i></button>
       </div>
       <nav class="tabs">
-        <label target="#demo-inputs"><input type="radio" name="tab-demo-section" value="0" autocomplete="off" checked><i class="text"></i><span>각종 입력, 버튼 요소</span></label>
+        <label target="#demo-inputs"><input type="radio" name="tab-demo-section" value="0" autocomplete="off"><i class="text"></i><span>각종 입력, 버튼 요소</span></label>
         <label target="#demo-paragraphs"><input type="radio" name="tab-demo-section" value="1" autocomplete="off"><i class="menu"></i><span>텍스트 요소</span></label>
         <label target="#demo-icons"><input type="radio" name="tab-demo-section" value="2" autocomplete="off"><i class="gallery"></i><span>아이콘 목록</span></label>
-        <label target="#demo-windows"><input type="radio" name="tab-demo-section" value="3" autocomplete="off"><i class="tasks"></i><span>창 요소</span></label>
+        <label target="#demo-windows"><input type="radio" name="tab-demo-section" value="3" autocomplete="off" checked><i class="tasks"></i><span>창, 알림 요소</span></label>
+        <label target="#demo-sidemenus"><input type="radio" name="tab-demo-section" value="4" autocomplete="off"><i class="tracking"></i><span>사이드 메뉴</span></label>
       </nav>
       <div id="demo-inputs" class="demo-view list-column">
         <partial src="./views/demo-inputs.html"></partial>
@@ -91,10 +92,23 @@
           <button id="demo-open-window-1"><i class="tasks"></i><span>창 열기 2</span></button>
           <button id="demo-open-window-2"><i class="tasks"></i><span>창 열기 3</span></button>
         </div>
+        <div class="list-row">
+          <button id="demo-close-active-window"><i class="deny"></i>활성화 창 닫기</button>
+          <button id="demo-show-all-window"><i class="window"></i>master - 모두 열기</button>
+          <button id="demo-close-all-window"><i class="window"></i>master - 모두 닫기</button>
+          <button id="demo-broadcast-all-window"><i class="window"></i>master - 브로드캐스트</button>
+        </div>
+        <div class="list-row">
+          <label><input type="checkbox" id="demo-master-winman-debugging" autocomplete="off" checked><div class="toggle"></div></label>
+          디버깅 모드
+        </div>
+      </div>
+      <div id="demo-sidemenus" class="demo-view list-column">
+        <partial src="./views/demo-sidemenus.html"></partial>
       </div>
     </div>
   </main>
-  <window id="demo-window-0">
+  <window id="demo-window-0" resetonshow>
     <inner>
       <titlebar>
         <div class="left">
