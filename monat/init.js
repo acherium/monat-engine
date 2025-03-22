@@ -133,6 +133,7 @@ const init = (target) => {
   const $selects = $a("label > select", target);
   for (const $select of $selects) {
     const isMultiple = (typeof get($select, "multiple") === "string" && get($select, "multiple") !== "false");
+    const isAlways = (typeof get($select, "always") === "string" && get($select, "always") !== "false");
     const defaultText = $(`option[value=""]`, $select) ? $(`option[value=""]`, $select).innerText : "선택";
     const $options = $a("option", $select);
     const $selectedOrigin = Array.from($select.options).filter((x) => x.selected);
@@ -148,11 +149,13 @@ const init = (target) => {
     };
     setText();
 
-    const $listBody = append(create("div", { classes: [ "immersive-select-list" ], properties: { style: "display: none; pointer-events: none;" } }), $label);
+    const $listBody = append(create("div", { classes: [ "immersive-select-list" ], properties: { style: (isAlways ? "" : "display: none; pointer-events: none;") } }), $label);
     const open = () => {
+      if (isAlways) return;
       if ($label.getBoundingClientRect().top > innerHeight / 2) set($label, "listontop", "");
       else unset($label, "listontop");
 
+      closeOthers();
       set($label, "expanded", "");
 
       $listBody.animate([ { opacity: "0", transform: "translateY(2px) scale(0.99)" } ], { fill: "both" });
@@ -161,6 +164,7 @@ const init = (target) => {
       $listBody.animate([ { opacity: "1", transform: "translateY(0px) scale(1)" } ], { duration: WINDOW_ANIMATION_DURATION, fill: "both", easing: "cubic-bezier(0.02, 0.61, 0.47, 0.99)" });
     };
     const close = () => {
+      if (isAlways) return;
       unset($label, "expanded");
 
       $listBody.animate([ { opacity: "0", transform: "translateY(2px) scale(0.99)" } ], { duration: WINDOW_ANIMATION_DURATION, fill: "both", easing: "cubic-bezier(0.02, 0.61, 0.47, 0.99)" });
@@ -171,6 +175,21 @@ const init = (target) => {
         if ($label.getBoundingClientRect().top > innerHeight / 2) set($label, "listontop", "");
         else unset($label, "listontop");
       }, COMMON_INTERVAL + WINDOW_ANIMATION_DURATION);
+    };
+    const closeOthers = () => {
+      for (const $other of Array.from($a("label[expanded]:has(>select)")).filter((x) => x !== $label)) {
+        const $otherList = $(".immersive-select-list", $other);
+        unset($other, "expanded");
+
+        $otherList.animate([ { opacity: "0", transform: "translateY(2px) scale(0.99)" } ], { duration: WINDOW_ANIMATION_DURATION, fill: "both", easing: "cubic-bezier(0.02, 0.61, 0.47, 0.99)" });
+        $otherList.style["pointer-events"] = "none";
+        setTimeout(() => {
+          $otherList.style["display"] = "none";
+  
+          if ($label.getBoundingClientRect().top > innerHeight / 2) set($label, "listontop", "");
+          else unset($label, "listontop");
+        }, COMMON_INTERVAL + WINDOW_ANIMATION_DURATION);
+      };
     };
     $select.onclick = () => {
       if (get($label, "expanded") === null) open();
@@ -205,7 +224,7 @@ const init = (target) => {
         for (const $li of $itemLis) $li.style["display"] = null;
       };
     };
-    const $btnClose = append(create("button", { properties: { innerHTML: `<i class="close"></i>` } }), $topList);
+    const $btnClose = append(create("button", { classes: [ "close" ], properties: { innerHTML: `<i class="close"></i>` } }), $topList);
     $btnClose.onclick = close;
 
     const $list = append(create("ul"), $listBody);
@@ -214,27 +233,24 @@ const init = (target) => {
       const $li = create("li");
       const $optionLabel = append(create("label"), $li);
       const $optionCheckbox = append(create("input", { properties: { type: "checkbox", value: $option.value } }), $optionLabel);
-      const $optionIcon = append(create("i", { classes: [ "blank" ] }), $optionLabel);
+      const $optionIcon = append(create("i", { classes: [ "option-check" ] }), $optionLabel);
       const $optionText = append(create("span", { properties: { innerText: $option.innerText } }), $optionLabel);
       $optionLabel.title = $option.innerText;
 
       if ((typeof get($option, "disabled") === "string" && get($option, "disabled") !== "false")) set($optionCheckbox, "disabled", "");
-      if ((typeof get($option, "selected") === "string" && get($option, "selected") !== "false")) {
-        set($optionCheckbox, "checked", "");
-        $optionIcon.className = "accept";
-      };
+      if ((typeof get($option, "selected") === "string" && get($option, "selected") !== "false")) set($optionCheckbox, "checked", "");
+
+      $optionLabel.onpointerup = () => { if (!isMultiple && !isAlways) close(); };
 
       $optionCheckbox.onchange = () => {
         if ($optionCheckbox.checked) {
           $option.selected = true;
-          $optionIcon.className = "accept";
           if (!isMultiple) {
             const $others = Array.from($a(`input[type="checkbox"]:checked`, $list)).filter((x) => x !== $optionCheckbox);
             for (const $other of $others) $other.checked = false;
           };
         } else {
           $option.selected = false;
-          $optionIcon.className = "blank";
         };
 
         setText();

@@ -34,6 +34,8 @@ label:has(>select) {
   user-select: none;
 }
 
+label:has(>select)[expanded] { z-index: 1; }
+
 label:has(>select) > select {
   position: absolute !important;
 
@@ -71,7 +73,7 @@ label:has(>select) > .immersive-select-list {
   position: absolute;
   flex-direction: column;
   left: calc(var(--select-border-width) * -1);
-  top: calc(var(--select-size) + var(--select-gap));
+  top: calc(var(--select-size) + var(--select-gap) - var(--select-border-width));
   overflow: hidden;
 
   max-width: 550px;
@@ -192,6 +194,11 @@ label:has(>select) > .immersive-select-list > ul > li > label > span {
   text-overflow: ellipsis;
 }
 
+label:has(>select) > .immersive-select-list > ul > li > label:has(input[type="checkbox"]:not(:disabled):not(:checked)) > i.option-check { mask-image: var(--lyra-icon-blank); }
+label:has(>select) > .immersive-select-list > ul > li > label:has(input[type="checkbox"]:not(:disabled):checked) > i.option-check { mask-image: var(--lyra-icon-accept); }
+label:has(>select) > .immersive-select-list > ul > li > label:has(input[type="checkbox"]:disabled:not(:checked)) > i.option-check { mask-image: var(--lyra-icon-prohibited-small); }
+label:has(>select) > .immersive-select-list > ul > li > label:has(input[type="checkbox"]:disabled:checked) > i.option-check { mask-image: var(--lyra-icon-accept); }
+
 /* 조작 버튼 */
 label:has(>select) > .immersive-select-list > .button-list {
   display: flex;
@@ -211,6 +218,34 @@ label:has(>select) > .immersive-select-list > .button-list > button {
   border-radius: unset;
 }
 label:has(>select) > .immersive-select-list > .button-list > button::before { border: unset; }
+
+/* 항상 열려 있는 목록 */
+label:has(>select[always]) {
+  padding: 0;
+}
+
+label:has(>select[always]) > span { display: none; }
+label:has(>select[always]) > i.select-arrow { display: none; }
+
+label:has(>select[always]) > .immersive-select-list {
+  position: relative;
+  left: unset;
+  right: unset;
+  top: unset;
+  bottom: unset;
+  z-index: inherit;
+
+  max-width: unset;
+  max-height: unset;
+  width: 100%;
+  height: 100%;
+
+  border: none;
+  border-radius: none;
+  box-shadow: none;
+}
+
+label:has(>select[always]) > .immersive-select-list > .top-list > button.close { display: none;}
 
 @media screen and (max-width: 1216px) {
   label:has(>select) > .immersive-select-list {
@@ -247,4 +282,6 @@ label:has(>select) > .immersive-select-list > .button-list > button::before { bo
     opacity: 1;
     pointer-events: auto;
   }
+
+  label:has(>select)[listontop] > .immersive-select-list { bottom: var(--select-padding); }
 }
