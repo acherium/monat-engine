@@ -93,6 +93,14 @@ export const LyraWindowManager = class {
   closeAll = () => { for (const x of Object.values(this.reserve)) x.close(); };
 
   broadcast = (event) => { for (const x of Object.values(this.reserve)) x.listener.dispatchEvent(event); };
+
+  setDebugging = (bool) => {
+    this.debugging = bool;
+
+    const debuggingStatus = new Event("debuggingstatus");
+    debuggingStatus.status = bool;
+    this.broadcast(debuggingStatus);
+  };
 };
 
 export const LyraWindow = class {

@@ -48,13 +48,7 @@ export default function(master) {
   $btnBroadcastAllWin.onclick = () => { master.winman.broadcast(new Event("debugging")); };
 
   const $chkDebuggingWinman = $("#demo-master-winman-debugging");
-  $chkDebuggingWinman.onchange = () => {
-    master.winman.debugging = $chkDebuggingWinman.checked;
-
-    const debuggingStatus = new Event("debuggingstatus");
-    debuggingStatus.status = $chkDebuggingWinman.checked;
-    master.winman.broadcast(debuggingStatus);
-  };
+  $chkDebuggingWinman.onchange = () => { master.winman.setDebugging($chkDebuggingWinman.checked); };
 
   let demoWinId = -1;
   const $btnOpenWin0 = $("#demo-open-window-0");
