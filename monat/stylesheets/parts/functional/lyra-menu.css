@@ -1,0 +1,172 @@
+@charset "UTF-8";
+/* 메뉴 속성 값 */
+:root {
+  --menu-area-padding: 8px;
+  --menu-radius: 6px;
+
+  --menu-border-outer-width: 1px;
+  --menu-border-outer-active: var(--accent);
+
+  --menu-border-inner-width: 0px;
+
+  --menu-inner-padding: 8px;
+  --menu-inner-background: var(--main);
+  --menu-inner-shadow: var(--shadow);
+
+  --menu-titlebar-size: 36px;
+  --menu-titlebar-padding: 8px;
+  --menu-titlebar-gap: 4px;
+  --menu-titlebar-active: var(--main);
+  --menu-titlebar-font-active: var(--font);
+
+  --menu-bottom-padding: 8px;
+  --menu-bottom-gap: 4px;
+  --menu-bottom-border: var(--border);
+  --menu-bottom-background: var(--sub);
+}
+
+/* 메뉴 */
+menulist {
+  display: flex;
+  position: fixed;
+  left: 0;
+  top: 0;
+  padding: var(--menu-area-padding);
+  z-index: 99;
+  overflow: hidden;
+
+  width: 100%;
+  height: 100%;
+  
+  pointer-events: none;
+}
+
+menulist > menubody {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  left: 0;
+  top: 0;
+  padding: var(--menu-border-inner-width);
+  z-index: 1;
+  overflow: hidden;
+
+  max-width: calc(100dvw - var(--menu-area-padding) * 2);
+  max-height: calc(100dvh - var(--menu-area-padding) * 2);
+  width: 350px;
+  height: 100%;
+  flex-shrink: 0;
+
+  border: solid var(--menu-border-outer-width) var(--menu-border-outer-active);
+  border-radius: var(--menu-radius);
+  background-color: var(--menu-inner-background);
+  box-shadow: var(--menu-inner-shadow);
+  pointer-events: auto;
+}
+
+menulist > outer {
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 0;
+  
+  width: 100%;
+  height: 100%;
+
+  background-color: oklch(from var(--main) l c h/0.7);
+  backdrop-filter: blur(15px);
+  opacity: 1;
+  pointer-events: auto;
+
+  transition: opacity var(--duration-ui);
+}
+
+/* 제목 표시줄 */
+menulist > menubody > titlebar {
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  height: var(--menu-titlebar-size);
+
+  background-color: var(--menu-titlebar-active);
+  user-select: none;
+  touch-action: none;
+}
+
+menulist > menubody > titlebar > :is(.left, .right) {
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+
+  width: max-content;
+  height: inherit;
+
+  background-color: inherit;
+}
+
+menulist > menubody > titlebar > .left {
+  gap: var(--menu-titlebar-gap);
+  padding: 0 var(--menu-titlebar-padding);
+  margin-right: auto;
+  overflow: hidden;
+
+  width: auto;
+
+  pointer-events: none;
+}
+menulist > menubody > titlebar > .left > .icon {
+  overflow: hidden;
+  order: -1;
+
+  width: 20px;
+  height: 20px;
+}
+menulist > menubody > titlebar > .left > span {
+  overflow: hidden;
+  
+  color: var(--menu-titlebar-font-active);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+menulist > menubody > titlebar > .right {
+  flex-direction: row-reverse;
+  margin-left: auto;
+
+  --icon: var(--menu-titlebar-font-active);
+}
+menulist > menubody > titlebar > .right > button {
+  justify-content: center;
+
+  border-radius: unset;
+  background-color: var(--menu-titlebar-active);
+}
+menulist > menubody > titlebar > .right > button::before { border: unset; }
+
+/* 주 영역 */
+menulist > menubody > menumain {
+  display: block;
+  padding: var(--menu-inner-padding);
+
+  width: 100%;
+  height:100%;
+  flex: 1;
+}
+
+/* 하단 영역 */
+menulist > menubody > bottom {
+  display: block;
+  position: relative;
+  margin-top: auto;
+  padding: var(--menu-bottom-padding);
+
+  width: 100%;
+
+  border-top: solid 1px var(--menu-bottom-border);
+  background-color: var(--menu-bottom-background);
+}

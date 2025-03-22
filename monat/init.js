@@ -5,6 +5,7 @@ import {
   DRAG_SCROLLING_THRESHOLD, COMMON_INTERVAL, WINDOW_ANIMATION_DURATION,
   LYRA_NAME, LYRA_DISPLAY_NAME, LYRA_AUTHOR, LYRA_VERSION, LYRA_DATE,
   LyraWindowManager, LyraWindow,
+  LyraMenuManager, LyraMenu,
   error
 } from "./module.js";
 
@@ -395,6 +396,9 @@ const initPartialRunner = (runner, partialman = null) => {
       for (const node of $a("window[active]")) unset(node, "active");
     };
   });
+
+  // 메뉴 초기화
+  master.menuman = new LyraMenuManager("master", true);
 
   // 선택 목록 닫기
   const closeSelect = ($label) => {

@@ -29,8 +29,8 @@
         <label target="#demo-inputs"><input type="radio" name="tab-demo-section" value="0" autocomplete="off"><i class="text"></i><span>각종 입력, 버튼 요소</span></label>
         <label target="#demo-paragraphs"><input type="radio" name="tab-demo-section" value="1" autocomplete="off"><i class="menu"></i><span>텍스트 요소</span></label>
         <label target="#demo-icons"><input type="radio" name="tab-demo-section" value="2" autocomplete="off"><i class="gallery"></i><span>아이콘 목록</span></label>
-        <label target="#demo-windows"><input type="radio" name="tab-demo-section" value="3" autocomplete="off" checked><i class="tasks"></i><span>창, 알림 요소</span></label>
-        <label target="#demo-sidemenus"><input type="radio" name="tab-demo-section" value="4" autocomplete="off"><i class="tracking"></i><span>사이드 메뉴</span></label>
+        <label target="#demo-windows"><input type="radio" name="tab-demo-section" value="3" autocomplete="off"><i class="tasks"></i><span>창, 알림 요소</span></label>
+        <label target="#demo-sidemenus"><input type="radio" name="tab-demo-section" value="4" autocomplete="off" checked><i class="tracking"></i><span>사이드 메뉴</span></label>
       </nav>
       <div id="demo-inputs" class="demo-view list-column">
         <partial src="./views/demo-inputs.html"></partial>
@@ -140,6 +140,30 @@
       </windowbody>
     </inner>
   </window>
+  <menulist id="demo-menu-left" none>
+    <menubody>
+      <titlebar>
+        <div class="left">
+          <div class="icon"><i class="sparkle"></i></div>
+          <span>메뉴 제목</span>
+        </div>
+        <div class="right">
+          <button closemenu><i class="close"></i></button>
+        </div>
+      </titlebar>
+      <menumain>
+        <p>가나다</p>
+        <p>가나다</p>
+        <p>가나다</p>
+        <p>가나다</p>
+      </menumain>
+      <bottom>
+        <i class="info"></i>
+        <p sub>Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi dicta nulla illum delectus dolorum nesciunt sequi aliquam magnam, illo cupiditate optio soluta voluptate quas quo dolores doloremque nobis eius? Suscipit?</p>
+      </bottom>
+    </menubody>
+    <outer></outer>
+  </menulist>
   <partial type="window" src="./views/window-test.html"></partial>
   <div id="float-menu">
     <button float><i class="search"></i><span>검색</span></button>

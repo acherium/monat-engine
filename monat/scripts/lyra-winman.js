@@ -5,9 +5,6 @@ import {
   get, set, unset, revokeAttribute,
   body
 } from "./lyra-domman.js";
-import {
-  freeze, copy
-} from "./lyra-objman.js";
 
 export const LyraWindowManager = class {
   name = null;
