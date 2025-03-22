@@ -2,11 +2,13 @@
 /* 창 속성 값 */
 :root {
   --window-area-padding: 8px;
-  
-  --window-border-width: 1px;
   --window-radius: 6px;
-  --window-border-active: var(--accent);
-  --window-border-inactive: var(--border);
+
+  --window-border-outer-width: 1px;
+  --window-border-outer-active: var(--accent);
+  --window-border-outer-inactive: var(--border);
+
+  --window-border-inner-width: 0px;
 
   --window-inner-padding: 8px;
   --window-inner-background: var(--main);
@@ -15,7 +17,8 @@
   --window-titlebar-size: 36px;
   --window-titlebar-padding: 8px;
   --window-titlebar-gap: 4px;
-  --window-titlebar-background: var(--main);
+  --window-titlebar-active: var(--main);
+  --window-titlebar-inactive: var(--main);
   --window-titlebar-font-active: var(--font);
   --window-titlebar-font-inactive: var(--font-sub);
 
@@ -47,6 +50,7 @@ window > inner {
   flex-direction: column;
   left: 0;
   top: 0;
+  padding: var(--window-border-inner-width);
   z-index: 1;
   overflow: hidden;
 
@@ -56,13 +60,11 @@ window > inner {
   height: max-content;
   flex-shrink: 0;
 
-  border: solid var(--window-border-width) var(--window-border-inactive);
+  border: solid var(--window-border-outer-width) var(--window-border-outer-inactive);
   border-radius: var(--window-radius);
   background-color: var(--window-inner-background);
   box-shadow: var(--window-inner-shadow);
   pointer-events: auto;
-
-  /* animation: var(--duration-ui) cubic-bezier(0.02, 0.61, 0.47, 0.99) both ani-window-open; */
 }
 @keyframes ani-window-open {
   from {
@@ -157,25 +159,36 @@ window > inner > titlebar > .right > button {
   justify-content: center;
 
   border-radius: unset;
+  background-color: var(--window-titlebar-inactive);
 }
 window > inner > titlebar > .right > button::before { border: unset; }
 
 /* 주 영역 */
 window > inner > windowbody {
-  display: block;
-  padding: var(--window-inner-padding);
+  display: flex;
+  flex-direction: column;
 
   width: 100%;
   height: 100%;
   flex: 1;
 }
 
+window > inner > windowbody > windowmain {
+  display: block;
+  padding: var(--window-inner-padding);
+
+  width: 100%;
+  height:100%;
+  flex: 1;
+}
+
 /* 하단 영역 */
-window > inner > bottom {
+window > inner > windowbody > bottom {
   display: flex;
   position: relative;
   align-items: center;
   justify-content: center;
+  margin-top: auto;
   padding: var(--window-bottom-padding);
 
   width: 100%;
@@ -184,7 +197,7 @@ window > inner > bottom {
   background-color: var(--window-bottom-background);
 }
 
-window > inner > bottom > :is(.left, .right) {
+window > inner > windowbody > bottom > :is(.left, .right) {
   display: flex;
   position: relative;
   align-items: center;
@@ -198,14 +211,14 @@ window > inner > bottom > :is(.left, .right) {
   background-color: inherit;
 }
 
-window > inner > bottom > .left { margin-right: auto; }
+window > inner > windowbody > bottom > .left { margin-right: auto; }
 
-window > inner > bottom > .right {
+window > inner > windowbody > bottom > .right {
   flex-direction: row-reverse;
   margin-left: auto;
 }
 
-window > inner > bottom > :is(.left, .right) > button[accent] { order: -1; }
+window > inner > windowbody > bottom > :is(.left, .right) > button[accent] { order: -1; }
 
 /* 크기 조절 포인터 */
 window > inner > resizepointer {
@@ -224,10 +237,13 @@ window > inner > resizepointer {
 }
 
 /* 활성 상태 창 */
-window[active] > inner { border-color: var(--window-border-active); }
-window[active] > inner > titlebar { border-color: var(--window-titlebar-active); }
+window[active] > inner { border-color: var(--window-border-outer-active); }
+window[active] > inner > titlebar { background-color: var(--window-titlebar-active); }
 window[active] > inner > titlebar > .left > span { color: var(--window-titlebar-font-active); }
-window[active] > inner > titlebar > .right > button { --icon: var(--window-titlebar-font-active); }
+window[active] > inner > titlebar > .right > button {
+  background-color: var(--window-titlebar-active);
+  --icon: var(--window-titlebar-font-active);
+}
 
 /* 최대화 */
 window[maximized]:not([minimized]) { padding: 0 !important; }

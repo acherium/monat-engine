@@ -54,20 +54,23 @@ export const LyraWindow = class {
             $: null
           }
         },
-        top: {
-          $: null
-        },
         body: {
-          $: null
-        },
-        bottom: {
           $: null,
-          left: {
+          top: {
             $: null
           },
-          right: {
+          main: {
             $: null
-          }
+          },
+          bottom: {
+            $: null,
+            left: {
+              $: null
+            },
+            right: {
+              $: null
+            }
+          },
         },
         resizePointer: {
           $: null
@@ -126,16 +129,19 @@ export const LyraWindow = class {
 
       this.parts.inner.titlebar.right.$ = $(".left", this.parts.inner.titlebar.$);
 
-      // inner - top 요소
-      this.parts.inner.top.$ = $("top", this.parts.inner.$);
-
       // inner - body 요소
       this.parts.inner.body.$ = $("windowbody", this.parts.inner.$);
 
-      // inner - bottom 요소
-      this.parts.inner.bottom.$ = $("bottom", this.parts.inner.$);
-      this.parts.inner.bottom.left.$ = $(".left", this.parts.inner.bottom.$);
-      this.parts.inner.bottom.right.$ = $(".right", this.parts.inner.bottom.$);
+      // inner - body - top 요소
+      this.parts.inner.body.top.$ = $("top", this.parts.inner.body.$);
+
+      // inner - body - main 요소
+      this.parts.inner.body.main.$ = $("windowmain", this.parts.inner.body.$);
+
+      // inner - body - bottom 요소
+      this.parts.inner.body.bottom.$ = $("bottom", this.parts.inner.body.$);
+      this.parts.inner.body.bottom.left.$ = $(".left", this.parts.inner.body.bottom.$);
+      this.parts.inner.body.bottom.right.$ = $(".right", this.parts.inner.body.bottom.$);
 
       // inner - resizePointer 요소
       this.parts.inner.resizePointer.$ = $("resizepointer", this.parts.inner.$);
@@ -204,16 +210,19 @@ export const LyraWindow = class {
       if (includeList.includes("maximize-button")) append(create("button", { attributes: { "maximizewindow": "" } }), this.parts.inner.titlebar.right.$);
       if (includeList.includes("minimize-button")) append(create("button", { attributes: { "minimizewindow": "" } }), this.parts.inner.titlebar.right.$);
 
-      // inner - top 요소
-      if (includeList.includes("top")) this.parts.inner.top.$ = append(create("top"), this.parts.inner.$);
-
       // inner - body 요소
       this.parts.inner.body.$ = append(create("windowbody"), this.parts.inner.$);
 
-      // inner - bottom 요소
-      if (includeList.includes("bottom")) this.parts.inner.bottom.$ = append(create("bottom"), this.parts.inner.$);
-      if (includeList.includes("bottom-left")) this.parts.inner.bottom.left.$ = append(create("div", { classes: [ "left" ] }), this.parts.inner.bottom.$);
-      if (includeList.includes("bottom-right")) this.parts.inner.bottom.right.$ = append(create("div", { classes: [ "right" ] }), this.parts.inner.bottom.$);
+      // inner - body - top 요소
+      if (includeList.includes("top")) this.parts.inner.body.top.$ = append(create("top"), this.parts.inner.body.$);
+
+      // inner - body - main 요소
+      this.parts.inner.body.main.$ = append(create("windowmain"), this.parts.inner.body.$);
+
+      // inner - body - bottom 요소
+      if (includeList.includes("bottom")) this.parts.inner.body.bottom.$ = append(create("bottom"), this.parts.inner.body.$);
+      if (includeList.includes("bottom-left")) this.parts.inner.body.bottom.left.$ = append(create("div", { classes: [ "left" ] }), this.parts.inner.body.bottom.$);
+      if (includeList.includes("bottom-right")) this.parts.inner.body.bottom.right.$ = append(create("div", { classes: [ "right" ] }), this.parts.inner.body.bottom.$);
 
       // inner - resizePointer 요소
       if (includeList.includes("resize-pointer")) this.parts.inner.resizePointer.$ = append(create("resizepointer"), this.parts.inner.$);
@@ -457,10 +466,10 @@ export const LyraWindow = class {
   };
 
   setBody = (node) => {
-    if (!this.parts.inner.$ || !this.parts.inner.body.$) return;
-    after(this.parts.inner.body.$, node);
-    revoke(this.parts.inner.body.$);
-    this.parts.inner.body.$ = node;
+    if (!this.parts.inner.$ || !this.parts.inner.body.$ || !this.parts.inner.body.main.$) return;
+    after(this.parts.inner.body.main.$, node);
+    revoke(this.parts.inner.body.main.$);
+    this.parts.inner.body.main.$ = node;
     return this;
   };
 

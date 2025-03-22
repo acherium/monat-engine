@@ -10,27 +10,29 @@
       </div>
     </titlebar>
     <windowbody>
-      <div class="tabs">
-        <label target="#partial-window-test-tab-0"><input type="radio" name="partial-window-test-tabs" value="0" autocomplete="off" checked>1</span></label>
-        <label target="#partial-window-test-tab-1"><input type="radio" name="partial-window-test-tabs" value="1" autocomplete="off">2</span></label>
-        <label target="#partial-window-test-tab-2"><input type="radio" name="partial-window-test-tabs" value="2" autocomplete="off">3</span></label>
-        <label target="#partial-window-test-tab-3"><input type="radio" name="partial-window-test-tabs" value="3" autocomplete="off">4</span></label>
-      </div>
-      <p id="partial-window-test-tab-0">1</p>
-      <p id="partial-window-test-tab-1">2</p>
-      <p id="partial-window-test-tab-2">3</p>
-      <p id="partial-window-test-tab-3">4</p>
-      <div id="test-box"></div>
-      <h1>Hello, world!</h1>
-      <p id="partial-window-position"></p>
-      <!-- <partial src="./views/test.html"></partial> -->
+      <windowmain>
+        <div class="tabs">
+          <label target="#partial-window-test-tab-0"><input type="radio" name="partial-window-test-tabs" value="0" autocomplete="off" checked>1</span></label>
+          <label target="#partial-window-test-tab-1"><input type="radio" name="partial-window-test-tabs" value="1" autocomplete="off">2</span></label>
+          <label target="#partial-window-test-tab-2"><input type="radio" name="partial-window-test-tabs" value="2" autocomplete="off">3</span></label>
+          <label target="#partial-window-test-tab-3"><input type="radio" name="partial-window-test-tabs" value="3" autocomplete="off">4</span></label>
+        </div>
+        <p id="partial-window-test-tab-0">1</p>
+        <p id="partial-window-test-tab-1">2</p>
+        <p id="partial-window-test-tab-2">3</p>
+        <p id="partial-window-test-tab-3">4</p>
+        <div id="test-box"></div>
+        <h1>Hello, world!</h1>
+        <p id="partial-window-position"></p>
+        <partial src="./views/test.html"></partial>
+      </windowmain>
+      <bottom>
+        <div class="left"></div>
+        <div class="right">
+          <button accent closewindow><span>확인</span></button>
+        </div>
+      </bottom>
     </windowbody>
-    <bottom>
-      <div class="left"></div>
-      <div class="right">
-        <button accent closewindow><span>확인</span></button>
-      </div>
-    </bottom>
     <resizepointer></resizepointer>
   </inner>
 </window>
