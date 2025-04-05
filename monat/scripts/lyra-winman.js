@@ -1,5 +1,5 @@
 // winman - 창 요소 조작 관련 모듈 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-import { COMMON_INTERVAL, WINDOW_ANIMATION_DURATION, POSITION_PARAMETERS, SIZE_PARAMETERS } from "./lyra-envman.js";
+import { COMMON_INTERVAL, WINDOW_ANIMATION_DURATION, WINDOW_ANIMATION_TIMING_FUNCTION, POSITION_PARAMETERS, SIZE_PARAMETERS } from "./lyra-envman.js";
 import {
   $, $a, $p, $pa, create, append, revoke, after, before,
   get, set, unset, revokeAttribute,
@@ -329,13 +329,15 @@ export const LyraWindow = class {
         const raw = `${param.position}`.split(/ +/).map((x) => x.trim()).filter((x) => x.length);
         
         if (raw.length === 1) {
-          if (!POSITION_PARAMETERS.includes(raw[0])) return;
-          this.rect.preset.x = raw[0] !== "pixel" ? raw[0] : null;
-          this.rect.preset.y = raw[0] !== "pixel" ? raw[0] : null;
+          if (POSITION_PARAMETERS.includes(raw[0])) {
+            this.rect.preset.x = raw[0] !== "pixel" ? raw[0] : null;
+            this.rect.preset.y = raw[0] !== "pixel" ? raw[0] : null;
+          };
         } else if (raw.length > 1) {
-          if (!POSITION_PARAMETERS.includes(raw[0]) || !POSITION_PARAMETERS.includes(raw[1])) return;
-          this.rect.preset.x = raw[0] !== "pixel" ? raw[0] : null;
-          this.rect.preset.y = raw[1] !== "pixel" ? raw[1] : null;
+          if (POSITION_PARAMETERS.includes(raw[0]) && POSITION_PARAMETERS.includes(raw[1])) {
+            this.rect.preset.x = raw[0] !== "pixel" ? raw[0] : null;
+            this.rect.preset.y = raw[1] !== "pixel" ? raw[1] : null;
+          };
         };
       };
 
@@ -344,13 +346,15 @@ export const LyraWindow = class {
         const raw = `${param.size}`.split(/ +/).map((x) => x.trim()).filter((x) => x.length);
         
         if (raw.length === 1) {
-          if (!SIZE_PARAMETERS.includes(raw[0])) return;
-          this.rect.preset.width = raw[0] !== "pixel" ? raw[0] : null;
-          this.rect.preset.height = raw[0] !== "pixel" ? raw[0] : null;
+          if (SIZE_PARAMETERS.includes(raw[0])) {
+            this.rect.preset.width = raw[0] !== "pixel" ? raw[0] : null;
+            this.rect.preset.height = raw[0] !== "pixel" ? raw[0] : null;
+          };
         } else if (raw.length > 1) {
-          if (!SIZE_PARAMETERS.includes(raw[0]) || !SIZE_PARAMETERS.includes(raw[1])) return;
-          this.rect.preset.width = raw[0] !== "pixel" ? raw[0] : null;
-          this.rect.preset.height = raw[1] !== "pixel" ? raw[1] : null;
+          if (SIZE_PARAMETERS.includes(raw[0]) && SIZE_PARAMETERS.includes(raw[1])) {
+            this.rect.preset.width = raw[0] !== "pixel" ? raw[0] : null;
+            this.rect.preset.height = raw[1] !== "pixel" ? raw[1] : null;
+          };
         };
       };
 
@@ -450,13 +454,13 @@ export const LyraWindow = class {
       {
         duration: WINDOW_ANIMATION_DURATION,
         fill: "both",
-        ease: "cubic-bezier(0.02, 0.61, 0.47, 0.99)"
+        ease: WINDOW_ANIMATION_TIMING_FUNCTION
       });
     this.parts.inner.$.animate([ { transform: "translateY(2px) scale(0.99)" }, { transform: "translateY(0px) scale(1)" } ],
       {
         duration: WINDOW_ANIMATION_DURATION,
         fill: "both",
-        ease: "cubic-bezier(0.02, 0.61, 0.47, 0.99)",
+        ease: WINDOW_ANIMATION_TIMING_FUNCTION,
         composite: "accumulate"
       });
   
@@ -484,13 +488,13 @@ export const LyraWindow = class {
       {
         duration: WINDOW_ANIMATION_DURATION,
         fill: "both",
-        ease: "cubic-bezier(0.02, 0.61, 0.47, 0.99)"
+        ease: WINDOW_ANIMATION_TIMING_FUNCTION
       });
     this.parts.inner.$.animate([ { transform: "translateY(0px) scale(1)" }, { transform: "translateY(2px) scale(0.99)" } ],
       {
         duration: WINDOW_ANIMATION_DURATION,
         fill: "both",
-        ease: "cubic-bezier(0.02, 0.61, 0.47, 0.99)",
+        ease: WINDOW_ANIMATION_TIMING_FUNCTION,
         composite: "accumulate"
       });
 

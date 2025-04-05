@@ -1,5 +1,6 @@
 // menuman - 메뉴 요소 조작 관련 모듈 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-import { COMMON_INTERVAL, WINDOW_ANIMATION_DURATION } from "./lyra-envman.js";
+import { COMMON_INTERVAL, WINDOW_ANIMATION_DURATION, WINDOW_ANIMATION_TIMING_FUNCTION,
+  PANEL_DIRECTION_PARAMETERS, PANEL_DIRECTION_VALUE } from "./lyra-envman.js";
 import {
   $, $a, $p, $pa, create, append, revoke, after, before,
   get, set, unset, revokeAttribute,
@@ -30,6 +31,13 @@ export const LyraPanelManager = class {
       retrieveTargets[x[0]] = x[1];
     };
     return retrieveTargets;
+  };
+
+  register = (target) => {
+    if (!target || target.constructor !== LyraPanel || !target.id) return this;
+    target.master = this;
+    this.reserve[target.id] = target;
+    return this;
   };
 
   show = (id, f = true) => {
@@ -112,8 +120,7 @@ export const LyraPanel = class {
   };
   partsOrigin = null;
 
-  rect = {};
-  rectOrigin = null;
+  direction = "left";
 
   listener = new EventTarget();
 
@@ -149,6 +156,12 @@ export const LyraPanel = class {
 
       // inner - bottom 요소
       this.parts.inner.bottom.$ = $("bottom", this.parts.inner.$);
+
+      // 진입 방향 불러오기
+      if (get(this.parts.$, "right") !== null) this.direction = "right";
+      else if (get(this.parts.$, "top") !== null) this.direction = "top";
+      else if (get(this.parts.$, "bottom") !== null) this.direction = "bottom";
+      else if (get(this.parts.$, "center") !== null) this.direction = "center";
     } else {
       this.parent = body;
 
@@ -156,14 +169,14 @@ export const LyraPanel = class {
       this.parts.$ = create("panel");
 
       // inner 요소
-      this.parts.inner.$ = append(create("panelbody"), this.parts.$);
+      this.parts.inner.$ = append(create("inner"), this.parts.$);
 
       // inner - titlebar 요소
       this.parts.inner.titlebar.$ = append(create("titlebar"), this.parts.inner.$);
 
-      this.parts.inner.titlebar.left.$ = append(create(".left"), this.parts.inner.titlebar.$);
+      this.parts.inner.titlebar.left.$ = append(create("div", { classes: [ "left" ] }), this.parts.inner.titlebar.$);
 
-      this.parts.inner.titlebar.left.$ = append(create(".right"), this.parts.inner.titlebar.$);
+      this.parts.inner.titlebar.right.$ = append(create("div", { classes: [ "right" ] }), this.parts.inner.titlebar.$);
       append(create("button", { attributes: { "closepanel": "" } }), this.parts.inner.titlebar.right.$);
 
       // inner - main 요소
@@ -176,6 +189,12 @@ export const LyraPanel = class {
       if (typeof param.id !== "undefined") {
         this.id = param.id;
         this.parts.$.id = param.id;
+      };
+
+      // 진입 방향 불러오기
+      if (typeof param.direction !== "undefined") {
+        if (PANEL_DIRECTION_PARAMETERS.includes(param.direction)) this.direction = param.direction;
+        set(this.parts.$, this.direction, "");
       };
     };
 
@@ -214,7 +233,7 @@ export const LyraPanel = class {
     this.closed = false;
     
     this.parts.inner.$.animate([ { opacity: "0" } ], { fill: "both" });
-    this.parts.inner.$.animate([ { transform: "translateY(2px) scale(0.99)" } ],
+    this.parts.inner.$.animate([ { transform: `${PANEL_DIRECTION_VALUE[this.direction]} scale(0.99)` } ],
     {
       fill: "both",
       composite: "accumulate"
@@ -227,14 +246,13 @@ export const LyraPanel = class {
       {
         duration: WINDOW_ANIMATION_DURATION,
         fill: "both",
-        ease: "cubic-bezier(0.02, 0.61, 0.47, 0.99)"
+        ease: WINDOW_ANIMATION_TIMING_FUNCTION
       });
-    this.parts.inner.$.animate([ { transform: "translateY(2px) scale(0.99)" }, { transform: "translateY(0px) scale(1)" } ],
+    this.parts.inner.$.animate([ { transform: `${PANEL_DIRECTION_VALUE[this.direction]} scale(0.99)` }, { transform: `translateX(0px) translateY(0px) scale(1)` } ],
       {
         duration: WINDOW_ANIMATION_DURATION,
         fill: "both",
-        ease: "cubic-bezier(0.02, 0.61, 0.47, 0.99)",
-        composite: "accumulate"
+        ease: WINDOW_ANIMATION_TIMING_FUNCTION
       });
   
     if (this.master) {
@@ -259,14 +277,13 @@ export const LyraPanel = class {
       {
         duration: WINDOW_ANIMATION_DURATION,
         fill: "both",
-        ease: "cubic-bezier(0.02, 0.61, 0.47, 0.99)"
+        ease: WINDOW_ANIMATION_TIMING_FUNCTION
       });
-    this.parts.inner.$.animate([ { transform: "translateY(0px) scale(1)" }, { transform: "translateY(2px) scale(0.99)" } ],
+    this.parts.inner.$.animate([ { transform: "translateX(0px) translateY(0px) scale(1)" }, { transform: `${PANEL_DIRECTION_VALUE[this.direction]} scale(0.99)` } ],
       {
         duration: WINDOW_ANIMATION_DURATION,
         fill: "both",
-        ease: "cubic-bezier(0.02, 0.61, 0.47, 0.99)",
-        composite: "accumulate"
+        ease: WINDOW_ANIMATION_TIMING_FUNCTION
       });
 
     setTimeout(() => {

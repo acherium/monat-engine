@@ -29,6 +29,7 @@
 panel {
   display: flex;
   position: fixed;
+  align-items: center;
   justify-content: center;
   left: 0;
   top: 0;
@@ -46,16 +47,12 @@ panel > inner {
   display: flex;
   position: absolute;
   flex-direction: column;
-  /* left: 0;
-  top: 0; */
   padding: var(--panel-border-inner-width);
   z-index: 1;
   overflow: hidden;
 
   max-width: calc(100dvw - var(--panel-area-padding) * 2);
   max-height: calc(100dvh - var(--panel-area-padding) * 2);
-  /* width: 350px;
-  height: 100%; */
   flex-shrink: 0;
 
   border: solid var(--panel-border-outer-width) var(--panel-border-outer-active);
@@ -65,7 +62,7 @@ panel > inner {
   pointer-events: auto;
 }
 
-:is(panel:not([right], [top], [bottom]), panel[left]) > inner {
+:is(panel:not([right], [top], [bottom], [center]), panel[left]) > inner {
   left: var(--panel-area-padding);
   top: var(--panel-area-padding);
 
@@ -84,14 +81,19 @@ panel[right] > inner {
 panel[top] > inner {
   top: var(--panel-area-padding);
 
-  width: 1000px;
+  width: 350px;
   height: max-content;
 }
 
 panel[bottom] > inner {
   bottom: var(--panel-area-padding);
 
-  width: 1000px;
+  width: 350px;
+  height: max-content;
+}
+
+panel[center] > inner {
+  width: 350px;
   height: max-content;
 }
 
