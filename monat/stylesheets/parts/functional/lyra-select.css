@@ -97,7 +97,7 @@ label:has(>select) > .immersive-select-list input[type="checkbox"] {
 
 label:has(>select)[listontop] > .immersive-select-list {
   top: unset;
-  bottom: calc(var(--select-size) + var(--select-gap));
+  bottom: calc(var(--select-size) + var(--select-gap) - var(--select-border-width));
 }
 
 /* 선택 목록 검색창 */

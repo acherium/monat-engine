@@ -1,0 +1,152 @@
+@charset "UTF-8";
+/* 레인지 슬라이더 속성 값 */
+:root {
+  --range-label-gap: 4px;
+  --range-label-size: 28px;
+  --range-label-radius: calc(var(--range-label-size) / 2);
+  --range-label-border: var(--border);
+  --range-label-background: oklch(from var(--main) l c h/1);
+
+  --range-track-size: 4px;
+  --range-track-padding: 4px;
+  --range-track-radius: 2px;
+  --range-track-background: oklch(from var(--main) l c h/0);
+
+  --range-track-indicator-offset: calc(var(--range-track-padding) * 2 + var(--range-thumb-size) / 4);
+  --range-track-indicator-size: calc(100% - var(--range-track-indicator-offset) * 2);
+
+  --range-thumb-size: 18px;
+  --range-thumb-radius: 9px;
+  --range-thumb-border: var(--border);
+  --range-thumb-background: var(--border);
+}
+
+/* 레인지 슬라이더 */
+input[type="range"] {
+  appearance: none;
+
+  padding: var(--range-track-padding);
+
+  height: 100%;
+
+  border-radius: var(--range-track-radius);
+  background-color: var(--range-track-background);
+
+  transition: background-color var(--duration-ui);
+}
+
+input[type="range"]::-webkit-slider-thumb{
+  appearance: none;
+
+  box-sizing: border-box;
+
+  width: var(--range-thumb-size);
+  height: var(--range-thumb-size);
+
+  border: solid 1px var(--range-thumb-border);
+  border-radius: var(--range-thumb-radius);
+  background-color: var(--range-thumb-background);
+
+  transition: var(--duration-ui);
+  transition-property: border-color, background-color;
+}
+
+input[type="range"]::-moz-range-thumb {
+  appearance: none;
+
+  box-sizing: border-box;
+
+  width: var(--range-thumb-size);
+  height: var(--range-thumb-size);
+
+  border: solid 1px var(--range-thumb-border);
+  border-radius: var(--range-thumb-radius);
+  background-color: var(--range-thumb-background);
+
+  transition: var(--duration-ui);
+  transition-property: border-color, background-color;
+}
+
+/* 레인지 슬라이더 라벨 */
+label:has(>input[type="range"]) {
+  display: flex;
+  position: relative;
+  align-items: center;
+  gap: var(--range-label-gap);
+
+  height: var(--range-label-size);
+
+  border: solid 1px var(--range-label-border);
+  border-radius: var(--range-label-radius);
+  background-color: var(--range-label-background);
+}
+
+label:has(>input[type="range"])::before {
+  position: absolute;
+  left: var(--range-track-indicator-offset);
+  z-index: 0;
+
+  width: var(--range-track-indicator-size);
+  height: 1px;
+
+  background-color: var(--range-label-border);
+  content: "";
+  pointer-events: none;
+  
+  transition: opacity var(--duration-ui);
+}
+
+label:has(>input[type="range"]) > input[type="range"] { z-index: 1; }
+
+label:has(>input[type="range"])::after {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 2;
+
+  width: 100%;
+  height: 100%;
+
+  border-radius: inherit;
+  background-color: var(--anti);
+  opacity: 0;
+  content: "";
+  pointer-events: none;
+  
+  transition: opacity var(--duration-ui);
+}
+
+/* 활성화된 레인지 슬라이더 */
+input[type="range"]:not(:disabled),
+label:has(>input[type="range"]:not(:disabled)) { cursor: ew-resize; }
+
+label:has(>input[type="range"]:not(:disabled)):hover::after { opacity: 0.1; }
+label:has(>input[type="range"]:not(:disabled)):active::after { opacity: 0.2; }
+
+:is(label:has(>input[type="range"]:not(:disabled)):hover, label:has(>input[type="range"]:not(:disabled)):active) {
+  border-color: var(--accent);
+  background-color: oklch(from var(--accent) l c h/0.5);
+}
+
+:is(label:has(>input[type="range"]:not(:disabled)):hover, label:has(>input[type="range"]:not(:disabled)):active)::before { background-color: var(--accent); }
+
+:is(label:has(>input[type="range"]:not(:disabled)):hover, label:has(>input[type="range"]:not(:disabled)):active) > input[type="range"]::-webkit-slider-thumb {
+  border-color: var(--accent);
+  background-color: var(--accent);
+}
+
+:is(label:has(>input[type="range"]:not(:disabled)):hover, label:has(>input[type="range"]:not(:disabled)):active) > input[type="range"]::-moz-range-thumb {
+  border-color: var(--accent);
+  background-color: var(--accent);
+}
+
+/* 비활성화된 레인지 슬라이더 */
+input[type="range"]:disabled { cursor: no-drop; }
+
+label:has(>input[type="range"]:disabled) {
+  background-color: oklch(from var(--range-label-border) l c h/0.5);
+  cursor: no-drop;
+}
+
+/* label:has(>input[type="range"]:disabled) > input[type="range"]::-webkit-slider-thumb { background-color: var(--range-label-background); }
+label:has(>input[type="range"]:disabled) > input[type="range"]::-moz-range-thumb { background-color: var(--range-label-background); } */
