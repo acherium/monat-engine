@@ -553,7 +553,6 @@ export const LyraWindow = class {
       this.parent.insertAdjacentElement("beforeend", this.parts.$);
     };
 
-    if (this.status) return this;
     this.status = true;
     if (this.master) this.master.active(this.id, false);
 
@@ -564,7 +563,6 @@ export const LyraWindow = class {
   inactive = () => {
     unset(this.parts.$, "active");
     
-    if (!this.status) return this;
     this.status = false;
     if (this.master) this.master.inactive(false);
 

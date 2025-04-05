@@ -13,6 +13,7 @@ export const LyraPanelManager = class {
 
   reserve = {};
   opened = {};
+  current = null;
 
   listener = new EventTarget();
 
@@ -61,6 +62,30 @@ export const LyraPanelManager = class {
     delete this.opened[id];
     if (f) target.close(false);
 
+    const last = Object.values(this.opened).sort((a, b) => a.lastActive > b.lastActive).pop();
+    last?.active();
+
+    return this;
+  };
+
+  active = (id, f = true) => {
+    if (!id || typeof id !== "string") return this;
+    
+    const target = this.reserve[id];
+    if (!target) return;
+
+    this.current = target;
+    if (f) target.active();
+
+    return this;
+  };
+
+  inactive = (f = true) => {
+    if (!this.current) return this;
+
+    if (f) this.current.inactive();
+    this.current = null;
+
     return this;
   };
 
@@ -86,6 +111,11 @@ export const LyraPanel = class {
 
   status = false;
   closed = true;
+
+  lastOpen = null;
+  lastClose = null;
+  lastActive = null;
+  lastInactive = null;
 
   parts = {
     $: null,
@@ -205,6 +235,9 @@ export const LyraPanel = class {
       node.addEventListener("pointerup", this.close);
     };
     if (this.parts.outer.$) this.parts.outer.$.onclick = () => { this.close(this.id); };
+
+    // 창 활성화
+    this.parts.inner.$.addEventListener("pointerdown", () => { this.active(); });
     
     // 파라미터 재정의
     for (const key of Object.keys(param)) if (typeof this[key] !== "undefined") this[key] = param[key];
@@ -229,8 +262,11 @@ export const LyraPanel = class {
   };
 
   show = () => {
+    this.active();
     if (!this.closed) return this;
     this.closed = false;
+
+    this.lastOpen = new Date();
     
     this.parts.inner.$.animate([ { opacity: "0" } ], { fill: "both" });
     this.parts.inner.$.animate([ { transform: `${PANEL_DIRECTION_VALUE[this.direction]} scale(0.99)` } ],
@@ -271,6 +307,9 @@ export const LyraPanel = class {
   close = () => {
     if (this.closed) return this;
     this.closed = true;
+    this.inactive();
+
+    this.lastClose = new Date();
 
     if (this.parts.outer.$) this.parts.outer.$.animate([ { opacity: "1" }, { opacity: "0" }], { duration: WINDOW_ANIMATION_DURATION, fill: "both" });
     this.parts.inner.$.animate([ { opacity: "1" }, { opacity: "0" } ],
@@ -293,6 +332,34 @@ export const LyraPanel = class {
     if (this.master) this.master.close(this.id, false);
 
     this.listener.dispatchEvent(new Event("close"));
+    return this;
+  };
+
+  active = () => {
+    for (const node of Array.from($a("panel[active]")).filter((x) => x !== this.parts.$)) unset(node, "active");
+    if (get(this.parts.$, "active") === null) {
+      set(this.parts.$, "active", "");
+      this.parent.insertAdjacentElement("beforeend", this.parts.$);
+    };
+
+    this.lastActive = new Date();
+
+    this.status = true;
+    if (this.master) this.master.active(this.id, false);
+
+    this.listener.dispatchEvent(new Event("active"));
+    return this;
+  };
+
+  inactive = () => {
+    unset(this.parts.$, "active");
+
+    this.lastInactive = new Date();
+    
+    this.status = false;
+    if (this.master) this.master.inactive(false);
+
+    this.listener.dispatchEvent(new Event("inactive"));
     return this;
   };
 };

@@ -61,4 +61,7 @@ export default function(master, partial) {
     master.panelman.register(demopan);
     master.panelman.show("demo-menu-created-center");
   };
+
+  const $btnCloseActive = $("#demo-close-active-panel");
+  $btnCloseActive.onpointerdown = () => { master.panelman.current?.close(); };
 };

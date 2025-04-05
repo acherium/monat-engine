@@ -388,7 +388,7 @@ const initPartialRunner = (runner, partialman = null) => {
   };
 
   // 창 초기화
-  master.winman = new LyraWindowManager("master");
+  master.winman = new LyraWindowManager("master", true);
   master.winman.retrieve(root);
   document.addEventListener("pointerdown", (event) => {
     if ($p("window", event.target) === null) {
@@ -398,8 +398,19 @@ const initPartialRunner = (runner, partialman = null) => {
   });
 
   // 메뉴 초기화
-  master.panelman = new LyraPanelManager("master");
+  master.panelman = new LyraPanelManager("master", true);
   master.panelman.retrieve(root);
+  document.addEventListener("pointerdown", (event) => {
+    if ($p("panel", event.target) === null) {
+      if (master.winman.current) master.panelman.inactive();
+      for (const node of $a("panel[active]")) unset(node, "active");
+    };
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !event.ctrlKey && !event.shiftKey && !event.altKey && !event.metaKey) {
+      master.panelman.current?.close();
+    };
+  });
 
   // 선택 목록 닫기
   const closeSelect = ($label) => {
