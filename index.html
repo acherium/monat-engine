@@ -30,7 +30,7 @@
         <label target="#demo-paragraphs"><input type="radio" name="tab-demo-section" value="1" autocomplete="off"><i class="menu"></i><span>텍스트 요소</span></label>
         <label target="#demo-icons"><input type="radio" name="tab-demo-section" value="2" autocomplete="off"><i class="gallery"></i><span>아이콘 목록</span></label>
         <label target="#demo-windows"><input type="radio" name="tab-demo-section" value="3" autocomplete="off"><i class="tasks"></i><span>창, 알림 요소</span></label>
-        <label target="#demo-sidemenus"><input type="radio" name="tab-demo-section" value="4" autocomplete="off" checked><i class="tracking"></i><span>사이드 메뉴</span></label>
+        <label target="#demo-sidemenus"><input type="radio" name="tab-demo-section" value="4" autocomplete="off" checked><i class="tracking"></i><span>패널</span></label>
       </nav>
       <div id="demo-inputs" class="demo-view list-column">
         <partial src="./views/demo-inputs.html"></partial>
@@ -140,30 +140,103 @@
       </windowbody>
     </inner>
   </window>
-  <menulist id="demo-menu-left" none>
-    <menubody>
+  <panel left id="demo-menu-left">
+    <outer></outer>
+    <inner>
       <titlebar>
         <div class="left">
           <div class="icon"><i class="sparkle"></i></div>
-          <span>메뉴 제목</span>
+          <span>패널 제목</span>
         </div>
         <div class="right">
-          <button closemenu><i class="close"></i></button>
+          <button closepanel><i class="close"></i></button>
         </div>
       </titlebar>
-      <menumain>
+      <panelmain>
         <p>가나다</p>
         <p>가나다</p>
         <p>가나다</p>
         <p>가나다</p>
-      </menumain>
+      </panelmain>
       <bottom>
         <i class="info"></i>
         <p sub>Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi dicta nulla illum delectus dolorum nesciunt sequi aliquam magnam, illo cupiditate optio soluta voluptate quas quo dolores doloremque nobis eius? Suscipit?</p>
       </bottom>
-    </menubody>
+    </inner>
+  </panel>
+  <panel right id="demo-menu-right">
     <outer></outer>
-  </menulist>
+    <inner>
+      <titlebar>
+        <div class="left">
+          <div class="icon"><i class="sparkle"></i></div>
+          <span>패널 제목</span>
+        </div>
+        <div class="right">
+          <button closepanel><i class="close"></i></button>
+        </div>
+      </titlebar>
+      <panelmain>
+        <p>가나다</p>
+        <p>가나다</p>
+        <p>가나다</p>
+        <p>가나다</p>
+      </panelmain>
+      <bottom>
+        <i class="info"></i>
+        <p sub>Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi dicta nulla illum delectus dolorum nesciunt sequi aliquam magnam, illo cupiditate optio soluta voluptate quas quo dolores doloremque nobis eius? Suscipit?</p>
+      </bottom>
+    </inner>
+  </panel>
+  <panel top id="demo-menu-top">
+    <outer></outer>
+    <inner>
+      <titlebar>
+        <div class="left">
+          <div class="icon"><i class="sparkle"></i></div>
+          <span>패널 제목</span>
+        </div>
+        <div class="right">
+          <button closepanel><i class="close"></i></button>
+        </div>
+      </titlebar>
+      <panelmain>
+        <p>가나다</p><p>가나다</p><p>가나다</p><p>가나다</p>
+        <p>가나다</p><p>가나다</p><p>가나다</p><p>가나다</p>
+        <p>가나다</p><p>가나다</p><p>가나다</p><p>가나다</p>
+        <p>가나다</p><p>가나다</p><p>가나다</p><p>가나다</p>
+        <p>가나다</p><p>가나다</p><p>가나다</p><p>가나다</p>
+        <p>가나다</p><p>가나다</p><p>가나다</p><p>가나다</p>
+      </panelmain>
+      <bottom>
+        <i class="info"></i>
+        <p sub>Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi dicta nulla illum delectus dolorum nesciunt sequi aliquam magnam, illo cupiditate optio soluta voluptate quas quo dolores doloremque nobis eius? Suscipit?</p>
+      </bottom>
+    </inner>
+  </panel>
+  <panel bottom id="demo-menu-bottom">
+    <inner>
+      <titlebar>
+        <div class="left">
+          <div class="icon"><i class="sparkle"></i></div>
+          <span>패널 제목</span>
+        </div>
+        <div class="right">
+          <button closepanel><i class="close"></i></button>
+        </div>
+      </titlebar>
+      <panelmain>
+        <p>가나다</p>
+        <p>가나다</p>
+        <p>가나다</p>
+        <p>가나다</p>
+      </panelmain>
+      <bottom>
+        <i class="info"></i>
+        <p sub>Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi dicta nulla illum delectus dolorum nesciunt sequi aliquam magnam, illo cupiditate optio soluta voluptate quas quo dolores doloremque nobis eius? Suscipit?</p>
+      </bottom>
+    </inner>
+  </panel>
   <partial type="window" src="./views/window-test.html"></partial>
   <div id="float-menu">
     <button float><i class="search"></i><span>검색</span></button>

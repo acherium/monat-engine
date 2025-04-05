@@ -158,7 +158,7 @@ export const LyraWindow = class {
       $: null
     }
   };
-  partsOrigin = {};
+  partsOrigin = null;
 
   rect = {
     x: 0,
@@ -172,7 +172,7 @@ export const LyraWindow = class {
       height: null
     }
   };
-  rectOrigin = {};
+  rectOrigin = null;
 
   maximized = false;
   minimized = false;
@@ -184,7 +184,6 @@ export const LyraWindow = class {
   listener = new EventTarget();
 
   constructor(param = {}, origin = null) {
-
     const includeList = param.includes || [];
 
     // 원본 요소가 있으면 원본에서 지정함
@@ -209,7 +208,7 @@ export const LyraWindow = class {
       this.parts.inner.titlebar.left.title.$ = $("span", this.parts.inner.titlebar.left.$);
       this.parts.inner.titlebar.left.title.text = this.parts.inner.titlebar.left.title.$?.innerText || null;
 
-      this.parts.inner.titlebar.right.$ = $(".left", this.parts.inner.titlebar.$);
+      this.parts.inner.titlebar.right.$ = $(".right", this.parts.inner.titlebar.$);
 
       // inner - body 요소
       this.parts.inner.body.$ = $("windowbody", this.parts.inner.$);
@@ -366,7 +365,6 @@ export const LyraWindow = class {
       };
     };
 
-    // 이벤트 초기화
     // 창 닫기
     const closeTriggers = $a("[closewindow]", this.parts.$);
     for (const node of closeTriggers) {
@@ -483,18 +481,18 @@ export const LyraWindow = class {
 
     if (this.parts.outer.$) this.parts.outer.$.animate([ { opacity: "1" }, { opacity: "0" }], { duration: WINDOW_ANIMATION_DURATION, fill: "both" });
     this.parts.inner.$.animate([ { opacity: "1" }, { opacity: "0" } ],
-    {
-      duration: WINDOW_ANIMATION_DURATION,
-      fill: "both",
-      ease: "cubic-bezier(0.02, 0.61, 0.47, 0.99)"
-    });
+      {
+        duration: WINDOW_ANIMATION_DURATION,
+        fill: "both",
+        ease: "cubic-bezier(0.02, 0.61, 0.47, 0.99)"
+      });
     this.parts.inner.$.animate([ { transform: "translateY(0px) scale(1)" }, { transform: "translateY(2px) scale(0.99)" } ],
-    {
-      duration: WINDOW_ANIMATION_DURATION,
-      fill: "both",
-      ease: "cubic-bezier(0.02, 0.61, 0.47, 0.99)",
-      composite: "accumulate"
-    });
+      {
+        duration: WINDOW_ANIMATION_DURATION,
+        fill: "both",
+        ease: "cubic-bezier(0.02, 0.61, 0.47, 0.99)",
+        composite: "accumulate"
+      });
 
     setTimeout(() => {
       this.parts.$ = revoke(this.parts.$);

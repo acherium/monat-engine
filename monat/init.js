@@ -5,7 +5,7 @@ import {
   DRAG_SCROLLING_THRESHOLD, COMMON_INTERVAL, WINDOW_ANIMATION_DURATION,
   LYRA_NAME, LYRA_DISPLAY_NAME, LYRA_AUTHOR, LYRA_VERSION, LYRA_DATE,
   LyraWindowManager, LyraWindow,
-  LyraMenuManager, LyraMenu,
+  LyraPanelManager, LyraPanel,
   error
 } from "./module.js";
 
@@ -388,7 +388,7 @@ const initPartialRunner = (runner, partialman = null) => {
   };
 
   // 창 초기화
-  master.winman = new LyraWindowManager("master", true);
+  master.winman = new LyraWindowManager("master");
   master.winman.retrieve(root);
   document.addEventListener("pointerdown", (event) => {
     if ($p("window", event.target) === null) {
@@ -398,7 +398,8 @@ const initPartialRunner = (runner, partialman = null) => {
   });
 
   // 메뉴 초기화
-  master.menuman = new LyraMenuManager("master", true);
+  master.panelman = new LyraPanelManager("master");
+  master.panelman.retrieve(root);
 
   // 선택 목록 닫기
   const closeSelect = ($label) => {
