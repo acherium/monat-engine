@@ -36,6 +36,6 @@ export const off = (target, eventName, listener) => { target.removeEventListener
  * 대상 요소에 이벤트를 발송합니다.
  * @param {HTMLElement} target 대상 요소.
  * @param {Event} event 이벤트 명.
- * @see {@link z | MDN 레퍼런스> EventTarget.dispatchEvent()}
+ * @see {@link https://developer.mozilla.org/ko/docs/Web/API/EventTarget/dispatchEvent | MDN 레퍼런스> EventTarget.dispatchEvent()}
  */
 export const send = (target, event) => { target.dispatchEvent(event); };
