@@ -3,6 +3,10 @@ import { create, append } from "./lyra-domman.js";
 import { LYRA_NAME, LYRA_DISPLAY_NAME, LYRA_VERSION, LYRA_DATE } from "./lyra-envman.js";
 import { LyraWindow } from "./lyra-winman.js";
 
+/**
+ * 기본 오류 창을 출력합니다.
+ * @param {string} message 오류 메시지.
+ */
 export const error = (message) => {
   const e = new Error(message);
   const win = new LyraWindow({

@@ -1,5 +1,5 @@
 import {
-  $, set, unset
+  $, set, unset, on
 } from "../monat/module.js";
 
 export default function(master, partial) {
@@ -21,5 +21,5 @@ export default function(master, partial) {
   };
 
   const $demoRange = $("#demo-range");
-  $demoRange.addEventListener("change", () => { console.log($demoRange.value); });
+  on($demoRange, "change", () => { console.log($demoRange.value); });
 };
