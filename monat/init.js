@@ -4,6 +4,7 @@ import {
   on, once, off, send,
   xhr,
   DRAG_SCROLLING_THRESHOLD, COMMON_INTERVAL, WINDOW_ANIMATION_DURATION,
+  DEFAULT_PANZONE_STEPS, DEFAULT_PANZONE_MIN, DEFAULT_PANZONE_MAX,
   LYRA_NAME, LYRA_DISPLAY_NAME, LYRA_AUTHOR, LYRA_VERSION, LYRA_DATE,
   LyraWindowManager, LyraWindow,
   LyraPanelManager, LyraPanel,
@@ -361,6 +362,85 @@ const init = (target, master) => {
     };
 
     setValue($range.value);
+  };
+
+  // 패닝 존 초기화
+  const $panzones = $a("panzone", target);
+  for (const $panzone of $panzones) {
+    const $sealed = $("seal", $panzone);
+    const $scale = append(create("div", { classes: [ "scale-layer" ] }), $panzone);
+    const $pos = append(create("div", { classes: [ "position-layer" ] }), $scale);
+
+    adjacent($pos, "beforeend", ...$sealed.children);
+    revoke($sealed);
+
+    const rect = {
+      x: 0,
+      y: 0,
+      scale: 1,
+      step: DEFAULT_PANZONE_STEPS,
+      scaleMin: DEFAULT_PANZONE_MIN,
+      scaleMax: DEFAULT_PANZONE_MAX
+    };
+
+    on($panzone, "pointerdown", (pointer) => {
+      if (pointer.pointerType !== "mouse") return;
+
+      $panzone.onpointermove = (move) => {
+        rect.x += move.movementX / rect.scale;
+        rect.y += move.movementY / rect.scale;
+        $pos.animate([ { transform: `translate(${rect.x}px, ${rect.y}px)` } ], { fill: "both" });
+      };
+
+      $panzone.onpointerup = () => {
+        $panzone.onpointermove = null;
+        $panzone.onpointerup = null;
+        $panzone.onpointercancel = null;
+      };
+
+      $panzone.onpointercancel = () => {
+        $panzone.onpointermove = null;
+        $panzone.onpointerup = null;
+        $panzone.onpointercancel = null;
+      };
+    });
+
+    on($panzone, "touchstart", (touch) => {
+      touch = touch.touches[0];
+      let tx = touch.clientX;
+      let ty = touch.clientY;
+
+      $panzone.ontouchmove = (move) => {
+        move = move.touches[0];
+
+        rect.x += (move.clientX - tx) / rect.scale;
+        rect.y += (move.clientY - ty) / rect.scale;
+        $pos.animate([ { transform: `translate(${rect.x}px, ${rect.y}px)` } ], { fill: "both" });
+
+        tx = move.clientX;
+        ty = move.clientY;
+      };
+
+      $panzone.ontouchend = () => {
+        $panzone.ontouchmove = null;
+        $panzone.ontouchend = null;
+        $panzone.ontouchcancel = null;
+      };
+
+      $panzone.ontouchcancel = () => {
+        $panzone.ontouchmove = null;
+        $panzone.ontouchend = null;
+        $panzone.ontouchcancel = null;
+      };
+    });
+
+    on($panzone, "wheel", (wheel) => {
+      rect.scale += ( wheel.deltaY > 0 ? rect.step * -1 : wheel.deltaY < 0 ? rect.step : 0 );
+      if (rect.scale < rect.scaleMin) rect.scale = rect.scaleMin;
+      if (rect.scale > rect.scaleMax) rect.scale = rect.scaleMax;
+
+      $scale.animate([ { transform: `scale(${rect.scale})` } ], { fill: "both" });
+    });
   };
 
   // 뷰 모듈 초기화
