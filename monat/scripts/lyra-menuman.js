@@ -179,15 +179,7 @@ export const LyraContextMenu = class {
     this.active();
     this.closed = false;
 
-    const closeExceptions = [ this.id ];
-    const checkParentMenu = (target) => {
-      if (target.parentMenu) {
-        closeExceptions.push(target.parentMenu);
-        checkParentMenu(this.master.reserve[target.parentMenu]);
-      };
-    };
-    checkParentMenu(this);
-
+    const closeExceptions = this.getParentTree();
     this.master.closeElse(closeExceptions);
     this.lastOpen = new Date();
 
@@ -313,5 +305,19 @@ export const LyraContextMenu = class {
 
     send(this.listener, "inactive");
     return this;
+  };
+
+  getParentTree = () => {
+    const res = [ this.id ];
+
+    const f = (target) => {
+      if (target.parentMenu) {
+        res.push(target.parentMenu);
+        f(this.master.reserve[target.parentMenu]);
+      };
+    };
+    f(this);
+
+    return res;
   };
 };
