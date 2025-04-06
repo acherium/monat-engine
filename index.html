@@ -32,6 +32,7 @@
         <label target="#demo-grid"><input type="radio" name="tab-demo-section" value="5" autocomplete="off"><i class="spreadsheet"></i><span>그리드</span></label>
         <label target="#demo-windows"><input type="radio" name="tab-demo-section" value="3" autocomplete="off"><i class="tasks"></i><span>창, 알림 요소</span></label>
         <label target="#demo-sidemenus"><input type="radio" name="tab-demo-section" value="4" autocomplete="off"><i class="tracking"></i><span>패널</span></label>
+        <label target="#demo-contextmenus"><input type="radio" name="tab-demo-section" value="6" autocomplete="off" checked><i class="menu"></i><span>컨텍스트 메뉴</span></label>
       </nav>
       <div id="demo-inputs" class="demo-view list-column">
         <partial src="./views/demo-inputs.html"></partial>
@@ -112,6 +113,9 @@
       </div>
       <div id="demo-sidemenus" class="demo-view list-column">
         <partial src="./views/demo-sidemenus.html"></partial>
+      </div>
+      <div id="demo-contextmenus" class="demo-view list-column">
+        <partial src="./views/demo-contextmenus.html"></partial>
       </div>
     </div>
   </main>
@@ -267,6 +271,11 @@
       </bottom>
     </inner>
   </panel>
+  <contextmenu id="demo-context-menu-0">
+    <button blank><span>테스트</span></button>
+    <button blank><span>테스트</span></button>
+    <button blank><span>테스트</span></button>
+  </contextmenu>
   <partial type="window" src="./views/window-test.html"></partial>
   <div id="float-menu">
     <button float><i class="search"></i><span>검색</span></button>

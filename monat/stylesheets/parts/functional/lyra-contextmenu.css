@@ -1,0 +1,37 @@
+@charset "UTF-8";
+/* 컨텍스트 메뉴 속성값 */
+:root {
+  --contextmenu-padding: 8px;
+  --contextmenu-radius: 6px;
+  --contextmenu-border: var(--accent);
+  --contextmenu-background: var(--main);
+  --contextmenu-shadow: var(--shadow);
+}
+
+/* 컨텍스트 메뉴 */
+contextmenu {
+  display: flex;
+  position: fixed;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 106;
+
+  max-width: calc(100dvw - var(--contextmenu-padding) * 2);
+  max-height: calc(100dvh - var(--contextmenu-padding) * 2);
+  width: 200px;
+  height: max-content;
+
+  border: solid 1px var(--contextmenu-border);
+  border-radius: var(--contextmenu-radius);
+  background-color: var(--contextmenu-background);
+  box-shadow: var(--contextmenu-shadow);
+}
+
+contextmenu > * { flex-shrink: 0; }
+
+/* 모바일 뷰 */
+/* @media screen and (max-width: 900px) {
+  contextmenu {
+    width: 100%;
+  }
+} */

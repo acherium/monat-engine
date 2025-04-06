@@ -35,3 +35,5 @@ export const PANEL_DIRECTION_VALUE = {
   "bottom": "translateY(2px)",
   "center": "translateY(2px)"
 };
+export const CONTEXT_MENU_DIRECTION_PARAMETERS = [ "left", "right", "bottom", "top", "mouse" ];
+export const CONTEXT_MENU_PADDING = 6;

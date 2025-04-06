@@ -7,6 +7,7 @@ import {
   LYRA_NAME, LYRA_DISPLAY_NAME, LYRA_AUTHOR, LYRA_VERSION, LYRA_DATE,
   LyraWindowManager, LyraWindow,
   LyraPanelManager, LyraPanel,
+  LyraContextMenuManager, LyraContextMenu,
   error
 } from "./module.js";
 
@@ -16,7 +17,7 @@ const master = {};
  * 대상을 Lyra Engine으로 초기화합니다.
  * @param {HTMLElement} target 대상 요소.
  */
-const init = (target) => {
+const init = (target, master) => {
   // :indeterminate 상태의 체크박스 초기화
   const $indeterminateCheckboxes = $a(`input[type="checkbox"][indeterminate]`);
   for (const $checkbox of ($indeterminateCheckboxes)) $checkbox.indeterminate = true;
@@ -377,7 +378,7 @@ const init = (target) => {
 
         const raw = data.target.response;
         const sealed = create("seal", { properties: { innerHTML: raw } });
-        init(sealed);
+        init(sealed, master);
 
         const partialman = {};
         const partialRunners = $a("script[runner][partial]", sealed);
@@ -401,6 +402,9 @@ const init = (target) => {
   for (const $span of $a("span[LYRA_AUTHOR]", target)) $span.innerText = LYRA_AUTHOR;
   for (const $span of $a("span[LYRA_VERSION]", target)) $span.innerText = LYRA_VERSION;
   for (const $span of $a("span[LYRA_DATE]", target)) $span.innerText = LYRA_DATE;
+
+  // master 요소 초기화
+  master.menuman.retrieve(target);
 
   return target;
 };
@@ -442,7 +446,7 @@ const initPartialRunner = (runner, partialman = null) => {
     }), head);
   };
 
-  // 창 초기화
+  // 창 선언
   master.winman = new LyraWindowManager("master", true);
   master.winman.retrieve(root);
   on(document, "pointerdown", (event) => {
@@ -452,18 +456,30 @@ const initPartialRunner = (runner, partialman = null) => {
     };
   });
 
-  // 메뉴 초기화
+  // 패널 선언
   master.panelman = new LyraPanelManager("master", true);
   master.panelman.retrieve(root);
   on(document, "pointerdown", (event) => {
     if ($p("panel", event.target) === null) {
-      if (master.winman.current) master.panelman.inactive();
+      if (master.panelman.current) master.panelman.inactive();
       for (const node of $a("panel[active]")) unset(node, "active");
     };
   });
   on(document, "keydown", (event) => {
     if (event.key === "Escape" && !event.ctrlKey && !event.shiftKey && !event.altKey && !event.metaKey) {
       master.panelman.current?.close();
+    };
+  });
+
+  // 컨텍스트 메뉴 선언
+  master.menuman = new LyraContextMenuManager("master", true);
+  master.menuman.retrieve(root);
+  on(document, "pointerdown", (event) => {
+    if ($p("contextmenu", event.target) === null && event.button !== 2) master.menuman.closeAll();
+  });
+  on(document, "keydown", (event) => {
+    if (event.key === "Escape" && !event.ctrlKey && !event.shiftKey && !event.altKey && !event.metaKey) {
+      master.menuman.closeAll();
     };
   });
 
@@ -491,6 +507,6 @@ const initPartialRunner = (runner, partialman = null) => {
   });
 
   // 초기화
-  init(body);
+  init(body, master);
   initRunner(root);
 })();

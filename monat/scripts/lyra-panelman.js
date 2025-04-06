@@ -1,4 +1,4 @@
-// menuman - 메뉴 요소 조작 관련 모듈 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+// panelman - 패널 요소 조작 관련 모듈 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 import { COMMON_INTERVAL, WINDOW_ANIMATION_DURATION, WINDOW_ANIMATION_TIMING_FUNCTION,
   PANEL_DIRECTION_PARAMETERS, PANEL_DIRECTION_VALUE } from "./lyra-envman.js";
 import { on, send } from "./lyra-eventman.js";
