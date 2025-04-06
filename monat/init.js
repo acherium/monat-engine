@@ -18,7 +18,7 @@ const master = {};
  * 대상을 Lyra Engine으로 초기화합니다.
  * @param {HTMLElement} target 대상 요소.
  */
-const init = (target, master) => {
+export const init = (target, master) => {
   // :indeterminate 상태의 체크박스 초기화
   const $indeterminateCheckboxes = $a(`input[type="checkbox"][indeterminate]`, target);
   for (const $checkbox of ($indeterminateCheckboxes)) $checkbox.indeterminate = true;
@@ -443,39 +443,6 @@ const init = (target, master) => {
     });
   };
 
-  // 뷰 모듈 초기화
-  for (const partial of $a("partial", target)) {
-    const partialType = get(partial, "type");
-    const partialSrc = get(partial, "src");
-    const partialParent = partial.parentNode;
-    
-    xhr(partialSrc, {
-      load: (data) => {
-        if (data.target.status !== 200) {
-          error(`Failed to load this partial HTML >>> [${partialType ?? "plain"}]"${partialSrc}"@${partialParent.nodeName} >>> ${data.target.status} ${data.target.statusText}`);
-          return;
-        };
-
-        const raw = data.target.response;
-        const sealed = create("seal", { properties: { innerHTML: raw } });
-        init(sealed, master);
-
-        const partialman = {};
-        const partialRunners = $a("script[runner][partial]", sealed);
-        for (const runner of partialRunners) initPartialRunner(runner, partialman);
-
-        if (partialType === "window") partialman.windowReserved = master.winman.retrieve(sealed, { parent: partialParent });
-        else adjacent(partial, "afterend", ...sealed.children);
-
-
-        adjacent(partial, "beforebegin", ...$a("link", sealed));
-
-        sealed.remove();
-        revoke(partial);
-      }
-    });
-  };
-
   // 프로젝트명, 버전 정보 텍스트 초기화
   for (const $span of $a("span[LYRA_NAME]", target)) $span.innerText = LYRA_NAME;
   for (const $span of $a("span[LYRA_DISPLAY_NAME]", target)) $span.innerText = LYRA_DISPLAY_NAME;
@@ -483,9 +450,44 @@ const init = (target, master) => {
   for (const $span of $a("span[LYRA_VERSION]", target)) $span.innerText = LYRA_VERSION;
   for (const $span of $a("span[LYRA_DATE]", target)) $span.innerText = LYRA_DATE;
 
-  // master 요소 초기화
-  master.panelman.retrieve(target);
-  master.menuman.retrieve(target);
+  if (master) {
+    // master 요소 초기화
+    master.panelman.retrieve(target);
+    master.menuman.retrieve(target);
+
+    // 뷰 모듈 초기화
+    for (const partial of $a("partial", target)) {
+      const partialType = get(partial, "type");
+      const partialSrc = get(partial, "src");
+      const partialParent = partial.parentNode;
+      
+      xhr(partialSrc, {
+        load: (data) => {
+          if (data.target.status !== 200) {
+            error(`Failed to load this partial HTML >>> [${partialType ?? "plain"}]"${partialSrc}"@${partialParent.nodeName} >>> ${data.target.status} ${data.target.statusText}`);
+            return;
+          };
+  
+          const raw = data.target.response;
+          const sealed = create("seal", { properties: { innerHTML: raw } });
+          init(sealed, master);
+  
+          const partialman = {};
+          const partialRunners = $a("script[runner][partial]", sealed);
+          for (const runner of partialRunners) initPartialRunner(runner, partialman);
+  
+          if (partialType === "window") partialman.windowReserved = master.winman.retrieve(sealed, { parent: partialParent });
+          else adjacent(partial, "afterend", ...sealed.children);
+  
+  
+          adjacent(partial, "beforebegin", ...$a("link", sealed));
+  
+          sealed.remove();
+          revoke(partial);
+        }
+      });
+    };
+  }
 
   return target;
 };

@@ -1,5 +1,5 @@
 import {
-  $, set, unset, on
+  $, set, unset, on, fetchHTML, fetchJSON
 } from "../monat/module.js";
 
 export default function(master, partial) {
@@ -22,4 +22,14 @@ export default function(master, partial) {
 
   const $demoRange = $("#demo-range");
   on($demoRange, "change", () => { console.log($demoRange.value); });
+
+  const $btnFetchHTML = $("#demo-fetch-html");
+  on($btnFetchHTML, "click", () => {
+    fetchHTML("./views/test.html").then(console.log);
+  });
+
+  const $btnFetchJSON = $("#demo-fetch-json");
+  on($btnFetchJSON, "click", () => {
+    fetchJSON("./test.json").then(console.log);
+  });
 };

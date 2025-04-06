@@ -1,0 +1,7 @@
+{
+  "test1": true,
+  "test2": [ 0, 1, 2 ],
+  "test3": {
+    "test4": "test5"
+  }
+}
