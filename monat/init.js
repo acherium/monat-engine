@@ -3,7 +3,7 @@ import {
   get, set, unset,
   on, once, off, send,
   xhr,
-  DRAG_SCROLLING_THRESHOLD, COMMON_INTERVAL, WINDOW_ANIMATION_DURATION,
+  DRAG_SCROLLING_THRESHOLD, COMMON_INTERVAL, WINDOW_ANIMATION_DURATION, WINDOW_ANIMATION_TIMING_FUNCTION, TOOLTIP_PADDING,
   DEFAULT_PANZONE_STEPS, DEFAULT_PANZONE_MIN, DEFAULT_PANZONE_MAX,
   LYRA_NAME, LYRA_DISPLAY_NAME, LYRA_AUTHOR, LYRA_VERSION, LYRA_DATE,
   LyraWindowManager, LyraWindow,
@@ -443,6 +443,56 @@ export const init = (target, master) => {
     });
   };
 
+  // 툴팁 초기화
+  const $tips = $a("[tip]", target);
+  for (const $parent of $tips) {
+    on($parent, "mouseover", (event) => {
+      const $tip = create("tip", { properties: { innerText: get($parent, "tip") } });
+
+      $tip.animate([ { opacity: "0" } ], { fill: "both" });
+      append($tip);
+
+      const r = $tip.getBoundingClientRect();
+      let posX = event.clientX;
+      let posY = event.clientY;
+
+      if (posX + r.width > window.innerWidth - TOOLTIP_PADDING) posX -= posX + r.width - window.innerWidth + TOOLTIP_PADDING;
+      if (posY + r.height > window.innerHeight - TOOLTIP_PADDING) posY -= posY + r.height - window.innerHeight + TOOLTIP_PADDING;
+
+      $tip.animate([ { opacity: "0" }, { opacity: "1" } ],
+        {
+          duration: WINDOW_ANIMATION_DURATION,
+          fill: "both",
+          ease: WINDOW_ANIMATION_TIMING_FUNCTION
+        });
+      $tip.animate([ { transform: `translate(${posX}px, ${posY + 2}px) scale(0.99)` }, { transform: `translate(${posX}px, ${posY}px) scale(1)` } ],
+        {
+          duration: WINDOW_ANIMATION_DURATION,
+          fill: "both",
+          ease: WINDOW_ANIMATION_TIMING_FUNCTION
+        });
+
+      once($parent, "mouseleave", () => {
+        $tip.animate([ { opacity: "0" } ],
+          {
+            duration: WINDOW_ANIMATION_DURATION,
+            fill: "both",
+            ease: WINDOW_ANIMATION_TIMING_FUNCTION
+          });
+        $tip.animate([ { transform: `translate(${posX}px, ${posY + 2}px) scale(0.99)` } ],
+          {
+            duration: WINDOW_ANIMATION_DURATION,
+            fill: "both",
+            ease: WINDOW_ANIMATION_TIMING_FUNCTION
+          });
+
+        setTimeout(() => {
+          revoke($tip);
+        }, WINDOW_ANIMATION_DURATION + COMMON_INTERVAL);
+      });
+    });
+  };
+
   // 프로젝트명, 버전 정보 텍스트 초기화
   for (const $span of $a("span[LYRA_NAME]", target)) $span.innerText = LYRA_NAME;
   for (const $span of $a("span[LYRA_DISPLAY_NAME]", target)) $span.innerText = LYRA_DISPLAY_NAME;
@@ -487,7 +537,7 @@ export const init = (target, master) => {
         }
       });
     };
-  }
+  };
 
   return target;
 };
