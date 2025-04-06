@@ -241,7 +241,7 @@ label:has(>select[always]) > .immersive-select-list {
   height: 100%;
 
   border: none;
-  border-radius: none;
+  border-radius: inherit;
   box-shadow: none;
 }
 
