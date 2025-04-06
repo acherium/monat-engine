@@ -93,16 +93,16 @@ label:has(>input[type="range"])::before {
   content: "";
   pointer-events: none;
   
-  transition: opacity var(--duration-ui);
+  transition: background-color var(--duration-ui);
 }
 
-label:has(>input[type="range"]) > input[type="range"] { z-index: 1; }
+label:has(>input[type="range"]) > input[type="range"] { z-index: 0; }
 
 label:has(>input[type="range"])::after {
   position: absolute;
   left: 0;
   top: 0;
-  z-index: 2;
+  z-index: 1;
 
   width: 100%;
   height: 100%;
@@ -123,19 +123,19 @@ label:has(>input[type="range"]:not(:disabled)) { cursor: ew-resize; }
 label:has(>input[type="range"]:not(:disabled)):hover::after { opacity: 0.1; }
 label:has(>input[type="range"]:not(:disabled)):active::after { opacity: 0.2; }
 
-:is(label:has(>input[type="range"]:not(:disabled)):hover, label:has(>input[type="range"]:not(:disabled)):active) {
+:is(label:has(>input[type="range"]:not(:disabled)):hover, label:has(>input[type="range"]:not(:disabled)):active):not([accent], [red], [orange], [yellow], [green], [blue], [navy], [purple], [turquoise], [skyblue], [pink]) {
   border-color: var(--accent);
   background-color: oklch(from var(--accent) l c h/0.5);
 }
 
-:is(label:has(>input[type="range"]:not(:disabled)):hover, label:has(>input[type="range"]:not(:disabled)):active)::before { background-color: var(--accent); }
+:is(label:has(>input[type="range"]:not(:disabled)):hover, label:has(>input[type="range"]:not(:disabled)):active):not([accent], [red], [orange], [yellow], [green], [blue], [navy], [purple], [turquoise], [skyblue], [pink])::before { background-color: var(--accent); }
 
-:is(label:has(>input[type="range"]:not(:disabled)):hover, label:has(>input[type="range"]:not(:disabled)):active) > input[type="range"]::-webkit-slider-thumb {
+:is(label:has(>input[type="range"]:not(:disabled)):hover, label:has(>input[type="range"]:not(:disabled)):active):not([accent], [red], [orange], [yellow], [green], [blue], [navy], [purple], [turquoise], [skyblue], [pink]) > input[type="range"]::-webkit-slider-thumb {
   border-color: var(--accent);
   background-color: var(--accent);
 }
 
-:is(label:has(>input[type="range"]:not(:disabled)):hover, label:has(>input[type="range"]:not(:disabled)):active) > input[type="range"]::-moz-range-thumb {
+:is(label:has(>input[type="range"]:not(:disabled)):hover, label:has(>input[type="range"]:not(:disabled)):active):not([accent], [red], [orange], [yellow], [green], [blue], [navy], [purple], [turquoise], [skyblue], [pink]) > input[type="range"]::-moz-range-thumb {
   border-color: var(--accent);
   background-color: var(--accent);
 }
@@ -143,10 +143,90 @@ label:has(>input[type="range"]:not(:disabled)):active::after { opacity: 0.2; }
 /* 비활성화된 레인지 슬라이더 */
 input[type="range"]:disabled { cursor: no-drop; }
 
-label:has(>input[type="range"]:disabled) {
+label:has(>input[type="range"]:disabled) { cursor: no-drop; }
+
+label:has(>input[type="range"]:disabled)::after {
   background-color: oklch(from var(--range-label-border) l c h/0.5);
-  cursor: no-drop;
+  opacity: 1;
 }
 
-/* label:has(>input[type="range"]:disabled) > input[type="range"]::-webkit-slider-thumb { background-color: var(--range-label-background); }
-label:has(>input[type="range"]:disabled) > input[type="range"]::-moz-range-thumb { background-color: var(--range-label-background); } */
+label:has(>input[type="range"]:disabled) > input[type="range"]::-webkit-slider-thumb { background-color: var(--range-label-background); }
+label:has(>input[type="range"]:disabled) > input[type="range"]::-moz-range-thumb { background-color: var(--range-label-background); }
+
+/* 활성화된 색상형 레인지 슬라이더 */
+label:has(>input[type="range"]:not(:disabled))[accent] {
+  --range-label-border: var(--accent);
+  --range-label-background: oklch(from var(--accent) l c h/0.5);
+  --range-thumb-border: var(--accent);
+  --range-thumb-background: var(--accent);
+}
+
+label:has(>input[type="range"]:not(:disabled))[red] {
+  --range-label-border: var(--red);
+  --range-label-background: oklch(from var(--red) l c h/0.5);
+  --range-thumb-border: var(--red);
+  --range-thumb-background: var(--red);
+}
+
+label:has(>input[type="range"]:not(:disabled))[orange] {
+  --range-label-border: var(--orange);
+  --range-label-background: oklch(from var(--orange) l c h/0.5);
+  --range-thumb-border: var(--orange);
+  --range-thumb-background: var(--orange);
+}
+
+label:has(>input[type="range"]:not(:disabled))[yellow] {
+  --range-label-border: var(--yellow);
+  --range-label-background: oklch(from var(--yellow) l c h/0.5);
+  --range-thumb-border: var(--yellow);
+  --range-thumb-background: var(--yellow);
+}
+
+label:has(>input[type="range"]:not(:disabled))[green] {
+  --range-label-border: var(--green);
+  --range-label-background: oklch(from var(--green) l c h/0.5);
+  --range-thumb-border: var(--green);
+  --range-thumb-background: var(--green);
+}
+
+label:has(>input[type="range"]:not(:disabled))[blue] {
+  --range-label-border: var(--blue);
+  --range-label-background: oklch(from var(--blue) l c h/0.5);
+  --range-thumb-border: var(--blue);
+  --range-thumb-background: var(--blue);
+}
+
+label:has(>input[type="range"]:not(:disabled))[navy] {
+  --range-label-border: var(--navy);
+  --range-label-background: oklch(from var(--navy) l c h/0.5);
+  --range-thumb-border: var(--navy);
+  --range-thumb-background: var(--navy);
+}
+
+label:has(>input[type="range"]:not(:disabled))[purple] {
+  --range-label-border: var(--purple);
+  --range-label-background: oklch(from var(--purple) l c h/0.5);
+  --range-thumb-border: var(--purple);
+  --range-thumb-background: var(--purple);
+}
+
+label:has(>input[type="range"]:not(:disabled))[turquoise] {
+  --range-label-border: var(--turquoise);
+  --range-label-background: oklch(from var(--turquoise) l c h/0.5);
+  --range-thumb-border: var(--turquoise);
+  --range-thumb-background: var(--turquoise);
+}
+
+label:has(>input[type="range"]:not(:disabled))[skyblue] {
+  --range-label-border: var(--skyblue);
+  --range-label-background: oklch(from var(--skyblue) l c h/0.5);
+  --range-thumb-border: var(--skyblue);
+  --range-thumb-background: var(--skyblue);
+}
+
+label:has(>input[type="range"]:not(:disabled))[pink] {
+  --range-label-border: var(--pink);
+  --range-label-background: oklch(from var(--pink) l c h/0.5);
+  --range-thumb-border: var(--pink);
+  --range-thumb-background: var(--pink);
+}
