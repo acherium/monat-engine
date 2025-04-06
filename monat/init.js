@@ -19,7 +19,7 @@ const master = {};
  */
 const init = (target, master) => {
   // :indeterminate 상태의 체크박스 초기화
-  const $indeterminateCheckboxes = $a(`input[type="checkbox"][indeterminate]`);
+  const $indeterminateCheckboxes = $a(`input[type="checkbox"][indeterminate]`, target);
   for (const $checkbox of ($indeterminateCheckboxes)) $checkbox.indeterminate = true;
 
   // 탭 관련 기능 초기화
