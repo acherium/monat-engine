@@ -2,8 +2,8 @@
 /* 레인지 슬라이더 속성 값 */
 :root {
   --range-label-gap: 4px;
-  --range-label-size: 28px;
-  --range-label-radius: calc(var(--range-label-size) / 2);
+  --range-label-size: 36px;
+  --range-label-radius: 6px;
   --range-label-border: var(--border);
   --range-label-background: oklch(from var(--main) l c h/1);
 
@@ -229,4 +229,11 @@ label:has(>input[type="range"]:not(:disabled))[pink] {
   --range-label-background: oklch(from var(--pink) l c h/0.5);
   --range-thumb-border: var(--pink);
   --range-thumb-background: var(--pink);
+}
+
+/* 레인지 슬라이더 컨트롤러 */
+label[controller]:has(>input[type="range"]) + label.range-input:has(input[type="text"]) > input[type="text"] {
+  width: 70px;
+
+  text-align: right;
 }

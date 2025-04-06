@@ -19,4 +19,7 @@ export default function(master, partial) {
       unset($btnDemoSendLoading, "disabled");
     }, 1000);
   };
+
+  const $demoRange = $("#demo-range");
+  $demoRange.addEventListener("change", () => { console.log($demoRange.value); });
 };

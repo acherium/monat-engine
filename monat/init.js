@@ -307,6 +307,60 @@ const init = (target) => {
     if (get($label, "nosearch") !== null) $searchLabel.style["display"] = "none";
   };
 
+  // 레인지 셀렉터 컨트롤러 초기화
+  const $ranges = $a(`label[controller] > input[type="range"]`, target);
+  for (const $range of $ranges) {
+    const min = get($range, "min");
+    const max = get($range, "max");
+    const step = get($range, "step");
+    const initValue = get($range, "value");
+    const disabled = get($range, "disabled") !== null;
+
+    const $label = $range.parentElement;
+    set($label, "withnext", "");
+
+    const $inputLabel = create("label", { classes: [ "range-input" ] });
+    const $input = append(create("input", { attributes: { type: "text" } }), $inputLabel);
+    after($label, $inputLabel);
+    if (disabled) set($input, "disabled", "");
+
+    const setValue = (value) => {
+      value = Number(value);
+      if (
+        Number.isNaN(value) ||
+        ( min !== null && value < min ) ||
+        ( max !== null && value > max )
+      ) {
+        $input.value = $range.value;
+      } else {
+        $range.value = value;
+        $input.value = value;
+      };
+    };
+
+    $input.onchange = () => {
+      setValue($input.value);
+      $range.dispatchEvent(new Event("input"));
+      $range.dispatchEvent(new Event("change"));
+    };
+    $range.addEventListener("input", () => { setValue($range.value); });
+
+    if (initValue !== null) {
+      const $btnReset = create("button", { properties: { innerHTML: "<span>초기화</span>" } });
+      after($inputLabel, $btnReset);
+      if (disabled) set($btnReset, "disabled", "");
+      set($inputLabel, "withnext", "");
+
+      $btnReset.onclick = () => {
+        setValue(initValue);
+        $range.dispatchEvent(new Event("input"));
+        $range.dispatchEvent(new Event("change"));
+      };
+    };
+
+    setValue($range.value);
+  };
+
   // 뷰 모듈 초기화
   for (const partial of $a("partial", target)) {
     const partialType = get(partial, "type");
