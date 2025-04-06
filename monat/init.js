@@ -404,6 +404,7 @@ const init = (target, master) => {
   for (const $span of $a("span[LYRA_DATE]", target)) $span.innerText = LYRA_DATE;
 
   // master 요소 초기화
+  master.panelman.retrieve(target);
   master.menuman.retrieve(target);
 
   return target;
