@@ -1,6 +1,7 @@
 // menuman - 메뉴 요소 조작 관련 모듈 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 import { COMMON_INTERVAL, WINDOW_ANIMATION_DURATION, WINDOW_ANIMATION_TIMING_FUNCTION,
   PANEL_DIRECTION_PARAMETERS, PANEL_DIRECTION_VALUE } from "./lyra-envman.js";
+import { on, send } from "./lyra-eventman.js";
 import {
   $, $a, $p, $pa, create, append, revoke, after, before,
   get, set, unset, revokeAttribute,
@@ -93,7 +94,7 @@ export const LyraPanelManager = class {
 
   closeAll = () => { for (const x of Object.values(this.reserve)) x.close(); };
 
-  broadcast = (event) => { for (const x of Object.values(this.reserve)) x.listener.dispatchEvent(event); };
+  broadcast = (event) => { for (const x of Object.values(this.reserve)) send(x.listener, event); };
 
   setDebugging = (bool) => {
     this.debugging = bool;
@@ -232,12 +233,12 @@ export const LyraPanel = class {
     const closeTriggers = $a("[closepanel]", this.parts.$);
     for (const node of closeTriggers) {
       if ($a("*", node).length < 1) append(create("i", { classes: [ "close" ] }), node);
-      node.addEventListener("pointerup", this.close);
+      on(node, "pointerup", this.close);
     };
     if (this.parts.outer.$) this.parts.outer.$.onclick = () => { this.close(this.id); };
 
     // 창 활성화
-    this.parts.inner.$.addEventListener("pointerdown", () => { this.active(); });
+    on(this.parts.inner.$, "pointerdown", this.active);
     
     // 파라미터 재정의
     for (const key of Object.keys(param)) if (typeof this[key] !== "undefined") this[key] = param[key];
@@ -247,11 +248,11 @@ export const LyraPanel = class {
     this.rectOrigin = JSON.stringify(this.rect);
 
     // 디버깅용 이벤트 정의
-    this.listener.addEventListener("debugging", () => {
+    on(this.listener, "debugging", () => {
       if (!this.master || !this.master.debugging) return;
       console.log(this);
     });
-    this.listener.addEventListener("debuggingstatus", (event) => {
+    on(this.listener, "debuggingstatus", (event) => {
       if (this.parts.inner.titlebar.left.title.$) {
         if (this.master.debugging) this.parts.inner.titlebar.left.title.$.innerHTML = `${this.parts.inner.titlebar.left.title.text} (master: ${this.master.name}, id: ${this.id})`;
         else this.parts.inner.titlebar.left.title.$.innerText = this.parts.inner.titlebar.left.title.text;
@@ -300,7 +301,7 @@ export const LyraPanel = class {
       };
     };
 
-    this.listener.dispatchEvent(new Event("show"));
+    send(this.listener, "show");
     return this;
   };
 
@@ -331,7 +332,7 @@ export const LyraPanel = class {
 
     if (this.master) this.master.close(this.id, false);
 
-    this.listener.dispatchEvent(new Event("close"));
+    send(this.listener, "close");
     return this;
   };
 
@@ -347,7 +348,7 @@ export const LyraPanel = class {
     this.status = true;
     if (this.master) this.master.active(this.id, false);
 
-    this.listener.dispatchEvent(new Event("active"));
+    send(this.listener, "active");
     return this;
   };
 
@@ -359,7 +360,7 @@ export const LyraPanel = class {
     this.status = false;
     if (this.master) this.master.inactive(false);
 
-    this.listener.dispatchEvent(new Event("inactive"));
+    send(this.listener, "inactive");
     return this;
   };
 };

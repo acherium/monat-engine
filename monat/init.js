@@ -1,6 +1,7 @@
 import {
   root, body, head, $, $a, $p, $s, create, append, revoke, after, before, adjacent,
   get, set, unset,
+  on, once, off, send,
   xhr,
   DRAG_SCROLLING_THRESHOLD, COMMON_INTERVAL, WINDOW_ANIMATION_DURATION,
   LYRA_NAME, LYRA_DISPLAY_NAME, LYRA_AUTHOR, LYRA_VERSION, LYRA_DATE,
@@ -39,17 +40,17 @@ const init = (target) => {
           $tabList.scroll($tabList.scrollLeft + move.movementX * -1, 0);
         };
 
-        document.addEventListener("pointerup", () => {
+        once(document, "pointerup", () => {
           $tabList.onpointermove = null;
           $tabList.onpointerup = null;
           $tabList.onpointercancel = null;
-        }, { once: true });
+        });
 
-        $tabList.onpointercancel = () => {
+        on($tabList, "pointercancel", () => {
           $tabList.onpointermove = null;
           $tabList.onpointerup = null;
           $tabList.onpointercancel = null;
-        };
+        });
       };
     } else if($tabList.classList.contains("tabs-column")) {
       // 종렬 탭 목록의 경우
@@ -66,17 +67,17 @@ const init = (target) => {
           $tabList.scroll(0, $tabList.scrollTop + move.movementY * -1);
         };
 
-        document.addEventListener("pointerup", () => {
+        once(document, "pointerup", () => {
           $tabList.onpointermove = null;
           $tabList.onpointerup = null;
           $tabList.onpointercancel = null;
-        }, { once: true });
+        });
 
-        $tabList.onpointercancel = () => {
+        on($tabList, "pointercancel", () => {
           $tabList.onpointermove = null;
           $tabList.onpointerup = null;
           $tabList.onpointercancel = null;
-        };
+        });
       };
     };
   };
@@ -124,9 +125,9 @@ const init = (target) => {
   };
   for (const $node of $tglForceDarkmode) {
     if ($node.nodeName === "INPUT" && [ "checkbox", "radio" ].includes($node.type)) {
-      $node.addEventListener("change", () => toggleForceDarkmode($node.checked));
+      on($node, "change", () => toggleForceDarkmode($node.checked));
     } else {
-      $node.addEventListener("click", () => toggleForceDarkmode());
+      on($node, "click", () => toggleForceDarkmode());
     };
   };
 
@@ -340,10 +341,10 @@ const init = (target) => {
 
     $input.onchange = () => {
       setValue($input.value);
-      $range.dispatchEvent(new Event("input"));
-      $range.dispatchEvent(new Event("change"));
+      send($range, "input");
+      send($range, "change");
     };
-    $range.addEventListener("input", () => { setValue($range.value); });
+    on($range, "input", () => { setValue($range.value); });
 
     if (initValue !== null) {
       const $btnReset = create("button", { properties: { innerHTML: "<span>초기화</span>" } });
@@ -353,8 +354,8 @@ const init = (target) => {
 
       $btnReset.onclick = () => {
         setValue(initValue);
-        $range.dispatchEvent(new Event("input"));
-        $range.dispatchEvent(new Event("change"));
+        send($range, "input");
+        send($range, "change");
       };
     };
 
@@ -444,7 +445,7 @@ const initPartialRunner = (runner, partialman = null) => {
   // 창 초기화
   master.winman = new LyraWindowManager("master", true);
   master.winman.retrieve(root);
-  document.addEventListener("pointerdown", (event) => {
+  on(document, "pointerdown", (event) => {
     if ($p("window", event.target) === null) {
       if (master.winman.current) master.winman.inactive();
       for (const node of $a("window[active]")) unset(node, "active");
@@ -454,13 +455,13 @@ const initPartialRunner = (runner, partialman = null) => {
   // 메뉴 초기화
   master.panelman = new LyraPanelManager("master", true);
   master.panelman.retrieve(root);
-  document.addEventListener("pointerdown", (event) => {
+  on(document, "pointerdown", (event) => {
     if ($p("panel", event.target) === null) {
       if (master.winman.current) master.panelman.inactive();
       for (const node of $a("panel[active]")) unset(node, "active");
     };
   });
-  document.addEventListener("keydown", (event) => {
+  on(document, "keydown", (event) => {
     if (event.key === "Escape" && !event.ctrlKey && !event.shiftKey && !event.altKey && !event.metaKey) {
       master.panelman.current?.close();
     };
@@ -482,7 +483,7 @@ const initPartialRunner = (runner, partialman = null) => {
       else unset($label, "listontop");
     }, COMMON_INTERVAL + WINDOW_ANIMATION_DURATION);
   };
-  document.addEventListener("pointerdown", (event) => {
+  on(document, "pointerdown", (event) => {
     if ($p("label:has(>select)", event.target) === null && !Array.from($a("label:has(>select)")).find((x) => x === event.target)) {
       const $expandedSelects = $a("label[expanded]:has(>select)");
       for (const $label of $expandedSelects) closeSelect($label);

@@ -1,6 +1,7 @@
 import {
   $, $p, $pa, $s, $sa, create, append, after, before,
   set, unset, seal, unseal,
+  on,
   xhr,
   LyraWindow
 } from "../monat/module.js";
@@ -10,7 +11,7 @@ export default function(master) {
   const $tabLblIcons = $(`label[target="#demo-icons"]`);
   const $tableIcons = $("#icon-table");
 
-  $tabLblIcons.addEventListener("pointerup", () => {
+  on($tabLblIcons, "pointerup", () => {
     $tableIcons.textContent = "";
     const appendIconTable = (list) => {
       for (const name of list) {
