@@ -18,7 +18,7 @@ const master = {};
  * 대상을 Lyra Engine으로 초기화합니다.
  * @param {HTMLElement} target 대상 요소.
  */
-export const init = (target, master) => {
+export const init = (target, master, originParent) => {
   // :indeterminate 상태의 체크박스 초기화
   const $indeterminateCheckboxes = $a(`input[type="checkbox"][indeterminate]`, target);
   for (const $checkbox of ($indeterminateCheckboxes)) $checkbox.indeterminate = true;
@@ -502,8 +502,8 @@ export const init = (target, master) => {
 
   if (master) {
     // master 요소 초기화
-    master.panelman.retrieve(target);
-    master.menuman.retrieve(target);
+    master.panelman.retrieve(target, { parent: originParent || target });
+    master.menuman.retrieve(target, { parent: originParent || target });
 
     // 뷰 모듈 초기화
     for (const partial of $a("partial", target)) {
@@ -520,7 +520,7 @@ export const init = (target, master) => {
   
           const raw = data.target.response;
           const sealed = create("seal", { properties: { innerHTML: raw } });
-          init(sealed, master);
+          init(sealed, master, target);
   
           const partialman = {};
           const partialRunners = $a("script[runner][partial]", sealed);

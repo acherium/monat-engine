@@ -229,6 +229,9 @@ export const LyraPanel = class {
       };
     };
 
+    // 부모 요소 재지정
+    if (typeof param.parent !== "undefined") this.parent = param.parent;
+
     // 창 닫기
     const closeTriggers = $a("[closepanel]", this.parts.$);
     for (const node of closeTriggers) {

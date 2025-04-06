@@ -370,6 +370,9 @@ export const LyraWindow = class {
       };
     };
 
+    // 부모 요소 재지정
+    if (typeof param.parent !== "undefined") this.parent = param.parent;
+
     // 창 닫기
     const closeTriggers = $a("[closewindow]", this.parts.$);
     for (const node of closeTriggers) {

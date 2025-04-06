@@ -162,6 +162,9 @@ export const LyraContextMenu = class {
       };
     };
 
+    // 부모 요소 재지정
+    if (typeof param.parent !== "undefined") this.parent = param.parent;
+
     // 항목 클릭 시 닫힘
     on(this.$, "click", (event) => {
       if (get(event.target, "sustain") === null && $p("[sustain]", event.target) === null) this.master.closeAll();
