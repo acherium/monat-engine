@@ -3,7 +3,8 @@ import {
   get, set, unset,
   on, once, off, send,
   xhr,
-  DRAG_SCROLLING_THRESHOLD, COMMON_INTERVAL, WINDOW_ANIMATION_DURATION, WINDOW_ANIMATION_TIMING_FUNCTION, TOOLTIP_PADDING,
+  DRAG_SCROLLING_THRESHOLD, COMMON_INTERVAL, WINDOW_ANIMATION_DURATION, WINDOW_ANIMATION_TIMING_FUNCTION,
+  TOOLTIP_PADDING, TOOLTIP_OFFSET,
   DEFAULT_PANZONE_STEPS, DEFAULT_PANZONE_MIN, DEFAULT_PANZONE_MAX,
   LYRA_NAME, LYRA_DISPLAY_NAME, LYRA_AUTHOR, LYRA_VERSION, LYRA_DATE,
   LyraWindowManager, LyraWindow,
@@ -453,8 +454,8 @@ export const init = (target, master, originParent) => {
       append($tip);
 
       const r = $tip.getBoundingClientRect();
-      let posX = event.clientX;
-      let posY = event.clientY;
+      let posX = event.clientX + TOOLTIP_OFFSET;
+      let posY = event.clientY + TOOLTIP_OFFSET;
 
       if (posX + r.width > window.innerWidth - TOOLTIP_PADDING) posX -= posX + r.width - window.innerWidth + TOOLTIP_PADDING;
       if (posY + r.height > window.innerHeight - TOOLTIP_PADDING) posY -= posY + r.height - window.innerHeight + TOOLTIP_PADDING;
@@ -502,6 +503,7 @@ export const init = (target, master, originParent) => {
 
   if (master) {
     // master 요소 초기화
+    master.winman.retrieve(target, { parent: originParent || target });
     master.panelman.retrieve(target, { parent: originParent || target });
     master.menuman.retrieve(target, { parent: originParent || target });
 
@@ -522,14 +524,10 @@ export const init = (target, master, originParent) => {
           const sealed = create("seal", { properties: { innerHTML: raw } });
           init(sealed, master, target);
   
-          const partialman = {};
-          const partialRunners = $a("script[runner][partial]", sealed);
-          for (const runner of partialRunners) initPartialRunner(runner, partialman);
-  
-          if (partialType === "window") partialman.windowReserved = master.winman.retrieve(sealed, { parent: partialParent });
-          else adjacent(partial, "afterend", ...sealed.children);
-  
-  
+          const partialRunners = $a("script[runner]", sealed);
+          for (const runner of partialRunners) initPartialRunner(runner);
+          
+          adjacent(partial, "afterend", ...sealed.children);
           adjacent(partial, "beforebegin", ...$a("link", sealed));
   
           sealed.remove();

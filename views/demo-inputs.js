@@ -2,7 +2,7 @@ import {
   $, set, unset, on, fetchHTML, fetchJSON
 } from "../monat/module.js";
 
-export default function(master, partial) {
+export default function(master) {
   // 누르면 로딩 상태 되는 버튼 데모
   const $btnDemoSendLoading = $("#demo-button-send-loading");
   $btnDemoSendLoading.onclick = () => {

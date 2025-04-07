@@ -3,7 +3,7 @@ import {
   LyraPanel
 } from "../monat/module.js";
 
-export default function(master, partial) {
+export default function(master) {
   const $btnLeft = $("#demo-open-sidemenu-left");
   const $btnRight = $("#demo-open-sidemenu-right");
   const $btnTop = $("#demo-open-sidemenu-top");

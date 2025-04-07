@@ -125,7 +125,7 @@ label[buttonlike]:has(>input[type="radio"]) > * {
 
 label[buttonlike]:has(>input[type="radio"])[outline] { background-color: transparent; }
 label[buttonlike]:has(>input[type="radio"])[blank] { background-color: transparent; }
-label[buttonlike]:has(>input[type="radio"])[blank]::before { border-color: transparent; }
+label[buttonlike]:has(>input[type="radio"])[blank]::before { border-color: transparent !important; }
 
 label[buttonlike]:has(>input[type="radio"]) > input[type="radio"] {
   position: absolute;

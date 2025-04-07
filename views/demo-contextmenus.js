@@ -1,6 +1,6 @@
 import { $ } from "../monat/module.js";
 
-export default (master, partial) => {
+export default (master) => {
   const $area = $("#context-menu-area");
 
   $area.oncontextmenu = (event) => {

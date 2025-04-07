@@ -166,7 +166,7 @@ label[buttonlike]:has(>input[type="checkbox"]) > * {
 
 label[buttonlike]:has(>input[type="checkbox"])[outline] { background-color: transparent; }
 label[buttonlike]:has(>input[type="checkbox"])[blank] { background-color: transparent; }
-label[buttonlike]:has(>input[type="checkbox"])[blank]::before { border-color: transparent; }
+label[buttonlike]:has(>input[type="checkbox"])[blank]::before { border-color: transparent !important; }
 
 label[buttonlike]:has(>input[type="checkbox"]) > input[type="checkbox"] {
   position: absolute;
