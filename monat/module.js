@@ -9,3 +9,6 @@ export * from "./scripts/lyra-objman.js";
 export * from "./scripts/lyra-panelman.js";
 export * from "./scripts/lyra-timeman.js";
 export * from "./scripts/lyra-winman.js";
+
+// 템플릿 로드
+export * from "./scripts/lyra-templman.js";

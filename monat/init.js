@@ -356,7 +356,7 @@ export const init = (target, master, originParent) => {
       set($inputLabel, "withnext", "");
 
       $btnReset.onclick = () => {
-        setValue(initValue);
+        setValue(get($range, "defaultValue") || initValue);
         send($range, "input");
         send($range, "change");
       };

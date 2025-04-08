@@ -1,5 +1,5 @@
 import {
-  $, set, unset, on, fetchHTML, fetchJSON
+  $, set, unset, on, fetchHTML, fetchJSON, LyraColorPicker
 } from "../monat/module.js";
 
 export default function(master) {
@@ -32,4 +32,8 @@ export default function(master) {
   on($btnFetchJSON, "click", () => {
     fetchJSON("./test.json").then(console.log);
   });
+
+  const colorPicker1 = new LyraColorPicker(master, "demo-color-picker-1", { color: { r: 50, g: 80 } });
+  const $btnColorPicker1 = $("#demo-open-color-picker-1");
+  on($btnColorPicker1, "click", () => { colorPicker1.show(); });
 };

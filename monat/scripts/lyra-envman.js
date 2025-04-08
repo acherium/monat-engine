@@ -42,3 +42,4 @@ export const DEFAULT_PANZONE_MIN = 0.1;
 export const DEFAULT_PANZONE_MAX = 2;
 export const TOOLTIP_PADDING = 4;
 export const TOOLTIP_OFFSET = 10;
+export const COLOR_MODE = [ "RGB", "HSL" ];

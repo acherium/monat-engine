@@ -3,7 +3,8 @@ import {
   set, unset, seal, unseal,
   on,
   xhr,
-  LyraWindow
+  LyraWindow,
+  LyraColorPicker
 } from "../monat/module.js";
 
 export default function(master) {
