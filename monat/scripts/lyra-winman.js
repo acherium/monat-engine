@@ -7,6 +7,28 @@ import {
   body
 } from "./lyra-domman.js";
 
+/**
+ * LyraWindow 생성자 매개변수 구조체.
+ * @typedef {object} LyraWindowParameters
+ * @param {Element} [parent] 부모 요소.
+ * @param {array<string>} [includes] 창 구조물.
+ * @param {boolean} [maximizable] 최대화 가능 여부.
+ * @param {boolean} [minimizable] 최소화 가능 여부.
+ * @param {boolean} [movable] 이동 가능 여부.
+ * @param {boolean} [resizable] 크기 조절 가능 여부.
+ * @param {number} [x] X 좌푯값.
+ * @param {number} [y] Y 좌푯값.
+ * @param {number} [width] 창 너비.
+ * @param {number} [height] 창 높이.
+ * @param {string} [position] 창 위치 프리셋 스타일.
+ * @param {string} [size] 창 크기 프리셋 스타일.
+ */
+/**
+ * 창 매니저를 생성합니다.
+ * @param {string} name 창 매니저 이름.
+ * @param {boolean} debugging 디버깅 활성화 여부.
+ * @returns {LyraWindowManager} 창 매니저.
+ */
 export const LyraWindowManager = class {
   name = null;
   debugging = false;
@@ -24,6 +46,12 @@ export const LyraWindowManager = class {
     return this;
   };
 
+  /**
+   * 대상 요소 내에 존재하는 창 요소를 회수하여 매니저에 등록합니다.
+   * @param {Element} [target] 대상 요소. 지정하지 않으면 문서 전역에서 회수합니다.
+   * @param {*} [param] 창 요소 생성자에 전달할 매개변수.
+   * @returns {object} 등록된 창 요소.
+   */
   retrieve = (target = document, param = {}) => {
     const retrieveTargets = {};
     for (const x of Array.from($a("window[id]", target)).map((x) => [ x.id, new LyraWindow(param, x) ])) {
@@ -34,6 +62,11 @@ export const LyraWindowManager = class {
     return retrieveTargets;
   };
 
+  /**
+   * 창 요소를 매니저에 등록합니다.
+   * @param {LyraWindow} target 창 요소.
+   * @returns {LyraWindowManager} 창 매니저.
+   */
   register = (target) => {
     if (!target || target.constructor !== LyraWindow || !target.id) return this;
     target.master = this;
@@ -41,6 +74,12 @@ export const LyraWindowManager = class {
     return this;
   };
 
+  /**
+   * 창을 표시하고 매니저의 상태값을 변경합니다.
+   * @param {string} id 대상 창 ID.
+   * @param {boolean} [f] 실제 동작 여부.
+   * @returns {LyraWindowManager} 창 매니저.
+   */
   show = (id, f = true) => {
     if (!id || typeof id !== "string") return;
 
@@ -53,6 +92,12 @@ export const LyraWindowManager = class {
     return this;
   };
 
+  /**
+   * 창을 닫고 매니저의 상태값을 변경합니다.
+   * @param {string} id 대상 창 ID.
+   * @param {boolean} [f] 실제 동작 여부.
+   * @returns {LyraWindowManager} 창 매니저.
+   */
   close = (id, f = true) => {
     if (!id || typeof id !== "string") return;
 
@@ -65,6 +110,12 @@ export const LyraWindowManager = class {
     return this;
   };
 
+  /**
+   * 창을 활성화하고 매니저의 상태값을 변경합니다.
+   * @param {string} id 대상 창 ID.
+   * @param {boolean} [f] 실제 동작 여부.
+   * @returns {LyraWindowManager} 창 매니저.
+   */
   active = (id, f = true) => {
     if (!id || typeof id !== "string") return this;
     
@@ -77,6 +128,11 @@ export const LyraWindowManager = class {
     return this;
   };
 
+  /**
+   * 현재 활성화된 창을 비활성화하고 매니저의 상태값을 변경합니다.
+   * @param {boolean} [f] 실제 동작 여부.
+   * @returns {LyraWindowManager} 창 매니저.
+   */
   inactive = (f = true) => {
     if (!this.current) return this;
 
@@ -86,21 +142,59 @@ export const LyraWindowManager = class {
     return this;
   };
 
-  showAll = () => { for (const x of Object.values(this.reserve)) x.show(); };
+  /**
+   * 매니저에 등록된 모든 창을 표시합니다.
+   * @returns {LyraWindowManager} 창 매니저.
+   */
+  showAll = () => {
+    for (const x of Object.values(this.reserve)) x.show();
+    
+    return this;
+  };
 
-  closeAll = () => { for (const x of Object.values(this.reserve)) x.close(); };
+  /**
+   * 매니저에 등록된 모든 창을 닫습니다.
+   * @returns {LyraWindowManager} 창 매니저.
+   */
+  closeAll = () => {
+    for (const x of Object.values(this.reserve)) x.close();
 
-  broadcast = (event) => { for (const x of Object.values(this.reserve)) { send(x.listener, event); } };
+    return this;
+  };
 
+  /**
+   * 매니저에 등록된 모든 창에 이벤트를 전달합니다.
+   * @param {Event} event 전달할 이벤트.
+   * @returns {LyraWindowManager} 창 매니저.
+   */
+  broadcast = (event) => {
+    for (const x of Object.values(this.reserve)) { send(x.listener, event); }
+
+    return this;
+  };
+
+  /**
+   * 디버깅 활성화 여부를 변경합니다.
+   * @param {boolean} bool 활성화 여부.
+   * @returns {LyraWindowManager} 창 매니저.
+   */
   setDebugging = (bool) => {
     this.debugging = bool;
 
     const debuggingStatus = new Event("debuggingstatus");
     debuggingStatus.status = bool;
     this.broadcast(debuggingStatus);
+
+    return this;
   };
 };
 
+/**
+ * 창 요소를 생성합니다.
+ * @param {LyraWindowParameters} [param] 매개변수.
+ * @param {Element} [origin] 원본 요소. 
+ * @returns {LyraWindow} 창 요소.
+ */
 export const LyraWindow = class {
   parent = null;
   master = null;
@@ -430,6 +524,10 @@ export const LyraWindow = class {
     return this;
   };
 
+  /**
+   * 창을 표시합니다.
+   * @returns {LyraWindow} 창 요소.
+   */
   show = () => {
     this.active();
     if (!this.closed) return this;
@@ -478,6 +576,10 @@ export const LyraWindow = class {
     return this;
   };
 
+  /**
+   * 창을 닫습니다.
+   * @returns {LyraWindow} 창 요소.
+   */
   close = () => {
     if (this.closed) return this;
     this.closed = true;
@@ -508,6 +610,10 @@ export const LyraWindow = class {
     return this;
   };
 
+  /**
+   * 최대화 상태를 전환합니다.
+   * @returns {LyraWindow} 창 요소.
+   */
   toggleMaximize = () => {
     if (!this.maximizable) return;
     this.maximized = !this.maximized;
@@ -527,6 +633,10 @@ export const LyraWindow = class {
     return this;
   };
 
+  /**
+   * 최소화 상태를 전환합니다.
+   * @returns {LyraWindow} 창 요소.
+   */
   toggleMinimize = () => {
     if (!this.minimizable) return;
     this.minimized = !this.minimized;
@@ -546,6 +656,10 @@ export const LyraWindow = class {
     return this;
   };
 
+  /**
+   * 이 창을 활성화하고 나머지 창을 비활성화합니다.
+   * @returns {LyraWindow} 창 요소.
+   */
   active = () => {
     for (const node of Array.from($a("window[active]")).filter((x) => x !== this.parts.$)) unset(node, "active");
     if (get(this.parts.$, "active") === null) {
@@ -560,6 +674,10 @@ export const LyraWindow = class {
     return this;
   };
 
+  /**
+   * 창을 비활성화합니다.
+   * @returns {LyraWindow} 창 요소.
+   */
   inactive = () => {
     unset(this.parts.$, "active");
     
@@ -570,6 +688,11 @@ export const LyraWindow = class {
     return this;
   };
 
+  /**
+   * 창의 제목을 설정합니다.
+   * @param {string} string 창 제목.
+   * @returns {LyraWindow} 창 요소.
+   */
   setTitle = (string) => {
     if (!this.parts.inner.$ || !this.parts.inner.titlebar.$ || !this.parts.inner.titlebar.left.$) return;
     if (!this.parts.inner.titlebar.left.title.$) this.parts.inner.titlebar.left.title.$ = append(create("span"), this.parts.inner.titlebar.left.$);
@@ -580,6 +703,11 @@ export const LyraWindow = class {
     return this;
   };
 
+  /**
+   * 창의 아이콘을 설정합니다.
+   * @param {Element} node 아이콘으로 등록할 요소.
+   * @returns {LyraWindow} 창 요소.
+   */
   setIcon = (node) => {
     if (!this.parts.inner.$ || !this.parts.inner.titlebar.$ || !this.parts.inner.titlebar.left.$) return;
     if (!this.parts.inner.titlebar.left.icon.$) this.parts.inner.titlebar.left.icon.$ = append(create("div", { classes: [ "icon" ] }), this.parts.inner.titlebar.left.$);
@@ -590,6 +718,11 @@ export const LyraWindow = class {
     return this;
   };
 
+  /**
+   * 창의 내용을 설정합니다.
+   * @param {Element} node 내용으로 등록할 요소.
+   * @returns {LyraWindow} 창 요소.
+   */
   setBody = (node) => {
     if (!this.parts.inner.$ || !this.parts.inner.body.$ || !this.parts.inner.body.main.$) return;
     after(this.parts.inner.body.main.$, node);
@@ -598,6 +731,11 @@ export const LyraWindow = class {
     return this;
   };
 
+  /**
+   * 창의 하단부를 설정합니다.
+   * @param {Element} node 하단부로 등록할 요소.
+   * @returns {LyraWindow} 창 요소.
+   */
   setBottom = (node) => {
     if (!this.parts.inner.$ || !this.parts.inner.bottom.$) return;
     after(this.parts.inner.bottom.$, node);
@@ -606,6 +744,10 @@ export const LyraWindow = class {
     return this;
   };
 
+  /**
+   * 창의 크기와 위치를 새로 고칩니다.
+   * @returns {LyraWindow} 창 요소.
+   */
   refreshRect = () => {
     this.parts.$.style["justify-content"] = this.rect.preset.x || null;
     this.parts.$.style["align-items"] = this.rect.preset.y || null;
@@ -625,6 +767,12 @@ export const LyraWindow = class {
     return this;
   };
 
+  /**
+   * 창의 위치를 설정합니다.
+   * @param {number | null} [x] X 좌푯값. null일 경우 변경하지 않습니다. 
+   * @param {number | null} [y] Y 좌푯값. null일 경우 변경하지 않습니다.
+   * @returns {LyraWindow} 창 요소.
+   */
   setPosition = (x = null, y = null) => {
     if (!this.movable) return this;
     if (x !== null) this.rect.x = x;
@@ -634,6 +782,12 @@ export const LyraWindow = class {
     return this;
   };
 
+  /**
+   * 창을 이동시킵니다.
+   * @param {number | null} [x] 이동할 X 좌푯값. null일 경우 변경하지 않습니다.
+   * @param {number | null} [y] 이동할 Y 좌푯값. null일 경우 변경하지 않습니다.
+   * @returns {LyraWindow} 창 요소.
+   */
   addPosition = (x = null, y = null) => {
     if (!this.movable) return this;
     if (x !== null) this.rect.x += x;
@@ -643,6 +797,12 @@ export const LyraWindow = class {
     return this;
   };
 
+  /**
+   * 창의 크기를 설정합니다.
+   * @param {number | null} [width] 창 너비. null일 경우 변경하지 않습니다.
+   * @param {number | null} [height] 창 높이. null일 경우 변경하지 않습니다.
+   * @returns {LyraWindow} 창 요소.
+   */
   setSize = (width = null, height = null) => {
     if (!this.resizable) return this;
     if (width !== null) this.rect.width = width;
@@ -652,6 +812,12 @@ export const LyraWindow = class {
     return this;
   };
 
+  /**
+   * 창의 크기를 변경합니다.
+   * @param {number | null} [width] 변경할 창 너비. null일 경우 변경하지 않습니다. 
+   * @param {number | null} [height] 변경할 창 높이. null일 경우 변경하지 않습니다.
+   * @returns {LyraWindow} 창 요소.
+   */
   addSize = (width = null, height = null) => {
     if (!this.resizable) return this;
     if (width !== null) this.rect.width += width;
@@ -662,6 +828,10 @@ export const LyraWindow = class {
     return this;
   };
 
+  /**
+   * 창 이동 이벤트를 설정합니다.
+   * @returns {LyraWindow} 창 요소.
+   */
   setMoveEvent = () => {
     if (!this.parts.inner.$ || !this.parts.inner.titlebar.$) return;
 
@@ -680,6 +850,10 @@ export const LyraWindow = class {
     return this;
   };
 
+  /**
+   * 창 크기 조절 이벤트를 설정합니다.
+   * @returns {LyraWindow} 창 요소.
+   */
   setResizeEvent = () => {
     if (!this.parts.inner.$ || !this.parts.inner.resizePointer.$) return;
 
