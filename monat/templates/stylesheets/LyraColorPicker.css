@@ -13,6 +13,9 @@
 }
 
 .LYRA-COLOR-PICKER .PREVIEW {
+  display: grid;
+  place-items: center;
+
   width: 100%;
   height: 100%;
   flex: 1;
@@ -21,6 +24,13 @@
   border-radius: var(--radius);
 
   transition-property: none;
+}
+
+.LYRA-COLOR-PICKER .PREVIEW::before {
+  position: relative;
+  z-index: -1;
+
+  content: "투명";
 }
 
 .LYRA-COLOR-PICKER .RANGE-ITEM {

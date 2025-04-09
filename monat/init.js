@@ -348,6 +348,7 @@ export const init = (target, master, originParent) => {
       send($range, "change");
     };
     on($range, "input", () => { setValue($range.value); });
+    on($range, "change", () => { setValue($range.value); });
 
     if (initValue !== null) {
       const $btnReset = create("button", { properties: { innerHTML: "<span>초기화</span>" } });
