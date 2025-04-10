@@ -39,3 +39,9 @@ toolbar > .divline {
 
   background-color: var(--toolbar-border);
 }
+
+/* 툴바 접기/펴기 */
+toolbar:not([noshrink])[shrink] *:not(button[shrinktoolbar], button[shrinktoolbar] > i) { display: none; }
+
+toolbar:not([noshrink]) button[shrinktoolbar] i { mask-image: var(--lyra-icon-arrowhead-w-double); }
+toolbar:not([noshrink])[shrink] button[shrinktoolbar] i { mask-image: var(--lyra-icon-arrowhead-e-double); }

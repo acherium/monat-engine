@@ -10,6 +10,7 @@ import {
 /**
  * LyraWindow 생성자 매개변수 구조체.
  * @typedef {object} LyraWindowParameters
+ * @param {string} [id] 창 ID.
  * @param {Element} [parent] 부모 요소.
  * @param {array<string>} [includes] 창 구조물.
  * @param {boolean} [maximizable] 최대화 가능 여부.
@@ -26,7 +27,7 @@ import {
 /**
  * 창 매니저를 생성합니다.
  * @param {string} name 창 매니저 이름.
- * @param {boolean} debugging 디버깅 활성화 여부.
+ * @param {boolean} [debugging] 디버깅 활성화 여부.
  * @returns {LyraWindowManager} 창 매니저.
  */
 export const LyraWindowManager = class {

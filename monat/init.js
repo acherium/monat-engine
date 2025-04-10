@@ -495,6 +495,20 @@ export const init = (target, master, originParent) => {
     });
   };
 
+  // 툴바 초기화
+  const $toolbars = $a("toolbar:not([noshrink])", target);
+  for (const $toolbar of $toolbars) {
+    const $btnShrink = create("button", { attributes: { "shrinktoolbar": "" } });
+    const $iconShrink = append(create("i"), $btnShrink);
+
+    on($btnShrink, "click", () => {
+      if(get($toolbar, "shrink") !== null) unset($toolbar, "shrink");
+      else set($toolbar, "shrink", "");
+    });
+
+    adjacent($toolbar, "afterbegin", $btnShrink);
+  };
+
   // 프로젝트명, 버전 정보 텍스트 초기화
   for (const $span of $a("span[LYRA_NAME]", target)) $span.innerText = LYRA_NAME;
   for (const $span of $a("span[LYRA_DISPLAY_NAME]", target)) $span.innerText = LYRA_DISPLAY_NAME;

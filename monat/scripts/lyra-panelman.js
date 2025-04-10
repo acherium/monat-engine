@@ -8,6 +8,19 @@ import {
   body
 } from "./lyra-domman.js";
 
+/**
+ * LyraPanel 생성자 매개변수 구조체.
+ * @typedef {object} LyraPanelParameters
+ * @param {string} [id] 패널 ID.
+ * @param {Element} [parent] 부모 요소.
+ * @param {string} [direction] 진입 방향.
+ */
+/**
+ * 패널 매니저를 생성합니다.
+ * @param {string} name 패널 매니저 이름.
+ * @param {boolean} [debugging] 디버깅 활성화 여부.
+ * @returns {LyraPanelManager} 패널 매니저.
+ */
 export const LyraPanelManager = class {
   name = null;
   debugging = false;
@@ -25,6 +38,12 @@ export const LyraPanelManager = class {
     return this;
   };
 
+  /**
+   * 대상 요소 내에 존재하는 패널 요소를 회수하여 매니저에 등록합니다.
+   * @param {Element} [target] 대상 요소. 지정하지 않으면 문서 전역에서 회수합니다.
+   * @param {*} [param] 패널 요소 생성자에 전달할 매개변수.
+   * @returns {object} 등록된 패널 요소.
+   */
   retrieve = (target = document, param = {}) => {
     const retrieveTargets = {};
     for (const x of Array.from($a("panel[id]", target)).map((x) => [ x.id, new LyraPanel(param, x) ])) {
@@ -35,6 +54,11 @@ export const LyraPanelManager = class {
     return retrieveTargets;
   };
 
+  /**
+   * 패널 요소를 매니저에 등록합니다.
+   * @param {LyraPanel} target 패널 요소.
+   * @returns {LyraPanelManager} 패널 매니저.
+   */
   register = (target) => {
     if (!target || target.constructor !== LyraPanel || !target.id) return this;
     target.master = this;
@@ -42,6 +66,12 @@ export const LyraPanelManager = class {
     return this;
   };
 
+  /**
+   * 패널을 표시하고 매니저의 상태값을 변경합니다.
+   * @param {string} id 대상 패널 ID.
+   * @param {boolean} [f] 실제 동작 여부.
+   * @returns {LyraPanelManager} 패널 매니저.
+   */
   show = (id, f = true) => {
     if (!id || typeof id !== "string") return;
 
@@ -54,6 +84,12 @@ export const LyraPanelManager = class {
     return this;
   };
 
+  /**
+   * 패널을 닫고 매니저의 상태값을 변경합니다.
+   * @param {string} id 대상 패널 ID.
+   * @param {boolean} [f] 실제 동작 여부.
+   * @returns {LyraPanelManager} 패널 매니저.
+   */
   close = (id, f = true) => {
     if (!id || typeof id !== "string") return;
 
@@ -69,6 +105,12 @@ export const LyraPanelManager = class {
     return this;
   };
 
+  /**
+   * 패널을 활성화하고 매니저의 상태값을 변경합니다.
+   * @param {string} id 대상 패널 ID.
+   * @param {boolean} f 실제 동작 여부.
+   * @returns {LyraPanelManager} 패널 매니저.
+   */
   active = (id, f = true) => {
     if (!id || typeof id !== "string") return this;
     
@@ -81,6 +123,11 @@ export const LyraPanelManager = class {
     return this;
   };
 
+  /**
+   * 현재 활성화된 패널을 비활성화하고 매니저의 상태값을 변경합니다.
+   * @param {string} [f] 실제 동작 여부.
+   * @returns {LyraPanelManager} 패널 매니저.
+   */
   inactive = (f = true) => {
     if (!this.current) return this;
 
@@ -90,12 +137,42 @@ export const LyraPanelManager = class {
     return this;
   };
 
-  showAll = () => { for (const x of Object.values(this.reserve)) x.show(); };
+  /**
+   * 매니저에 등록된 모든 패널을 표시합니다.
+   * @returns {LyraPanelManager} 패널 매니저.
+   */
+  showAll = () => {
+    for (const x of Object.values(this.reserve)) x.show();
 
-  closeAll = () => { for (const x of Object.values(this.reserve)) x.close(); };
+    return this;
+  };
 
-  broadcast = (event) => { for (const x of Object.values(this.reserve)) send(x.listener, event); };
+  /**
+   * 매니저에 등록된 모든 패널을 닫습니다.
+   * @returns {LyraPanelManager} 패널 매니저.
+   */
+  closeAll = () => {
+    for (const x of Object.values(this.reserve)) x.close();
 
+    return this;
+  };
+
+  /**
+   * 매니저에 등록된 모든 패널에 이벤트를 전달합니다.
+   * @param {Event} event 전달할 이벤트.
+   * @returns {LyraPanelManager} 패널 매니저.
+   */
+  broadcast = (event) => {
+    for (const x of Object.values(this.reserve)) send(x.listener, event);
+
+    return this;
+  };
+
+  /**
+   * 디버깅 활성화 여부를 변경합니다.
+   * @param {boolean} bool 활성화 여부.
+   * @returns {LyraPanelManager} 패널 매니저.
+   */
   setDebugging = (bool) => {
     this.debugging = bool;
 
@@ -105,6 +182,12 @@ export const LyraPanelManager = class {
   };
 };
 
+/**
+ * 패널 요소를 생성합니다.
+ * @param {LyraPanelParameters} [param] 매개변수.
+ * @param {Element} [origin] 원본 요소.
+ * @returns {LyraPanel} 패널 요소.
+ */
 export const LyraPanel = class {
   parent = null;
   master = null;
@@ -265,6 +348,10 @@ export const LyraPanel = class {
     return this;
   };
 
+  /**
+   * 패널을 표시합니다.
+   * @returns {LyraPanel} 패널 요소.
+   */
   show = () => {
     this.active();
     if (!this.closed) return this;
@@ -308,6 +395,10 @@ export const LyraPanel = class {
     return this;
   };
 
+  /**
+   * 패널을 닫습니다.
+   * @returns {LyraPanel} 패널 요소.
+   */
   close = () => {
     if (this.closed) return this;
     this.closed = true;
@@ -339,6 +430,10 @@ export const LyraPanel = class {
     return this;
   };
 
+  /**
+   * 이 패널을 활성화하고 나머지 패널을 비활성화합니다.
+   * @returns {LyraPanel} 패널 요소.
+   */
   active = () => {
     for (const node of Array.from($a("panel[active]")).filter((x) => x !== this.parts.$)) unset(node, "active");
     if (get(this.parts.$, "active") === null) {
@@ -355,6 +450,10 @@ export const LyraPanel = class {
     return this;
   };
 
+  /**
+   * 이 패널을 비활성화합니다.
+   * @returns {LyraPanel} 패널 요소.
+   */
   inactive = () => {
     unset(this.parts.$, "active");
 
