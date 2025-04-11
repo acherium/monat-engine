@@ -79,4 +79,6 @@ export default function(master) {
   $btnOpenWin2.onclick = () => {
     master.winman.show("partial-test-window");
   };
+
+  master.notiman.show("testnoti");
 };

@@ -42,7 +42,7 @@ export const LyraContextMenuManager = class {
   /**
    * 대상 요소 내에 존재하는 메뉴 요소를 회수하여 매니저에 등록합니다.
    * @param {Element} [target] 대상 요소. 지정하지 않으면 문서 전역에서 회수합니다.
-   * @param {*} [param] 메뉴 요소 생성자에 전달할 매개변수.
+   * @param {LyraContextMenuParameters} [param] 메뉴 요소 생성자에 전달할 매개변수.
    * @returns {LyraContextMenuManager} 메뉴 매니저.
    */
   retrieve = (target = document, param = {}) => {

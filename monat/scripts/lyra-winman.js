@@ -50,7 +50,7 @@ export const LyraWindowManager = class {
   /**
    * 대상 요소 내에 존재하는 창 요소를 회수하여 매니저에 등록합니다.
    * @param {Element} [target] 대상 요소. 지정하지 않으면 문서 전역에서 회수합니다.
-   * @param {*} [param] 창 요소 생성자에 전달할 매개변수.
+   * @param {LyraWindowParameters} [param] 창 요소 생성자에 전달할 매개변수.
    * @returns {LyraWindowManager} 창 매니저.
    */
   retrieve = (target = document, param = {}) => {
@@ -540,10 +540,10 @@ export const LyraWindow = class {
     
     this.parts.inner.$.animate([ { opacity: "0" } ], { fill: "both" });
     this.parts.inner.$.animate([ { transform: "translateY(2px) scale(0.99)" } ],
-    {
-      fill: "both",
-      composite: "accumulate"
-    });
+      {
+        fill: "both",
+        composite: "accumulate"
+      });
 
     append(this.parts.$, this.parent);
 
