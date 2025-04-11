@@ -44,3 +44,4 @@ export const TOOLTIP_PADDING = 4;
 export const TOOLTIP_OFFSET = 10;
 export const COLOR_MODE = [ "RGB", "HSL" ];
 export const HEX_REGEX = new RegExp("^([0-9a-fA-F]{8})$");
+export const DEFAULT_TOAST_DURATION = 3000;

@@ -5,6 +5,7 @@ export * from "./scripts/lyra-errorman.js";
 export * from "./scripts/lyra-eventman.js";
 export * from "./scripts/lyra-fetchman.js";
 export * from "./scripts/lyra-menuman.js";
+export * from "./scripts/lyra-notiman.js";
 export * from "./scripts/lyra-objman.js";
 export * from "./scripts/lyra-panelman.js";
 export * from "./scripts/lyra-timeman.js";

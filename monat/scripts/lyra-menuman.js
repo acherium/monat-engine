@@ -43,16 +43,15 @@ export const LyraContextMenuManager = class {
    * 대상 요소 내에 존재하는 메뉴 요소를 회수하여 매니저에 등록합니다.
    * @param {Element} [target] 대상 요소. 지정하지 않으면 문서 전역에서 회수합니다.
    * @param {*} [param] 메뉴 요소 생성자에 전달할 매개변수.
-   * @returns {object} 등록된 메뉴 요소.
+   * @returns {LyraContextMenuManager} 메뉴 매니저.
    */
   retrieve = (target = document, param = {}) => {
-    const retrieveTargets = {};
     for (const x of Array.from($a("contextmenu[id]", target)).map((x) => [ x.id, new LyraContextMenu(param, x) ])) {
       this.reserve[x[0]] = x[1];
       this.reserve[x[0]].master = this;
-      retrieveTargets[x[0]] = x[1];
     };
-    return retrieveTargets;
+
+    return this;
   };
 
   /**
@@ -309,8 +308,8 @@ export const LyraContextMenu = class {
     if (posX < CONTEXT_MENU_PADDING) posX = CONTEXT_MENU_PADDING;
     if (posY < CONTEXT_MENU_PADDING) posY = CONTEXT_MENU_PADDING;
 
-    if (posX + r.width > window.innerWidth) posX = CONTEXT_MENU_PADDING;
-    if (posY + r.height > window.innerHeight) posY = CONTEXT_MENU_PADDING;
+    if (posX + r.width > window.innerWidth) posX -= posX + r.width - window.innerWidth + CONTEXT_MENU_PADDING;
+    if (posY + r.height > window.innerHeight) posY -= posY + r.height - window.innerHeight + CONTEXT_MENU_PADDING;
     
     this.$.animate([ { opacity: "0" } ], { fill: "both" });
     this.$.animate([ { transform: `translateX(${posX}px) translateY(${posY + 2}px) scale(0.99)` } ],

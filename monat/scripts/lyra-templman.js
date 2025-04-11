@@ -119,7 +119,10 @@ export const LyraColorPicker = class {
       this.parts.hex.input.$ = $inputHex;
       this.parts.hex.button.$ = $btnHex;
 
-      on($btnHex, "click", () => { navigator.clipboard.writeText(`#${this.color.hex}`); });
+      on($btnHex, "click", () => {
+        navigator.clipboard.writeText(`#${this.color.hex}`);
+        if (master.notiman) master.notiman.showToast({ text: "HEX 코드를 복사하였습니다." });
+      });
 
       const $preview = $(".PREVIEW", $seal);
       this.parts.preview.$ = $preview;

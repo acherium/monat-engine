@@ -10,6 +10,7 @@ import {
   LyraWindowManager, LyraWindow,
   LyraPanelManager, LyraPanel,
   LyraContextMenuManager, LyraContextMenu,
+  LyraNotificationManager, LyraNotification,
   error
 } from "./module.js";
 
@@ -628,6 +629,10 @@ const initPartialRunner = (runner, partialman = null) => {
       master.menuman.closeAll();
     };
   });
+
+  // 알림 선언
+  master.notiman = new LyraNotificationManager("master", true);
+  master.notiman.retrieve(root);
 
   // 선택 목록 닫기
   const closeSelect = ($label) => {
