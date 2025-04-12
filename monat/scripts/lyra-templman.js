@@ -8,6 +8,32 @@ import { COLOR_MODE, HEX_REGEX } from "./lyra-envman.js";
 
 export const LYRA_TEMPLATE_COLOR_PICKER = fetchHTML("./monat/templates/LyraColorPicker.html");
 
+/**
+ * 색상 개체.
+ * @typedef {object} ColorObject
+ * @param {number} [r] R 값.
+ * @param {number} [g] G 값.
+ * @param {number} [b] B 값.
+ * @param {number} [h] H 값.
+ * @param {number} [s] S 값.
+ * @param {number} [l] L 값.
+ * @param {number} [a] 투명도 값.
+ * @param {string} [hex] HEX 값.
+ */
+/**
+ * LyraColorPicker 생성자 매개변수 구조체.
+ * @typedef {object} LyraColorPicketParameters
+ * @param {string} [mode] 색상 모드.
+ * @param {boolean} [includeAlpha] 투명도 포함 여부.
+ * @param {ColorObject} [color] 색상 개체.
+ */
+/**
+ * 창 기반의 색상 선택기 템플릿을 생성합니다.
+ * @param {object} master 마스터 개체
+ * @param {string} id ID.
+ * @param {LyraColorPicketParameters} param 매개변수.
+ * @returns {LyraColorPicker} 색상 선택기.
+ */
 export const LyraColorPicker = class {
   master = null;
   id = null;
@@ -156,18 +182,32 @@ export const LyraColorPicker = class {
     return this;
   };
 
+  /**
+   * 색상 선택기를 표시합니다.
+   * @returns {LyraColorPicker} 색상 선택기.
+   */
   show() {
     this.master.winman.show(this.id);
 
     return this;
   };
 
+  /**
+   * 색상 선택기의 제목을 설정합니다.
+   * @param {string} text 제목.
+   * @returns {LyraColorPicker} 색상 선택기.
+   */
   setTitle(text) {
     this.parts.window.setTitle(text);
 
     return this;
   };
 
+  /**
+   * 색상 모드를 설정합니다.
+   * @param {string} mode 색상 모드.
+   * @returns {LyraColorPicker} 색상 선택기.
+   */
   setMode(mode) {
     if (!COLOR_MODE.includes(mode)) return this;
 
@@ -195,6 +235,10 @@ export const LyraColorPicker = class {
     return this;
   };
 
+  /**
+   * 색상 모드를 전환합니다.
+   * @returns {LyraColorPicker} 색상 선택기.
+   */
   changeMode() {
     switch(this.mode) {
       case "RGB":
@@ -208,6 +252,11 @@ export const LyraColorPicker = class {
     return this;
   };
 
+  /**
+   * 투명도 포함 여부를 설정합니다.
+   * @param {boolean} bool 투명도 포함 여부.
+   * @returns {LyraColorPicker} 색상 선택기.
+   */
   setIncludeAlpha(bool) {
     if (bool.constructor !== Boolean) return this;
 
@@ -217,6 +266,11 @@ export const LyraColorPicker = class {
     return this;
   };
 
+  /**
+   * 색상 개체의 키를 기준으로 색상을 계산하고 적용합니다.
+   * @param {string} key 키.
+   * @returns {LyraColorPicker} 색상 선택기.
+   */
   setColorByKey(key = "r") {
     switch(key) {
       case "r":
