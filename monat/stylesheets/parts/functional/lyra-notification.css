@@ -76,5 +76,13 @@ notification > bottom {
 }
 
 notification * { color: inherit; }
-notification > * { flex-shrink: 0; }
+notification > * {
+  flex-shrink: 0;
+
+  line-height: 1;
+}
 notification > bottom > * { flex-shrink: 0; }
+
+notification > h1 { font-size: 1.3em; }
+notification > h2 { font-size: 1.2em; }
+notification > h3, h4, h5, h6 { font-size: 1.1em; }

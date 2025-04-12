@@ -1,4 +1,5 @@
 // templman - HTML 템플릿 관련 모듈 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+import { RGBAtoHEX, HEXtoRGBA, RGBtoHSL, HSLtoRGB } from "./lyra-methods.js";
 import { $, $a, get, set, unset, create, append, unseal, root } from "./lyra-domman.js";
 import { on, send } from "./lyra-eventman.js";
 import { fetchHTML } from "./lyra-fetchman.js";
@@ -222,10 +223,10 @@ export const LyraColorPicker = class {
       case "g":
       case "b":
         this.color[key] = parseInt(this.parts[key].input.$.value);
-        Object.assign(this.color, this.RGBtoHSL(this.color.r, this.color.g, this.color.b));
+        Object.assign(this.color, RGBtoHSL(this.color.r, this.color.g, this.color.b));
 
         for (const [ key, value ] of Object.entries(this.color)) key === "hex" ? {} : this.color[key] = Math.floor(value);
-        this.color.hex = this.RGBAtoHEX(this.color.r, this.color.g, this.color.b, this.color.a);
+        this.color.hex = RGBAtoHEX(this.color.r, this.color.g, this.color.b, this.color.a);
 
         for (const [ key, value ] of Object.entries(this.color)) {
           this.parts[key].input.$.value = value;
@@ -236,10 +237,10 @@ export const LyraColorPicker = class {
       case "s":
       case "l":
         this.color[key] = parseInt(this.parts[key].input.$.value);
-        Object.assign(this.color, this.HSLtoRGB(this.color.h, this.color.s, this.color.l));
+        Object.assign(this.color, HSLtoRGB(this.color.h, this.color.s, this.color.l));
 
         for (const [ key, value ] of Object.entries(this.color)) key === "hex" ? {} : this.color[key] = Math.floor(value);
-        this.color.hex = this.RGBAtoHEX(this.color.r, this.color.g, this.color.b, this.color.a);
+        this.color.hex = RGBAtoHEX(this.color.r, this.color.g, this.color.b, this.color.a);
 
         for (const [ key, value ] of Object.entries(this.color)) {
           this.parts[key].input.$.value = value;
@@ -249,7 +250,7 @@ export const LyraColorPicker = class {
       case "a":
         this.color.a = parseInt(this.parts.a.input.$.value);
         for (const [ key, value ] of Object.entries(this.color)) key === "hex" ? {} : this.color[key] = Math.floor(value);
-        this.color.hex = this.RGBAtoHEX(this.color.r, this.color.g, this.color.b, this.color.a);
+        this.color.hex = RGBAtoHEX(this.color.r, this.color.g, this.color.b, this.color.a);
 
         for (const [ key, value ] of Object.entries(this.color)) {
           this.parts[key].input.$.value = value;
@@ -259,8 +260,8 @@ export const LyraColorPicker = class {
       case "hex":
         if (HEX_REGEX.exec(this.parts.hex.input.$.value)) {
           this.color.hex = this.parts.hex.input.$.value;
-          Object.assign(this.color, this.HEXtoRGBA(this.color.hex));
-          Object.assign(this.color, this.RGBtoHSL(this.color.r, this.color.g, this.color.b));
+          Object.assign(this.color, HEXtoRGBA(this.color.hex));
+          Object.assign(this.color, RGBtoHSL(this.color.r, this.color.g, this.color.b));
           for (const [ key, value ] of Object.entries(this.color)) key === "hex" ? {} : this.color[key] = Math.floor(value);
   
           for (const [ key, value ] of Object.entries(this.color)) {
@@ -274,85 +275,5 @@ export const LyraColorPicker = class {
     this.parts.preview.$.style["background-color"] = `#${this.color.hex}`;
 
     return this;
-  };
-
-  RGBAtoHEX(r, g, b, a) {
-    r = r.toString(16).toUpperCase();
-    g = g.toString(16).toUpperCase();
-    b = b.toString(16).toUpperCase();
-    a = Math.floor(a / 100 * 255).toString(16).toUpperCase();
-
-    r = r.padStart(2, "0");
-    g = g.padStart(2, "0");
-    b = b.padStart(2, "0");
-    a = a.padStart(2, "0");
-
-    return `${r}${g}${b}${a}`;
-  };
-
-  HEXtoRGBA(hex) {
-    return {
-      r: Number(`0x${hex.substring(0, 2)}`),
-      g: Number(`0x${hex.substring(2, 4)}`),
-      b: Number(`0x${hex.substring(4, 6)}`)
-    };
-  };
-
-  RGBtoHSL(r, g, b) {
-    const result = {
-      h: 0,
-      s: 0,
-      l: 0
-    };
-
-    r = r / 255;
-    g = g / 255;
-    b = b / 255;
-
-    const max = Math.max(r, g, b);
-    const min = Math.min(r, g, b);
-    const chroma = max - min;
-
-    if (chroma > 0) {
-      if (max === r) {
-        const segment = (g - b) / chroma;
-        const shift = (segment < 0 ? 360 : 0) / 60;
-        result.h = segment + shift;
-      } else if (max === g) {
-        const segment = (b - r) / chroma;
-        const shift = 120 / 60;
-        result.h = segment + shift;
-      } else if (max === b) {
-        const segment = (r - g) / chroma;
-        const shift = 240 / 60;
-        result.h = segment + shift;
-      };
-    };
-    result.h *= 60;
-
-    result.l = (max + min) / 2;
-    result.s = chroma === 0 ? 0 : chroma / (1 - Math.abs(result.l * 2 - 1));
-
-    result.l *= 100;
-    result.s *= 100;
-
-    return result;
-  };
-
-  HSLtoRGB(h, s, l) {
-    s /= 100;
-    l /= 100;
-
-    const a = s * Math.min(l, 1 - l);
-    const k = (n) => (n + h / 30) % 12;
-    const f = (n) => l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
-
-    const result = {
-      r: 255 * f(0),
-      g: 255 * f(8),
-      b: 255 * f(4)
-    };
-
-    return result;
   };
 };

@@ -4,7 +4,8 @@ import {
   on,
   xhr,
   LyraWindow,
-  LyraColorPicker
+  LyraColorPicker,
+  random, ransel, ranchar
 } from "../monat/module.js";
 
 export default function(master) {
@@ -80,5 +81,16 @@ export default function(master) {
     master.winman.show("partial-test-window");
   };
 
-  master.notiman.show("testnoti");
+  // master.notiman.show("testnoti");
+  master.notiman.showOnce({
+    duration: 10000,
+    icon: "star",
+    title: "제목 테스트",
+    content: "내용 테스트",
+    buttons: [
+      create("button", { properties: { innerHTML: "<span>버튼 1</span>" }, events: { click: () => { console.log(true); } } }),
+      create("button", { properties: { innerHTML: "<span>버튼 2</span>" }, events: { click: () => { console.log(true); } } }),
+      create("button", { properties: { innerHTML: "<span>버튼 3</span>" }, events: { click: () => { console.log(true); } } })
+    ]
+  });
 };

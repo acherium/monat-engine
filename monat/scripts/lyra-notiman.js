@@ -5,7 +5,7 @@ import {
 } from "./lyra-envman.js";
 import { on, once, off, send } from "./lyra-eventman.js";
 import {
-  $, $a, $p, $pa, create, append, revoke, after, before,
+  $, $a, $p, $pa, create, append, revoke, after, before, adjacent,
   get, set, unset, revokeAttribute,
   body
 } from "./lyra-domman.js";
@@ -13,9 +13,14 @@ import {
 /**
  * LyraNotification 생성자 매개변수 구조체.
  * @typedef {object} LyraNotificationParameters
- * @param {string} [id] 창 ID.
+ * @param {string} [id] 알림 ID.
  * @param {Element} [parent] 부모 요소.
  * @param {number} [duration] 유지 시간.
+ * @param {string} [icon] 알림 아이콘 ID.
+ * @param {string} [title] 알림 제목.
+ * @param {string} [content] 알림 내용.
+ * @param {string} [html] HTML 내용. 지정된 경우 텍스트 내용을 덮어씌웁니다.
+ * @param {array<Element>} [buttons] 하단 버튼 목록.
  */
 /**
  * LyraToastNotification 생성자 매개변수 구조체.
@@ -50,7 +55,7 @@ export const LyraNotificationManager = class {
     if (name && typeof name === "string") this.name = name;
     this.debugging = debugging;
 
-    this.parts.$ = revoke($("#LYRA-NOTIFICATION-AREA", body)) || create("div", { id: "LYRA-NOTIFICATION-AREA" });
+    this.parts.$ = $("#LYRA-NOTIFICATION-AREA", body) ? revoke($("#LYRA-NOTIFICATION-AREA", body)) : create("div", { id: "LYRA-NOTIFICATION-AREA" });
     this.parts.wrap.$ = $(".WRAP", this.parts.$) || append(create("div", { classes: [ "WRAP" ] }), this.parts.$);
 
     append(this.parts.$, body);
@@ -61,7 +66,7 @@ export const LyraNotificationManager = class {
   /**
    * 대상 요소 내에 존재하는 알림 요소를 회수하여 매니저에 등록합니다.
    * @param {Element} [target] 대상 요소. 지정하지 않으면 문서 전역에서 회수합니다.
-   * @param {*} [param] 알림 요소 생성자에 전달할 매개변수.
+   * @param {LyraNotificationParameters} [param] 알림 요소 생성자에 전달할 매개변수.
    * @returns {LyraNotificationManager} 알림 매니저.
    */
   retrieve = (target = document, param = {}) => {
@@ -74,6 +79,18 @@ export const LyraNotificationManager = class {
       this.reserve[x[0]] = x[1];
       this.reserve[x[0]].master = this;
     };
+
+    return this;
+  };
+
+  /**
+   * 일회성 알림을 생성하고 표시합니다. 이 메소드로 생성된 알림은 매니저에 등록되지 않습니다.
+   * @param {LyraNotificationParameters} [param] 알림 요소 생성자에 전달할 매개변수.
+   * @returns {LyraNotificationManager} 알림 매니저.
+   */
+  showOnce = (param = {}) => {
+    param.parent = this.parts.wrap.$;
+    new LyraNotification(param).show();
 
     return this;
   };
@@ -226,6 +243,28 @@ export const LyraNotification = class {
       
       // 유지 시간 불러오기
       if (typeof param.duration !== "undefined" && !Number.isNaN(Number(param.duration))) this.duration = Number(param.duration);
+
+      // 아이콘 불러오기
+      if (typeof param.icon !== "undefined") append(create("i", { classes: [ `${param.icon}` ] }), this.parts.$);
+
+      // 제목 불러오기
+      if (typeof param.title !== "undefined") append(create("h1", { properties: { innerText: `${param.title}` } }), this.parts.$);
+
+      // 내용 불러오기
+      if (typeof param.content !== "undefined") append(create("p", { properties: { innerText: `${param.content}` } }), this.parts.$);
+
+      // HTML 불러오기
+      if (typeof param.html !== "undefined") this.parts.$.innerHTML = param.html;
+
+      // 버튼 불러오기
+      if (typeof param.buttons !== "undefined" && param.buttons.constructor === Array) {
+        if (!this.parts.bottom.$) this.parts.bottom.$ = append(create("bottom"), this.parts.$);
+
+        for (const $button of param.buttons) {
+          if (!get($button, "blank")) set($button, "blank", "");
+          append($button, this.parts.bottom.$);
+        };
+      };
       
       // ID 불러오기
       if (typeof param.id !== "undefined") {
@@ -264,7 +303,7 @@ export const LyraNotification = class {
         composite: "accumulate"
       });
 
-    append(this.parts.$, this.parent);
+    adjacent(this.parent, "afterbegin", this.parts.$);
 
     this.parts.$.animate([ { opacity: "0" }, { opacity: "1" } ],
       {
