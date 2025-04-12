@@ -387,8 +387,6 @@ export const init = (target, master, originParent) => {
     };
 
     on($panzone, "pointerdown", (pointer) => {
-      if (pointer.pointerType !== "mouse") return;
-
       $panzone.onpointermove = (move) => {
         rect.x += move.movementX / rect.scale;
         rect.y += move.movementY / rect.scale;
@@ -408,6 +406,7 @@ export const init = (target, master, originParent) => {
       };
     });
 
+    /*
     on($panzone, "touchstart", (touch) => {
       touch = touch.touches[0];
       let tx = touch.clientX;
@@ -436,6 +435,7 @@ export const init = (target, master, originParent) => {
         $panzone.ontouchcancel = null;
       };
     });
+    */
 
     on($panzone, "wheel", (wheel) => {
       rect.scale += ( wheel.deltaY > 0 ? rect.step * -1 : wheel.deltaY < 0 ? rect.step : 0 );
@@ -594,7 +594,7 @@ const initPartialRunner = (runner, partialman = null) => {
   };
 
   // 창 선언
-  master.winman = new LyraWindowManager("master", true);
+  master.winman = new LyraWindowManager("master");
   master.winman.retrieve(root);
   on(document, "pointerdown", (event) => {
     if ($p("window", event.target) === null) {
@@ -604,7 +604,7 @@ const initPartialRunner = (runner, partialman = null) => {
   });
 
   // 패널 선언
-  master.panelman = new LyraPanelManager("master", true);
+  master.panelman = new LyraPanelManager("master");
   master.panelman.retrieve(root);
   on(document, "pointerdown", (event) => {
     if ($p("panel", event.target) === null) {
@@ -619,7 +619,7 @@ const initPartialRunner = (runner, partialman = null) => {
   });
 
   // 컨텍스트 메뉴 선언
-  master.menuman = new LyraContextMenuManager("master", true);
+  master.menuman = new LyraContextMenuManager("master");
   master.menuman.retrieve(root);
   on(document, "pointerdown", (event) => {
     if ($p("contextmenu", event.target) === null && event.button !== 2) master.menuman.closeAll();
@@ -631,7 +631,7 @@ const initPartialRunner = (runner, partialman = null) => {
   });
 
   // 알림 선언
-  master.notiman = new LyraNotificationManager("master", true);
+  master.notiman = new LyraNotificationManager("master");
   master.notiman.retrieve(root);
 
   // 선택 목록 닫기
