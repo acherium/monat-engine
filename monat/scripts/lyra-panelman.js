@@ -22,6 +22,7 @@ import {
  * @returns {LyraPanelManager} 패널 매니저.
  */
 export const LyraPanelManager = class {
+  master = null;
   name = null;
   debugging = false;
 
@@ -31,7 +32,9 @@ export const LyraPanelManager = class {
 
   listener = new EventTarget();
 
-  constructor(name, debugging = false) {
+  constructor(master, name, debugging = false) {
+    this.master = master;
+    
     if (name && typeof name === "string") this.name = name;
     this.debugging = debugging;
 
@@ -341,6 +344,14 @@ export const LyraPanel = class {
       if (this.parts.inner.titlebar.left.title.$) {
         if (this.master.debugging) this.parts.inner.titlebar.left.title.$.innerHTML = `${this.parts.inner.titlebar.left.title.text} (master: ${this.master.name}, id: ${this.id})`;
         else this.parts.inner.titlebar.left.title.$.innerText = this.parts.inner.titlebar.left.title.text;
+      };
+    });
+
+    // 사전 이벤트 정의
+    on(this.listener, "updatedictionary", (event) => {
+      for (const [ key, value ] of Object.entries(event.dictionary)) {
+        const elements = $a(`span[dict="${key}"]`, this.parts.$);
+        for (const element of elements) element.innerText = value;
       };
     });
 

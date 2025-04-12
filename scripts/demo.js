@@ -1,5 +1,5 @@
 import {
-  $, $p, $pa, $s, $sa, create, append, after, before,
+  $, $a, $p, $pa, $s, $sa, create, append, after, before,
   set, unset, seal, unseal,
   on,
   xhr,
@@ -93,4 +93,7 @@ export default function(master) {
       create("button", { properties: { innerHTML: "<span>버튼 3</span>" }, events: { click: () => { console.log(true); } } })
     ]
   });
+
+  master.dictman.set("test_dict", "1234").apply();
+  setTimeout(() => { master.dictman.set("test_dict", "4567").apply(); }, 5000);
 };

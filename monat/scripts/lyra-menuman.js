@@ -23,6 +23,7 @@ import {
  * @returns {LyraContextMenuManager} 메뉴 매니저.
  */
 export const LyraContextMenuManager = class {
+  master = null;
   name = null;
   debugging = false;
 
@@ -32,7 +33,9 @@ export const LyraContextMenuManager = class {
 
   listener = new EventTarget();
 
-  constructor(name, debugging = false) {
+  constructor(master, name, debugging = false) {
+    this.master = master;
+    
     if (name && typeof name === "string") this.name = name;
     this.debugging = debugging;
 
@@ -256,6 +259,14 @@ export const LyraContextMenu = class {
     // 하위 메뉴 열기
     on(this.$, "click", (event) => {
       if (get(event.target, "submenu") !== null) this.master.show(get(event.target, "submenu"), event);
+    });
+
+    // 사전 이벤트 정의
+    on(this.listener, "updatedictionary", (event) => {
+      for (const [ key, value ] of Object.entries(event.dictionary)) {
+        const elements = $a(`span[dict="${key}"]`, this.$);
+        for (const element of elements) element.innerText = value;
+      };
     });
 
     return this;

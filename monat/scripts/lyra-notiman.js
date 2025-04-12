@@ -36,6 +36,7 @@ import {
  * @returns {LyraNotificationManager} 알림 매니저.
  */
 export const LyraNotificationManager = class {
+  master = null;
   name = null;
   debugging = null;
 
@@ -51,7 +52,9 @@ export const LyraNotificationManager = class {
 
   listener = new EventTarget();
 
-  constructor(name, debugging = false) {
+  constructor(master, name, debugging = false) {
+    this.master = master;
+    
     if (name && typeof name === "string") this.name = name;
     this.debugging = debugging;
 
@@ -283,6 +286,14 @@ export const LyraNotification = class {
     on(this.listener, "debugging", () => {
       if (!this.master || !this.master.debugging) return;
       console.log(this);
+    });
+
+    // 사전 이벤트 정의
+    on(this.listener, "updatedictionary", (event) => {
+      for (const [ key, value ] of Object.entries(event.dictionary)) {
+        const elements = $a(`span[dict="${key}"]`, this.parts.$);
+        for (const element of elements) element.innerText = value;
+      };
     });
 
     return this;

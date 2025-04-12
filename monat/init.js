@@ -7,14 +7,16 @@ import {
   TOOLTIP_PADDING, TOOLTIP_OFFSET,
   DEFAULT_PANZONE_STEPS, DEFAULT_PANZONE_MIN, DEFAULT_PANZONE_MAX,
   LYRA_NAME, LYRA_DISPLAY_NAME, LYRA_AUTHOR, LYRA_VERSION, LYRA_DATE,
+  LyraMaster,
   LyraWindowManager, LyraWindow,
   LyraPanelManager, LyraPanel,
   LyraContextMenuManager, LyraContextMenu,
   LyraNotificationManager, LyraNotification,
+  LyraDictionaryManager,
   error
 } from "./module.js";
 
-const master = {};
+const master = new LyraMaster();
 
 /**
  * 대상을 Lyra Engine으로 초기화합니다.
@@ -545,6 +547,8 @@ export const init = (target, master, originParent) => {
           
           adjacent(partial, "afterend", ...sealed.children);
           adjacent(partial, "beforebegin", ...$a("link", sealed));
+
+          master.dictman.apply();
   
           sealed.remove();
           revoke(partial);
@@ -594,7 +598,7 @@ const initPartialRunner = (runner, partialman = null) => {
   };
 
   // 창 선언
-  master.winman = new LyraWindowManager("master");
+  master.winman = new LyraWindowManager(master, "master");
   master.winman.retrieve(root);
   on(document, "pointerdown", (event) => {
     if ($p("window", event.target) === null) {
@@ -604,7 +608,7 @@ const initPartialRunner = (runner, partialman = null) => {
   });
 
   // 패널 선언
-  master.panelman = new LyraPanelManager("master");
+  master.panelman = new LyraPanelManager(master, "master");
   master.panelman.retrieve(root);
   on(document, "pointerdown", (event) => {
     if ($p("panel", event.target) === null) {
@@ -619,7 +623,7 @@ const initPartialRunner = (runner, partialman = null) => {
   });
 
   // 컨텍스트 메뉴 선언
-  master.menuman = new LyraContextMenuManager("master");
+  master.menuman = new LyraContextMenuManager(master, "master");
   master.menuman.retrieve(root);
   on(document, "pointerdown", (event) => {
     if ($p("contextmenu", event.target) === null && event.button !== 2) master.menuman.closeAll();
@@ -631,8 +635,11 @@ const initPartialRunner = (runner, partialman = null) => {
   });
 
   // 알림 선언
-  master.notiman = new LyraNotificationManager("master");
+  master.notiman = new LyraNotificationManager(master, "master");
   master.notiman.retrieve(root);
+
+  // 사전 선언
+  master.dictman = new LyraDictionaryManager(master, "master");
 
   // 선택 목록 닫기
   const closeSelect = ($label) => {
