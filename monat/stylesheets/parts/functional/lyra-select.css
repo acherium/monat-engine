@@ -5,11 +5,11 @@
   --select-padding: 8px;
   --select-padding-offset: 4px;
   --select-gap: 4px;
-  --select-radius: 6px;
+  --select-radius: var(--radius-0);
   
-  --select-border: var(--border);
-  --select-border-width: 1px;
-  --select-background: oklch(from var(--anti) l c h/0);
+  --select-border: var(--depth-1);
+  --select-border-width: 0px;
+  --select-background: var(--depth);
   --select-background-disabled: oklch(from var(--anti) l c h/0.1);
   
   --select-list-background: var(--main);
@@ -28,7 +28,7 @@ label:has(>select) {
   min-width: var(--select-size);
   height: var(--select-size);
 
-  border: solid var(--select-border-width) var(--select-border);
+  /* border: solid var(--select-border-width) var(--select-border); */
   border-radius: var(--select-radius);
   background-color: var(--select-background);
   user-select: none;
@@ -101,14 +101,17 @@ label:has(>select)[listontop] > .immersive-select-list {
 }
 
 /* 선택 목록 검색창 */
-label:has(>select) > .immersive-select-list > label:has(>input[type="text"]) {
+label:has(>select) > .immersive-select-list > .top-list > label:has(>input[type="text"]) {
   flex-shrink: 0;
 
   border-top: unset;
   border-left: unset;
   border-right: unset;
-  border-bottom-left-radius: unset;
-  border-bottom-right-radius: unset;
+  border-radius: unset;
+}
+
+label:has(>select:not([always])) > .immersive-select-list > .top-list > label:has(>input[type="text"]):has(+ button) {
+  margin-right: 1px;
 }
 
 label:has(>select) > .immersive-select-list > .top-list > *,
@@ -205,7 +208,7 @@ label:has(>select) > .immersive-select-list > .button-list {
   gap: 1px;
 
   border-top: solid 1px var(--select-border);
-  background-color: var(--select-border);
+  background-color: var(--main);
 }
 
 label:has(>select) > .immersive-select-list > .button-list > button {
@@ -240,7 +243,7 @@ label:has(>select[always]) > .immersive-select-list {
   width: 100%;
   height: 100%;
 
-  border: none;
+  /* border: none; */
   border-radius: inherit;
   box-shadow: none;
 }
