@@ -2,11 +2,11 @@
 /* 창 속성 값 */
 :root {
   --window-area-padding: 8px;
-  --window-radius: 6px;
+  --window-radius: var(--radius-0);
 
   --window-border-outer-width: 1px;
-  --window-border-outer-active: var(--accent);
-  --window-border-outer-inactive: var(--border);
+  --window-border-outer-active: var(--depth-border);
+  --window-border-outer-inactive: var(--depth-border);
 
   --window-border-inner-width: 0px;
 
@@ -14,18 +14,19 @@
   --window-inner-background: var(--main);
   --window-inner-shadow: var(--shadow);
 
-  --window-titlebar-size: 36px;
+  --window-titlebar-size: 40px;
   --window-titlebar-padding: 8px;
   --window-titlebar-gap: 4px;
-  --window-titlebar-active: var(--main);
-  --window-titlebar-inactive: var(--main);
+  --window-titlebar-active: var(--depth-1);
+  --window-titlebar-inactive: var(--depth-2);
   --window-titlebar-font-active: var(--font);
   --window-titlebar-font-inactive: var(--font-sub);
 
   --window-bottom-padding: 8px;
   --window-bottom-gap: 4px;
+  --window-bottom-border-width: 0px;
   --window-bottom-border: var(--border);
-  --window-bottom-background: var(--sub);
+  --window-bottom-background: var(--depth-1);
 }
 
 /* 창 */
@@ -147,6 +148,9 @@ window > inner > titlebar > .right {
 window > inner > titlebar > .right > button {
   justify-content: center;
 
+  height: 100%;
+  aspect-ratio: 1/1;
+
   border-radius: unset;
   background-color: var(--window-titlebar-inactive);
 }
@@ -182,7 +186,7 @@ window > inner > windowbody > bottom {
 
   width: 100%;
 
-  border-top: solid 1px var(--window-bottom-border);
+  border-top: solid var(--window-bottom-border-width) var(--window-bottom-border);
   background-color: var(--window-bottom-background);
 }
 

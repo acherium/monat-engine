@@ -2,10 +2,10 @@
 /* 메뉴 속성 값 */
 :root {
   --panel-area-padding: 8px;
-  --panel-radius: 6px;
+  --panel-radius: var(--radius-0);
 
   --panel-border-outer-width: 1px;
-  --panel-border-outer-active: var(--accent);
+  --panel-border-outer-active: var(--depth-border);
 
   --panel-border-inner-width: 0px;
 
@@ -13,7 +13,7 @@
   --panel-inner-background: var(--main);
   --panel-inner-shadow: var(--shadow);
 
-  --panel-titlebar-size: 36px;
+  --panel-titlebar-size: 40px;
   --panel-titlebar-padding: 8px;
   --panel-titlebar-gap: 4px;
   --panel-titlebar-active: var(--main);
@@ -21,7 +21,8 @@
 
   --panel-bottom-padding: 8px;
   --panel-bottom-gap: 4px;
-  --panel-bottom-border: var(--border);
+  --panel-bottom-border-width: 0px;
+  --panel-bottom-border: var(--depth-1);
   --panel-bottom-background: var(--sub);
 }
 
@@ -177,6 +178,9 @@ panel > inner > titlebar > .right {
 panel > inner > titlebar > .right > button {
   justify-content: center;
 
+  height: 100%;
+  aspect-ratio: 1/1;
+
   border-radius: unset;
   background-color: var(--panel-titlebar-active);
 }
@@ -203,7 +207,7 @@ panel > inner > bottom {
 
   width: 100%;
 
-  border-top: solid 1px var(--panel-bottom-border);
+  border-top: solid var(--panel-bottom-border-width) var(--panel-bottom-border);
   background-color: var(--panel-bottom-background);
 }
 

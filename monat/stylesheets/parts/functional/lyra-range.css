@@ -3,9 +3,10 @@
 :root {
   --range-label-gap: 4px;
   --range-label-size: 36px;
-  --range-label-radius: 6px;
+  --range-label-radius: var(--radius-0);
+  --range-label-border-width: 0px;
   --range-label-border: var(--border);
-  --range-label-background: oklch(from var(--main) l c h/1);
+  --range-label-background: var(--depth);
 
   --range-track-size: 4px;
   --range-track-padding: 4px;
@@ -76,7 +77,7 @@ label:has(>input[type="range"]) {
 
   height: var(--range-label-size);
 
-  border: solid 1px var(--range-label-border);
+  border: solid var(--range-label-border-width) var(--range-label-border);
   border-radius: var(--range-label-radius);
   background-color: var(--range-label-background);
 }

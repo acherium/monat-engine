@@ -2,9 +2,10 @@
 /* 컨텍스트 메뉴 속성값 */
 :root {
   --contextmenu-padding: 8px;
-  --contextmenu-radius: 6px;
+  --contextmenu-radius: var(--radius-0);
+  --contextmenu-border-width: 0px;
   --contextmenu-border: var(--accent);
-  --contextmenu-background: var(--main);
+  --contextmenu-background: var(--depth-1);
   --contextmenu-shadow: var(--shadow);
 }
 
@@ -21,7 +22,7 @@ contextmenu {
   width: 200px;
   height: max-content;
 
-  border: solid 1px var(--contextmenu-border);
+  border: solid var(--contextmenu-border-width) var(--contextmenu-border);
   border-radius: var(--contextmenu-radius);
   background-color: var(--contextmenu-background);
   box-shadow: var(--contextmenu-shadow);
