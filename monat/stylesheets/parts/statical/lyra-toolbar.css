@@ -1,12 +1,13 @@
 @charset "UTF-8";
 /* 툴바 공통 */
 :root {
-  --toolbar-padding: 4px;
+  --toolbar-padding: var(--padding);
   --toolbar-gap: 4px;
-  --toolbar-radius: 10px;
+  --toolbar-radius: var(--radius-1);
+  --toolbar-border-width: 0px;
 
   --toolbar-border: var(--border);
-  --toolbar-background: var(--main);
+  --toolbar-background: var(--depth-1);
   --toolbar-shadow: var(--shadow);
 
   --toolbar-partition-size: 30px;
@@ -25,7 +26,7 @@ toolbar {
   width: max-content;
   height: max-content;
 
-  border: solid 1px var(--toolbar-border);
+  border: solid var(--toolbar-border-width) var(--toolbar-border);
   border-radius: var(--toolbar-radius);
   background-color: var(--toolbar-background);
   box-shadow: var(--toolbar-shadow);
@@ -37,7 +38,7 @@ toolbar > .divline {
   width: 1px;
   height: var(--toolbar-partition-size);
 
-  background-color: var(--toolbar-border);
+  background-color: var(--depth-border);
 }
 
 /* 툴바 접기/펴기 */
