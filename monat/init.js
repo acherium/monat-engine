@@ -17,6 +17,7 @@ import {
 } from "./module.js";
 
 const master = new LyraMaster();
+const initialPartialPromises = [];
 
 /**
  * 대상을 Lyra Engine으로 초기화합니다.
@@ -530,30 +531,34 @@ export const init = (target, master, originParent) => {
       const partialType = get(partial, "type");
       const partialSrc = get(partial, "src");
       const partialParent = partial.parentNode;
-      
-      xhr(partialSrc, {
-        load: (data) => {
-          if (data.target.status !== 200) {
-            error(`Failed to load this partial HTML >>> [${partialType ?? "plain"}]"${partialSrc}"@${partialParent.nodeName} >>> ${data.target.status} ${data.target.statusText}`);
-            return;
-          };
-  
-          const raw = data.target.response;
-          const sealed = create("seal", { properties: { innerHTML: raw } });
-          init(sealed, master, target);
-  
-          const partialRunners = $a("script[runner]", sealed);
-          for (const runner of partialRunners) initPartialRunner(runner);
-          
-          adjacent(partial, "afterend", ...sealed.children);
-          adjacent(partial, "beforebegin", ...$a("link", sealed));
 
-          master.dictman.apply();
+      initialPartialPromises.push(new Promise((resolve, reject) => {
+        xhr(partialSrc, {
+          load: (data) => {
+            if (data.target.status !== 200) {
+              error(`Failed to load this partial HTML >>> [${partialType ?? "plain"}]"${partialSrc}"@${partialParent.nodeName} >>> ${data.target.status} ${data.target.statusText}`);
+              return;
+            };
+    
+            const raw = data.target.response;
+            const sealed = create("seal", { properties: { innerHTML: raw } });
+            init(sealed, master, body);
+    
+            const partialRunners = $a("script[runner]", sealed);
+            for (const runner of partialRunners) initPartialRunner(runner);
+            
+            adjacent(partial, "afterend", ...sealed.children);
+            adjacent(partial, "beforebegin", ...$a("link", sealed));
   
-          sealed.remove();
-          revoke(partial);
-        }
-      });
+            master.dictman.apply();
+    
+            sealed.remove();
+            revoke(partial);
+
+            resolve(true);
+          }
+        });
+      }));
     };
   };
 
@@ -666,5 +671,7 @@ const initPartialRunner = (runner, partialman = null) => {
 
   // 초기화
   init(body, master);
-  initRunner(root);
+  Promise.allSettled(initialPartialPromises).then(() => {
+    initRunner(root);
+  });
 })();
